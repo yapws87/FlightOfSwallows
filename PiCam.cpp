@@ -84,13 +84,18 @@ void PiCam::getFrame_thread()
 		if (m_cap.isOpened())
 			m_cap.read(frameColor); // get a new frame from camera
 		else
+		{
+			m_picom.printStdLog( "Camera is not loaded properly. Exiting thread...");
 			break;
+		}
+			
 
 		if (!frameColor.empty())
 		{
 			// Preprocess the frames
 			cvtColor(frameColor, frame, cv::COLOR_BGR2GRAY);
-			
+			cv::imshow("frameColor",frameColor);
+			cv::waitkey(1);
 			// Noise Removal
 
 			// Copy to main matrix
