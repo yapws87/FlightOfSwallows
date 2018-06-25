@@ -95,7 +95,7 @@ void PiCam::getFrame_thread()
 			// Preprocess the frames
 			cvtColor(frameColor, frame, cv::COLOR_BGR2GRAY);
 			cv::imshow("frameColor",frameColor);
-			cv::waitkey(1);
+			cv::waitKey(1);
 			// Noise Removal
 
 			// Copy to main matrix
