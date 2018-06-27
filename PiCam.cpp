@@ -76,6 +76,7 @@ void PiCam::getFrame_thread()
 {
 	PiCommon picom;
 
+	static int m_nCountFrame = 0;
 	for (;;)
 	{
 		picom.countFPSStart();
@@ -94,8 +95,14 @@ void PiCam::getFrame_thread()
 		{
 			// Preprocess the frames
 			cvtColor(frameColor, frame, cv::COLOR_BGR2GRAY);
-			cv::imshow("frameColor",frameColor);
-			cv::waitKey(1);
+			m_nCountFrame++;
+			if(m_nCountFrame > 180)
+			{
+				cv::imshow("frameColor",frameColor);
+				cv::waitKey(1);
+				m_nCountFrame = 0;
+			}
+			
 			// Noise Removal
 
 			// Copy to main matrix
