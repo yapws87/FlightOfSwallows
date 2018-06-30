@@ -32,14 +32,14 @@ void process_thread()
 int main()
 {
     PiCommon picom;
-	CBirdCounter* birdCounterPtr = new CBirdCounter();
-	PiCam* picam = new PiCam();
+	//CBirdCounter* birdCounterPtr = new CBirdCounter();
+	//PiCam* picam = new PiCam();
 
 	std::cout<< "Init Video" << std::endl;
 	
 	
 	std::vector<std::thread> threads;
-	if(picam->init_cam())
+	if(m_piCam.init_cam())
 	{
 		//VideoWriter vWriter;
 	
