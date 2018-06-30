@@ -29,17 +29,18 @@ void process_thread()
 	
 }
 
-int main()
+int main(int argc, char * argv[])
 {
-    PiCommon picom;
-	//CBirdCounter* birdCounterPtr = new CBirdCounter();
-	//PiCam* picam = new PiCam();
-
-	std::cout<< "Init Video" << std::endl;
-	
+	if (argc < 3)
+	{
+		print("Not enough arguments given. Default value will be use.");
+	}
+	int nInit_width = atoi(argv[1]);
+	int nInit_height = atoi(argv[2]);
+	int nInit_fps = atoi(argv[3]);
 	
 	std::vector<std::thread> threads;
-	if(m_piCam.init_cam())
+	if(m_piCam.init_cam(nInit_width,nInit_height,nInit_fps))
 	{
 		//VideoWriter vWriter;
 	
