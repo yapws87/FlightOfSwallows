@@ -17,7 +17,7 @@ public:
     PiCam();
     ~PiCam();
 
-    bool init_cam(int nWidth = 320, int nHeight = 240, int nFPS = 15);
+    bool init_cam(int nWidth = 320, int nHeight = 240, int nFPS = 30);
     void runFrame_thread();
 	void save_thread();
 
