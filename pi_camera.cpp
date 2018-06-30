@@ -32,16 +32,27 @@ void process_thread()
 int main(int argc, char * argv[])
 {
 	PiCommon picom;
+	bool bCamInitFlag = false;
+
+	int nInit_width;
+	int nInit_height;
+	int nInit_fps;
+
 	if (argc < 3)
 	{
 		picom.printStdLog("Not enough arguments given. Default value will be use." );
+		m_piCam.init_cam();
 	}
-	int nInit_width = atoi(argv[1]);
-	int nInit_height = atoi(argv[2]);
-	int nInit_fps = atoi(argv[3]);
+	else{
+		nInit_width = atoi(argv[1]);
+		nInit_height = atoi(argv[2]);
+		nInit_fps = atoi(argv[3]);
+		m_piCam.init_cam(nInit_width,nInit_height,nInit_fps);
+	}
+	
 	
 	std::vector<std::thread> threads;
-	if(m_piCam.init_cam(nInit_width,nInit_height,nInit_fps))
+	if(bCamInitFlag)
 	{
 		//VideoWriter vWriter;
 	
