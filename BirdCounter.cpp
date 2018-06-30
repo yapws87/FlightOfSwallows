@@ -650,6 +650,10 @@ void CBirdCounter::process_thread()
 		m_matFrameGray.pop_front();
 		m_matFrameColor.pop_front();
 
+		cv::imshow("matLocalColor", matLocalColor);
+		cv::waitKey(1);
+		continue;
+
 		// Motion detections
 		// Reduce size for faster calculation
 		cv::Mat smallLocalGray;

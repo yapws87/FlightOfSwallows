@@ -24,7 +24,7 @@ int main()
 	
         picom.printStdLog( "Starting all threads" );
 		threads.push_back(std::thread(&PiCam::getFrame_thread, picam));
-		//threads.push_back(std::thread(&CBirdCounter::process_thread, birdCounterPtr));
+		threads.push_back(std::thread(&CBirdCounter::process_thread, birdCounterPtr));
 		//threads.push_back(std::thread(&CBirdCounter::tweet_thread, birdCounterPtr));
 		//threads.push_back(std::thread(&CBirdCounter::save_thread, birdCounterPtr));
 		
