@@ -59,8 +59,8 @@ int main()
 	}
 	
 	
-	delete picam;
-	delete birdCounterPtr;
+	//delete picam;
+	//delete birdCounterPtr;
 
     return 0;
 	
