@@ -44,8 +44,8 @@ int main()
 		//VideoWriter vWriter;
 	
         picom.printStdLog( "Starting all threads" );
-		threads.push_back(std::thread(&startFrame_thread, birdCounterPtr,picam));
-		threads.push_back(std::thread(&process_thread, birdCounterPtr,picam));
+		threads.push_back(std::thread(startFrame_thread));
+		threads.push_back(std::thread(process_thread));
 		//threads.push_back(std::thread(&PiCam::getFrame_thread, picam));
 		//threads.push_back(std::thread(&CBirdCounter::process_thread, birdCounterPtr,picam));
 		//threads.push_back(std::thread(&CBirdCounter::tweet_thread, birdCounterPtr));
