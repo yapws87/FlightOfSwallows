@@ -643,12 +643,9 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		matLocalGray = matFrameGray;//m_matFrameGray.front();
 		matLocalColor = matFrameColor;//m_matFrameColor.front();
 
-
-
 		//std::cout << "Remaining Frames : " << m_matFrameGray.size() << "\n";
-
-		m_matFrameGray.pop_front();
-		m_matFrameColor.pop_front();
+		//m_matFrameGray.pop_front();
+		//m_matFrameColor.pop_front();
 
 		cv::imshow("matLocalColor", matLocalColor);
 		cv::waitKey(1);
