@@ -23,7 +23,7 @@ public:
 
    
 
-    void get_frame(cv::Mat &matColor, cv::Mat &matGray);
+    void get_frame(cv::Mat &matGray, cv::Mat &matColor);
     void set_record();
     void set_save_directory(std::string file_directory);
 

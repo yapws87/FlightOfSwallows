@@ -227,7 +227,7 @@ void PiCam::save_thread()
 	}
 }
 
-void PiCam::get_frame(cv::Mat &matColor, cv::Mat &matGray)
+void PiCam::get_frame(cv::Mat &matGray, cv::Mat &matColor)
 {
     m_mutex.lock();
 

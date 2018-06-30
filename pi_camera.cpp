@@ -21,7 +21,7 @@ void process_thread()
 	cv::Mat matGray, matColor;
 	for(;;)
 	{
-		m_picam.get_frame(matGray,matColor)
+		m_piCam.get_frame(matGray,matColor)
 		m_birdCount.process_thread(matGray,matColor);
 
 	}
