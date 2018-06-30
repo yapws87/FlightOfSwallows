@@ -674,7 +674,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		m_pMOG->getBackgroundImage(matBG);
 		if (matBG.empty())
 		{
-			continue;
+			//continue;
+			return;
 		}
 
 		// Find subtraction
