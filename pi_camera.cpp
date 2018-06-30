@@ -33,7 +33,7 @@ int main(int argc, char * argv[])
 {
 	if (argc < 3)
 	{
-		print("Not enough arguments given. Default value will be use.");
+		std::cout << "Not enough arguments given. Default value will be use." << std::endl;
 	}
 	int nInit_width = atoi(argv[1]);
 	int nInit_height = atoi(argv[2]);
