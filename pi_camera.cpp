@@ -31,9 +31,10 @@ void process_thread()
 
 int main(int argc, char * argv[])
 {
+	PiCommon picom;
 	if (argc < 3)
 	{
-		std::cout << "Not enough arguments given. Default value will be use." << std::endl;
+		picom.printStdLog("Not enough arguments given. Default value will be use." );
 	}
 	int nInit_width = atoi(argv[1]);
 	int nInit_height = atoi(argv[2]);
