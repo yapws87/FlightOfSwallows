@@ -8,6 +8,27 @@
 #include "PiCommon.h"
 #include "PiCam.h"
 
+CBirdCounter m_birdCount;
+PiCam m_piCam;
+
+void startFrame_thread()
+{
+	m_piCam.runFrame_thread();
+}
+
+void process_thread()
+{
+	cv::Mat matGray, matColor;
+	for(;;)
+	{
+		m_picam.get_frame(matGray,matColor)
+		m_birdCount.process_thread(matGray,matColor);
+
+	}
+	
+	
+}
+
 int main()
 {
     PiCommon picom;
@@ -23,8 +44,10 @@ int main()
 		//VideoWriter vWriter;
 	
         picom.printStdLog( "Starting all threads" );
-		threads.push_back(std::thread(&PiCam::getFrame_thread, picam));
-		threads.push_back(std::thread(&CBirdCounter::process_thread, birdCounterPtr));
+		threads.push_back(std::thread(&startFrame_thread, birdCounterPtr,picam));
+		threads.push_back(std::thread(&process_thread, birdCounterPtr,picam));
+		//threads.push_back(std::thread(&PiCam::getFrame_thread, picam));
+		//threads.push_back(std::thread(&CBirdCounter::process_thread, birdCounterPtr,picam));
 		//threads.push_back(std::thread(&CBirdCounter::tweet_thread, birdCounterPtr));
 		//threads.push_back(std::thread(&CBirdCounter::save_thread, birdCounterPtr));
 		

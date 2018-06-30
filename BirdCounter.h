@@ -214,7 +214,7 @@ public:
 	bool initVideo();
 	void getFrame_thread();
 	void save_thread();
-	void process_thread();
+	void process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor);
 	void getVideoFrame_thread(std::string vidpath);
 	void run_threads();
 	void tweet_thread();

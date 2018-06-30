@@ -622,26 +622,26 @@ void CBirdCounter::save_thread()
 
 	}
 }
-void CBirdCounter::process_thread()
+void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 {
 	PiCommon picom;
 	double dTime = 0;
-	for (;;)
-	{
+	//for (;;)
+	//{
 		dTime = cv::getTickCount();
 		double dForeRatio = 0.0;
-		int nFrameWidth = m_nFrameWidth;
-		int nFrameHeight = m_nFrameHeight;
+		int nFrameWidth = matFrameGray.cols;//m_nFrameWidth;
+		int nFrameHeight = matFrameGray.rows;//m_nFrameHeight;
 
 		// Exceptions
-		if (m_matFrameGray.empty())
-			continue;
+		if (matFrameGray.empty())
+			return;
 
 		cv::Mat matLocalGray;
 		cv::Mat matLocalColor;
 		cv::Mat matLocalFore;
-		matLocalGray = m_matFrameGray.front();
-		matLocalColor = m_matFrameColor.front();
+		matLocalGray = matFrameGray;//m_matFrameGray.front();
+		matLocalColor = matFrameColor;//m_matFrameColor.front();
 
 
 
@@ -652,7 +652,7 @@ void CBirdCounter::process_thread()
 
 		cv::imshow("matLocalColor", matLocalColor);
 		cv::waitKey(1);
-		continue;
+		return;
 
 		// Motion detections
 		// Reduce size for faster calculation
@@ -816,7 +816,7 @@ void CBirdCounter::process_thread()
 
 	
 
-	}
+	//}
 }
 bool CBirdCounter::initVideo()
 {
