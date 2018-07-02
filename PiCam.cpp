@@ -96,26 +96,17 @@ void PiCam::runFrame_thread()
 			// Preprocess the frames
 			cvtColor(frameColor, frame, cv::COLOR_BGR2GRAY);
 			m_nCountFrame++;
-			// if(m_nCountFrame > 180)
-			// {
-			// 	cv::imshow("frameColor",frameColor);
-			// 	cv::waitKey(1);
-			// 	m_nCountFrame = 0;
-			// }
 			
 			// Noise Removal
 
 			// Copy to main matrix
 			m_mutex.lock();
 
+			// Prevent overflow
 			if (m_matFrameGray.size() > 100)
 			{
-				//picom.printStdLog("OverFlow : " + std::to_string(m_nOverflowCount) + "\tProcess Time : " + std::to_string(m_dTime));
-                //picom.printStdLog("OverFlow Occured "  + "\tProcess Time : " + std::to_string(m_dTime));
-				//m_nOverflowCount++;
 				m_matFrameGray.clear();
 				m_matFrameColor.clear();
-				
 			}
 					
 			// Que to save image
