@@ -726,7 +726,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (dForeRatio > 0.35) {
 			m_nSaturationCount++;
 			m_nCountContinuosValid = 0;
-			
+
+			std::cout << "Large ChANGE"<<std::endl;		
 			// Clear all bird datas
 			m_birds.clear();
 		}
@@ -736,6 +737,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			if (bExistBird) {
 				m_nCountContinuosValid++;
 				printBirdLog();
+				std::cout <<  "BIRD EXIST"<<  std::endl;
 			}
 		}
 		
@@ -815,9 +817,10 @@ if(!m_matSaveImage.empty())
 			m_statusTime = tempTime;
 			m_bSaveStatus = true;
 			m_nSecCount += elapsed_seconds.count();
+			std::cout << "Seconds : " << m_nSecCount;
 		}
 
-	
+	std::cout << std::endl;
 
 	//}
 }
