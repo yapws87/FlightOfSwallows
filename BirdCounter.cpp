@@ -822,7 +822,7 @@ if(!m_matSaveImage.empty())
 			
 		}
 
-	std::cout << std::endl;
+	//std::cout << std::endl;
 
 	//}
 }
