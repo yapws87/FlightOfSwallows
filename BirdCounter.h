@@ -294,7 +294,7 @@ protected:
 	//Time and frame counts
 	double m_dTimeAcc = 0;
 	double m_dTickCount = 0;
-	int m_nSecCount = 0;
+	float m_fSecCount = 0;
 	int m_nCountContinuosValid = 0;
 	bool m_bMotionDetected = false;
 
