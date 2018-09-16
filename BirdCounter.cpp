@@ -763,6 +763,11 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			cv::waitKey(0);
 		}
 #endif
+		if (!matDisplayWithBirds.empty())
+		{
+			cv::imshow("matDisplayWithBirds",matDisplayWithBirds);
+			cv::waitKey(1);
+		}
 
 
 		// Record video if threshold shows continuos 10 frames
@@ -812,12 +817,13 @@ if(!m_matSaveImage.empty())
 		// Status update
 		auto tempTime = std::chrono::system_clock::now();
 		std::chrono::duration<double> elapsed_seconds = tempTime - m_statusTime;
+		std::cout << "Seconds : " << m_nSecCount;
+		m_nSecCount += elapsed_seconds.count();
 		if (elapsed_seconds.count() > 60 * 5)
 		{
 			m_statusTime = tempTime;
 			m_bSaveStatus = true;
-			m_nSecCount += elapsed_seconds.count();
-			std::cout << "Seconds : " << m_nSecCount;
+			
 		}
 
 	std::cout << std::endl;
