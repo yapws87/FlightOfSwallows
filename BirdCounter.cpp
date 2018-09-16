@@ -769,14 +769,14 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		{
 			// For Uploading pictures to twitter every 60 min interval
 			if (m_fSecCount > 60 * 120) // Write
-			{
+			{ 
 				prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
 				m_bMotionDetected = true;
 				m_bTweeterFlag = true;
 				m_dthresh = dForeRatio;
 				m_fSecCount = 0;
 				m_preRatio = m_ratios;
-
+				std::cout << "wat" << std::endl;
 			}
 			m_nCountContinuosValid = 0;
 
