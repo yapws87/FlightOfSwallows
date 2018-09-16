@@ -752,7 +752,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		{
 			m_nCountContinuosValid = 1;
 			m_bTweeterFlag = true;
-			m_nSecCount = 10000;
+			m_fSecCount = 10000;
 		}
 
 		
@@ -774,13 +774,13 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (m_nCountContinuosValid >= 1)
 		{
 			// For Uploading pictures to twitter every 60 min interval
-			if (m_nSecCount > 60 * 120) // Write
+			if (m_fSecCount > 60 * 120) // Write
 			{
 				prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
 				m_bMotionDetected = true;
 				m_bTweeterFlag = true;
 				m_dthresh = dForeRatio;
-				m_nSecCount = 0;
+				m_fSecCount = 0;
 				m_preRatio = m_ratios;
 
 			}
@@ -817,8 +817,10 @@ if(!m_matSaveImage.empty())
 		// Status update
 		auto tempTime = std::chrono::system_clock::now();
 		std::chrono::duration<double> elapsed_seconds = tempTime - m_statusTime;
-		std::cout << "Seconds : " << m_nSecCount;
-		m_nSecCount += elapsed_seconds.count();
+		
+		m_fSecCount += elapsed_seconds.count();
+		std::cout << "Seconds : " << m_fSecCount;
+
 		if (elapsed_seconds.count() > 60 * 5)
 		{
 			m_statusTime = tempTime;
