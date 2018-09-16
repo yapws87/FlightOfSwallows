@@ -218,6 +218,10 @@ public:
 	void getVideoFrame_thread(std::string vidpath);
 	void run_threads();
 	void tweet_thread();
+	cv::Mat getDispMat(){
+			return m_matSaveImage;
+
+	};
 
 protected:
 

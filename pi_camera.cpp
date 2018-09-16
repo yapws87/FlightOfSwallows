@@ -23,6 +23,7 @@ void process_thread()
 	{
 		m_piCam.get_frame(matGray,matColor);
 		m_birdCount.process_thread(matGray,matColor);
+		cv::imshow("Display",m_matSaveImage);
 
 	}
 	
