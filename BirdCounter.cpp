@@ -682,8 +682,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		//cv::absdiff(matSmallGrayFrame, matBg, aDiff);
 		cv::absdiff(smallLocalGray, matBG, aDiff);
 		cv::blur(aDiff, aDiff, cv::Size(3, 3));
-		//cv::threshold(aDiff, matLocalFore, 7, 255, CV_THRESH_BINARY);
-		cv::threshold(aDiff, matLocalFore, 3, 255, CV_THRESH_BINARY);
+		cv::threshold(aDiff, matLocalFore, 7, 255, CV_THRESH_BINARY);
+		//cv::threshold(aDiff, matLocalFore, 3, 255, CV_THRESH_BINARY);
 
 		// Remove upper and lower noise
 		int nimgOff = 0.02 * matLocalFore.rows;
@@ -763,12 +763,6 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			cv::waitKey(0);
 		}
 #endif
-		if (!matDisplayWithBirds.empty())
-		{
-			cv::imshow("matDisplayWithBirds",matDisplayWithBirds);
-			cv::waitKey(1);
-		}
-
 
 		// Record video if threshold shows continuos 10 frames
 		if (m_nCountContinuosValid >= 1)
