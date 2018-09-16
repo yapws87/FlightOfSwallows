@@ -228,6 +228,8 @@ void CBirdCounter::prepareSaveImage(const cv::Mat matFg, cv::Mat matDisplay, int
 
 	matDisplay.copyTo(m_matSaveImage);
 
+	
+
 }
 
 
@@ -647,9 +649,9 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		//m_matFrameGray.pop_front();
 		//m_matFrameColor.pop_front();
 
-		cv::imshow("matLocalColor", matLocalColor);
-		cv::waitKey(1);
-		return;
+		// cv::imshow("matLocalColor", matLocalColor);
+		// cv::waitKey(1);
+		// return;
 
 		// Motion detections
 		// Reduce size for faster calculation
@@ -779,7 +781,9 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 
 		}
 
-
+if(!m_matSaveImage.empty())
+	cv::imshow(m_matSaveImage);
+	
 #ifndef PERSONAL_COMPUTER
 		// usleep(100);
 #endif
