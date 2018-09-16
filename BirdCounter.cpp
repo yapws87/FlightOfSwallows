@@ -813,7 +813,7 @@ if(!m_matSaveImage.empty())
 		std::chrono::duration<double> elapsed_seconds = tempTime - m_statusTime;
 		
 		m_fSecCount += elapsed_seconds.count();
-		std::cout << "Seconds : " << m_fSecCount;
+		//std::cout << "Seconds : " << m_fSecCount;
 
 		if (elapsed_seconds.count() > 60 * 5)
 		{
