@@ -782,8 +782,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		}
 
 if(!m_matSaveImage.empty())
-	cv::imshow(m_matSaveImage);
-	
+	cv::imshow("result",m_matSaveImage);
+
 #ifndef PERSONAL_COMPUTER
 		// usleep(100);
 #endif
