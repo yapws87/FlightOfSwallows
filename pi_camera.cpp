@@ -28,7 +28,7 @@ void process_thread()
 		matDisp = m_birdCount.getDispMat();
 		if(!matDisp.empty())
 			cv::imshow("Display",matDisp);
-
+			cv::waitKey(0);
 	}
 	
 	
