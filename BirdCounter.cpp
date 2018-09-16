@@ -767,6 +767,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		// Record video if threshold shows continuos 10 frames
 		if (m_nCountContinuosValid >= 1)
 		{
+			std::cout << "secs : "  << m_fSecCount << std::endl;
+
 			// For Uploading pictures to twitter every 60 min interval
 			if (m_fSecCount > 60 * 120) // Write
 			{ 
