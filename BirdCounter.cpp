@@ -814,6 +814,7 @@ if(!m_matSaveImage.empty())
 		{
 			m_statusTime = tempTime;
 			m_bSaveStatus = true;
+			m_nSecCount += elapsed_seconds.count();
 		}
 
 	
