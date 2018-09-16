@@ -767,8 +767,6 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		// Record video if threshold shows continuos 10 frames
 		if (m_nCountContinuosValid >= 1)
 		{
-			std::cout << "secs : "  << m_fSecCount << std::endl;
-
 			// For Uploading pictures to twitter every 60 min interval
 			if (m_fSecCount > 60 * 120) // Write
 			{ 
@@ -778,17 +776,11 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 				m_dthresh = dForeRatio;
 				m_fSecCount = 0;
 				m_preRatio = m_ratios;
-				std::cout << "wat" << std::endl;
 			}
 			m_nCountContinuosValid = 0;
 
 		}
 
-if(!m_matSaveImage.empty()){
-	cv::imshow("result",m_matSaveImage);
-	cv::waitKey(1);
-}
-	
 
 #ifndef PERSONAL_COMPUTER
 		// usleep(100);
@@ -797,6 +789,7 @@ if(!m_matSaveImage.empty()){
 		dTime = cv::getTickCount() - dTime;
 		dTime = (dTime / cv::getTickFrequency() * 1000);
 		m_dTime = (m_dTime + dTime) / 2;
+		m_nFps_real = 1 / (m_dTime / 1000);
 		//std::cout << dTime << "\t" << m_dTime << "\n";
 		
 		// Upload graph
