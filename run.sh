@@ -10,4 +10,6 @@ gpio -g mode $light_pin output
 gpio -g write $motor_pin 1
 gpio -g write $light_pin 1
 
+v4l2-ctl -v --set-ctrl=rotate=180
+
 ~/fos_project/FlightOfSwallows/./PiCamera 320 240 90
