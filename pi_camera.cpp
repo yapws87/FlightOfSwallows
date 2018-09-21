@@ -29,10 +29,19 @@ void process_thread()
 		
 		if(m_nDisplay_flag)
 		{
-			matDisp = m_birdCount.getDispMat();
-			if(!matDisp.empty())
-				cv::imshow("Display",matDisp);
-				cv::waitKey(1);
+			static int disp_count = 0;
+			disp_count++;
+			if(disp_count > 15)
+			{
+				matDisp = m_birdCount.getDispMat();
+				if(!matDisp.empty())
+				{
+					cv::imshow("Display",matDisp);
+					cv::waitKey(1);
+				}
+				disp_count = 0;
+			}
+			
 		}
 	
 			
