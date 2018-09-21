@@ -11,6 +11,8 @@
 CBirdCounter m_birdCount;
 PiCam m_piCam;
 
+int m_nDisplay_flag = 0;
+
 void startFrame_thread()
 {
 	m_piCam.runFrame_thread();
@@ -19,16 +21,21 @@ void startFrame_thread()
 void process_thread()
 {
 	cv::Mat matGray, matColor;
+	cv::Mat matDisp;
 	for(;;)
 	{
 		m_piCam.get_frame(matGray,matColor);
 		m_birdCount.process_thread(matGray,matColor);
-
-		cv::Mat matDisp;
-		matDisp = m_birdCount.getDispMat();
-		if(!matDisp.empty())
-			cv::imshow("Display",matDisp);
-			cv::waitKey(1);
+		
+		if(m_nDisplay_flag)
+		{
+			matDisp = m_birdCount.getDispMat();
+			if(!matDisp.empty())
+				cv::imshow("Display",matDisp);
+				cv::waitKey(1);
+		}
+	
+			
 	}
 	
 	
@@ -39,9 +46,9 @@ int main(int argc, char * argv[])
 	PiCommon picom;
 	bool bCamInitFlag = false;
 
-	int nInit_width;
-	int nInit_height;
-	int nInit_fps;
+	static int nInit_width;
+	static int nInit_height;
+	static int nInit_fps;
 
 	if (argc < 3)
 	{
@@ -52,6 +59,7 @@ int main(int argc, char * argv[])
 		nInit_width = atoi(argv[1]);
 		nInit_height = atoi(argv[2]);
 		nInit_fps = atoi(argv[3]);
+		m_nDisplay_flag = atoi(argv[4]);
 		bCamInitFlag = m_piCam.init_cam(nInit_width,nInit_height,nInit_fps);
 	}
 	
