@@ -105,13 +105,13 @@ void PiCam::runFrame_thread()
 			// Prevent overflow
 			if (m_matFrameGray.size() > 100)
 			{
-				std::cout << "Overflow frame" <<std::endl;
+				picom.printStdLog( "Overflow gray frame");
 				m_matFrameGray.clear();
 				m_matFrameColor.clear();
 			}
 			if( m_videoFrames.size() > 100)
 			{
-				std::cout << "Overflow of video frame" <<std::endl;
+				picom.printStdLog( "Overflow recording frame");
 				m_videoFrames.clear();
 			}
 			
@@ -121,7 +121,7 @@ void PiCam::runFrame_thread()
 			{
 				if(!m_bRecord){
 					m_bRecord = true;
-					std::cout << "Record flag turned ON" << std::endl;
+					picom.printStdLog( "Record flag turned ON" );
 				}
 					
 				//m_videoFrames

@@ -645,13 +645,6 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		matLocalGray = matFrameGray;//m_matFrameGray.front();
 		matLocalColor = matFrameColor;//m_matFrameColor.front();
 
-		//std::cout << "Remaining Frames : " << m_matFrameGray.size() << "\n";
-		//m_matFrameGray.pop_front();
-		//m_matFrameColor.pop_front();
-
-		// cv::imshow("matLocalColor", matLocalColor);
-		// cv::waitKey(1);
-		// return;
 
 		// Motion detections
 		// Reduce size for faster calculation
@@ -727,7 +720,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			m_nSaturationCount++;
 			m_nCountContinuosValid = 0;
 
-			std::cout << "Large ChANGE"<<std::endl;		
+			picom.printStdLog( "Large ChANGE");		
 			// Clear all bird datas
 			m_birds.clear();
 		}
@@ -737,7 +730,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			if (bExistBird) {
 				m_nCountContinuosValid++;
 				printBirdLog();
-				std::cout <<  "BIRD EXIST"<<  std::endl;
+				picom.printStdLog( "BIRD EXIST");
 			}
 		}
 		
