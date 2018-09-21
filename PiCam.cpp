@@ -105,15 +105,25 @@ void PiCam::runFrame_thread()
 			// Prevent overflow
 			if (m_matFrameGray.size() > 100)
 			{
+				std::cout << "Overflow frame" <<std::endl;
 				m_matFrameGray.clear();
 				m_matFrameColor.clear();
 			}
+			if( m_videoFrames.size() > 100)
+			{
+				std::cout << "Overflow of video frame" <<std::endl;
+				m_videoFrames.clear();
+			}
+			
 					
 			// Que to save image
 			if (picom.get_current_time() == "18:58:00" )
 			{
-				if(!m_bRecord)
+				if(!m_bRecord){
 					m_bRecord = true;
+					std::cout << "Record flag turned ON" << std::endl;
+				}
+					
 				//m_videoFrames
 			}
 				
