@@ -12,4 +12,4 @@ gpio -g write $light_pin 1
 
 v4l2-ctl --set-ctrl=rotate=180
 
-~/fos_project/FlightOfSwallows/./PiCamera 320 240 90 0
+~/fos_project/FlightOfSwallows/./PiCamera 320 240 90 1
