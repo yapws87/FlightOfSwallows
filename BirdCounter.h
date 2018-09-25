@@ -116,7 +116,6 @@ struct BirdData
 					nBirdDirection = nDirection > 0 ? BIRD_FLY_OUT : BIRD_FLY_IN;
 				
 			}
-			
 		}
 
 		// Calculate Average Speed
@@ -174,7 +173,6 @@ struct BirdData
 		if (nBirdDirection == BIRD_FLY_IN && ptStep.x > 0)
 			return false;
 
-
 		// Update the steps
 		update(boundingBox + ptStep);
 		nPredictLimit--;
@@ -194,12 +192,6 @@ struct BirdData
 		if (safeBox.br().x >= nWidth || safeBox.br().y >= nHeight)
 			return cv::Rect();
 
-		/*safeBox.x = safeBox.x < 0 ? 0 : safeBox.x;
-		safeBox.y = safeBox.y < 0 ? 0 : safeBox.y;
-		
-		safeBox.width = safeBox.x + safeBox.width >= nWidth ? nWidth - safeBox.x - 1: safeBox.width;
-		safeBox.height = safeBox.y + safeBox.height >= nHeight ? nHeight - safeBox.y - 1 : safeBox.height;*/
-
 		return safeBox;
 	}
 
@@ -211,30 +203,20 @@ public:
 	CBirdCounter();
 	~CBirdCounter();
 
-	bool initVideo();
-	void getFrame_thread();
-	void save_thread();
 	void process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor);
-	void getVideoFrame_thread(std::string vidpath);
-	void run_threads();
 	void tweet_thread();
 	cv::Mat getDispMat(){
 			return m_matSaveImage;
-
 	};
 
 protected:
 
 	// Functions
-	//void uniSleep(int nSleepTime_milisec);
-	bool initPiCamera(cv::VideoCapture &cap);
 	void insertText(cv::Mat & matDisplay, int nFPS, double nMean, double nThreshold);
 	void tweet_bird();
 	void tweet_graph(std::string strdate);
 	void prepareSaveImage(const cv::Mat matFg, cv::Mat matDisplay, int nfps, double dThreshold);
-	//void countFPSStart();
-	//void countFPSEnd();
-	
+
 	
 	bool countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &matDisplay,bool bDisplay = false);
 	cv::Rect boundingBirds(std::vector<cv::Point> birdPts);
@@ -247,7 +229,6 @@ protected:
 	void resetBirdCount();
 
 	// Variables
-	//PiCommon m_piCom;
 	std::vector<BirdCell> m_inBird_logs;
 	std::vector<BirdCell> m_outBird_logs;
 	std::chrono::time_point<std::chrono::system_clock> m_statusTime;
@@ -283,8 +264,6 @@ protected:
 	int m_nOverflowCount = 0;
 	int m_nSaturationCount = 0;
 	float m_fMinThresh = 0.01;
-
-
 
 	int m_nFps_real = 0;
 	int m_nFrameAcc = 0;

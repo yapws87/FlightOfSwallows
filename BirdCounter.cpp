@@ -1,7 +1,5 @@
 #include "BirdCounter.h"
 
-
-
 CBirdCounter::CBirdCounter()
 {
 	m_pMOG = cv::createBackgroundSubtractorMOG2(100,2 * 2, false);
@@ -11,67 +9,6 @@ CBirdCounter::CBirdCounter()
 
 CBirdCounter::~CBirdCounter()
 {
-}
-
-bool CBirdCounter::initPiCamera(cv::VideoCapture &cap)
-{
-	PiCommon picom;
-	int nFrameWidth = m_nFrameWidth;
-	int nFrameHeight = m_nFrameHeight;
-	int nFps = m_nFps;
-
-
-	if (!cap.isOpened())  // check if we succeeded
-	{
-		picom.printStdLog("Camera Init Fail");
-		return false;
-	}
-	else {
-		picom.printStdLog("Camera Init Successful\n");
-		picom.printStdLog("Setting parameters..");
-	}
-
-	picom.uniSleep(1000);
-	// Set parameters for width
-	
-	cap.set(CV_CAP_PROP_FRAME_WIDTH, nFrameWidth);
-	picom.uniSleep(1000);
-	if (cap.get(CV_CAP_PROP_FRAME_WIDTH) == nFrameWidth) {
-		picom.printStdLog("[PARAM_FRAME_WIDTH] " + std::to_string(nFrameWidth) + " SUCCESS");
-	}
-	else {
-		picom.printStdLog("[PARAM_FRAME_WIDTH] " + std::to_string(nFrameWidth) + " FAIL");
-	}
-
-	picom.printStdLog( "Verified Width : " + std::to_string(cap.get(CV_CAP_PROP_FRAME_WIDTH)));
-	
-	// Set parameters for height
-	cap.set(CV_CAP_PROP_FRAME_HEIGHT, nFrameHeight);
-	picom.uniSleep(1000);
-	if (cap.get(CV_CAP_PROP_FRAME_HEIGHT) == nFrameHeight)
-	{
-		picom.printStdLog("[PARAM_FRAME_HEIGHT] " + std::to_string(nFrameHeight) + " SUCCESS");
-	}
-	else {
-		picom.printStdLog("[PARAM_FRAME_HEIGHT] " + std::to_string(nFrameHeight) + " FAIL");
-	}
-	picom.printStdLog("Verified Height : " + std::to_string(cap.get(CV_CAP_PROP_FRAME_HEIGHT)));
-
-	// Set parameters for fps
-	cap.set(CV_CAP_PROP_FPS, nFps);
-	picom.uniSleep(1000);
-	if (cap.get(CV_CAP_PROP_FPS) == nFps) {
-		picom.printStdLog("[PARAM_FPS] " + std::to_string(nFps) + " SUCCESS");
-	}
-	else {
-		picom.printStdLog("[PARAM_FPS] " + std::to_string(nFps) + " FAIL");
-	}
-
-	picom.printStdLog("Loaded FPS : " + std::to_string(cap.get(CV_CAP_PROP_FPS)));
-
-	picom.printStdLog("");
-	
-	return true;
 }
 
 void CBirdCounter::insertText(cv::Mat & matDisplay, int nFPS, double nMean, double nThreshold)
@@ -203,10 +140,8 @@ void CBirdCounter::tweet_graph(std::string strdate)
 	picom.printStdLog("Cmd2 : " + piSys);
 	system(piSys.c_str());
 
-	
 	picom.printStdLog("Tweeted Graph!\n");
 
-	
 }
 
 void CBirdCounter::prepareSaveImage(const cv::Mat matFg, cv::Mat matDisplay, int nfps, double dThreshold)
@@ -228,26 +163,13 @@ void CBirdCounter::prepareSaveImage(const cv::Mat matFg, cv::Mat matDisplay, int
 
 	matDisplay.copyTo(m_matSaveImage);
 
-	
-
 }
-
-
-
 
 void CBirdCounter::resetBirdCount()
 {
 	m_nCount_In = 0;
 	m_nCount_Out = 0;
 }
-
-
-
-
-
-
-
-
 
 cv::Rect CBirdCounter::boundingBirds(std::vector<cv::Point> birdPts)
 {
@@ -554,76 +476,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 
 	return bExistBird;
 }
-// Thread for all process
-void CBirdCounter::save_thread()
-{
-	PiCommon picom;
-	cv::VideoWriter vWriter;
 
-	// Set video name
-	int nVideoCount = 0;
-	std::string videoName;
-	int nFps = m_nFps;
-	// Limit store length
-	long nLengthLimit = nFps * 60 * 5; //store for 10 minutes
-	long nLengthCount = 0;
-
-	picom.printStdLog("Video thread started ");
-	for (;;)
-	{
-		if (m_videoFrames.size() > 0)
-		{
-			if (!vWriter.isOpened())
-			{
-				videoName = "/home/pi/openCV_test/cctv_" + picom.get_current_time_and_date() + ".avi";
-
-				// Saving options
-				picom.printStdLog("Set video : " + videoName);
-				vWriter.open(videoName, CV_FOURCC('M', 'P', '4', '2'), nFps, cv::Size(320, 240));
-				nVideoCount++;
-			}
-
-		
-			cv::Mat matTemp;
-			m_mutex.lock();	
-					
-			matTemp = m_videoFrames.front();
-			m_videoFrames.pop_front();
-			
-			m_mutex.unlock();
-			
-
-			if (!matTemp.empty()) {
-				vWriter.write(matTemp);
-				nLengthCount++;
-				//if(nLengthCount%100 ==0 )
-				//	std::cout << "Writing frame : " << nLengthCount << "  " << m_videoFrames.size() << std::endl;
-			}
-	
-
-			if (nLengthCount > nLengthLimit)
-			{
-				m_mutex.lock(); 
-				if(m_bRecord)
-					m_bRecord = false;
-				m_mutex.unlock();
-
-				if (m_videoFrames.size() == 0)
-				{
-					vWriter.release();
-					picom.printStdLog("Saving to : " + videoName + " DONE ");
-					picom.printStdLog("Remaining frames :" + std::to_string(m_videoFrames.size()));
-					//break;
-				}	
-			}
-		}
-		else
-		{
-			picom.uniSleep(100);
-		}
-
-	}
-}
 void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 {
 	PiCommon picom;
@@ -716,11 +569,11 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 
 		cv::Mat matDisplayWithBirds;
 		// Skip when too large changes occur
-		if (dForeRatio > 0.35) {
+		if (dForeRatio > 0.5) {
 			m_nSaturationCount++;
 			m_nCountContinuosValid = 0;
 
-			picom.printStdLog( "Large ChANGE");		
+			picom.printStdLog( "Large Change");		
 			// Clear all bird datas
 			m_birds.clear();
 		}
@@ -730,7 +583,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			if (bExistBird) {
 				m_nCountContinuosValid++;
 				printBirdLog();
-				picom.printStdLog( "BIRD EXIST");
+				//picom.printStdLog( "BIRD EXIST");
 			}
 		}
 		
@@ -816,94 +669,6 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 	//std::cout << std::endl;
 
 	//}
-}
-bool CBirdCounter::initVideo()
-{
-	PiCommon picom;
-	m_cap = cv::VideoCapture(0); // open the default camera
-
-	 // Init the camera with initial parameters
-	if (!initPiCamera(m_cap))
-	{
-		picom.printStdLog("Init PiCamera Failed");
-		return false;
-	}
-	return true;
-}
-
-void CBirdCounter::getVideoFrame_thread(std::string filepath)
-{
-// 	PiCommon picom;
-// 	m_cap.open(filepath);
-// 	for (;;)
-// 	{
-// 		countFPSStart();
-// 		cv::Mat frame, frameColor;
-// 		if (m_cap.isOpened())
-// 			m_cap.read(frameColor); // get a new frame from camera
-// 		else
-// 			break;
-
-// 		if (!frameColor.empty())
-// 		{
-// 			// Preprocess the frames
-// 			//cv::flip(frameColor, frameColor, 0);
-// 			//cv::flip(frameColor, frameColor, 1);
-// 			//cv::blur(frameColor, frameColor, cv::Size(3, 3));
-// 			cvtColor(frameColor, frame, cv::COLOR_BGR2GRAY);
-
-
-// 			// Copy to main matrix
-// 			m_mutex.lock();
-
-
-// 			if (m_matFrameGray.size() > 50000)
-// 			{
-// 				picom.printStdLog("OverFlow : " + std::to_string(m_nOverflowCount));
-// 				m_nOverflowCount++;
-// 				m_matFrameGray.clear();
-// 				m_matFrameColor.clear();
-
-// 			}
-			
-// 			//cv::Mat matNoNoise = m_cv.pi_RemoveHorizontalNoise(frame);
-// 			//cvtColor(matNoNoise, frameColor, cv::COLOR_GRAY2BGR);
-			
-// 			m_matFrameColor.push_back(frameColor);
-// 			m_matFrameGray.push_back(frame);
-
-
-			
-// 			// for recordings
-// 			//m_videoFrames.push_back(m_matFrameGray);
-// 			m_mutex.unlock();
-// 			picom.uniSleep(3);
-// 		}
-// 		else
-// 			break;
-
-// 		countFPSEnd();
-
-// #ifndef PERSONAL_COMPUTER
-// 		usleep(100);
-// #endif
-
-//	}
-}
-
-
-void CBirdCounter::run_threads()
-{
-	
-	std::vector<std::thread> threads;
-	printf("Init Thread");
-	//threads.push_back(std::thread(&CBirdCounter::getVideoFrame_thread, CBirdCounter()));
-	//threads.push_back(std::thread(&CBirdCounter::process_thread, CBirdCounter()));
-	//threads.push_back(std::thread(save_thread));
-
-	for (auto& thread : threads) {
-		thread.join();
-	}
 }
 
 void CBirdCounter::tweet_thread()

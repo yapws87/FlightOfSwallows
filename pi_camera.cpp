@@ -13,9 +13,14 @@ PiCam m_piCam;
 
 int m_nDisplay_flag = 0;
 
-void startFrame_thread()
+void streamFrame_thread()
 {
 	m_piCam.runFrame_thread();
+}
+
+void saveFrame_thread()
+{
+	m_piCam.save_thread();
 }
 
 void process_thread()
@@ -31,6 +36,7 @@ void process_thread()
 		{
 			static int disp_count = 0;
 			disp_count++;
+
 			if(disp_count > 15)
 			{
 				matDisp = m_birdCount.getDispMat();
@@ -41,13 +47,8 @@ void process_thread()
 				}
 				disp_count = 0;
 			}
-			
 		}
-	
-			
 	}
-	
-	
 }
 
 int main(int argc, char * argv[])
@@ -59,7 +60,7 @@ int main(int argc, char * argv[])
 	static int nInit_height;
 	static int nInit_fps;
 
-	if (argc < 3)
+	if (argc < 4)
 	{
 		picom.printStdLog("Not enough arguments given. Default value will be use." );
 		m_piCam.init_cam();
@@ -72,32 +73,22 @@ int main(int argc, char * argv[])
 		bCamInitFlag = m_piCam.init_cam(nInit_width,nInit_height,nInit_fps);
 	}
 	
-	
 	std::vector<std::thread> threads;
 	if(bCamInitFlag)
 	{
 		//VideoWriter vWriter;
-	
+
         picom.printStdLog( "Starting all threads" );
-		threads.push_back(std::thread(startFrame_thread));
+		threads.push_back(std::thread(streamFrame_thread));
 		threads.push_back(std::thread(process_thread));
-		//threads.push_back(std::thread(&PiCam::getFrame_thread, picam));
-		//threads.push_back(std::thread(&CBirdCounter::process_thread, birdCounterPtr,picam));
+		threads.push_back(std::thread(saveFrame_thread));
 		//threads.push_back(std::thread(&CBirdCounter::tweet_thread, birdCounterPtr));
-		//threads.push_back(std::thread(&CBirdCounter::save_thread, birdCounterPtr));
-		
-		
+
 		for (auto& thread : threads) {
 			thread.join();
 		}
 		std::cout<< "Thread Initialized" << std::endl;
 	}
 	
-	
-	//delete picam;
-	//delete birdCounterPtr;
-
     return 0;
-	
-	
 }

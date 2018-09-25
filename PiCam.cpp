@@ -18,7 +18,6 @@ void PiCam::status_check(std::string item, std::string value, bool bstatus)
         m_picom.printStdLog( item + value + ": FAIL");
 }
 
-
 bool PiCam::init_cam(int nWidth , int nHeight , int nFPS)
 {
     m_nFrameWidth = nWidth;
@@ -90,7 +89,6 @@ void PiCam::runFrame_thread()
 			break;
 		}
 			
-
 		if (!frameColor.empty())
 		{
 			// Preprocess the frames
@@ -115,7 +113,6 @@ void PiCam::runFrame_thread()
 				m_videoFrames.clear();
 			}
 			
-					
 			// Que to save image
 			if (picom.get_current_time() == "18:58:00" )
 			{
@@ -127,7 +124,6 @@ void PiCam::runFrame_thread()
 				//m_videoFrames
 			}
 				
-
 			m_matFrameColor.push_back(frameColor);
 			m_matFrameGray.push_back(frame);
 			// for recordings
@@ -170,6 +166,7 @@ void PiCam::save_thread()
 	int nVideoCount = 0;
 	std::string videoName;
 	int nFps = m_nFPS;
+
 	// Limit store length
 	long nLengthLimit = nFps * 60 * m_nSave_duration_minutes; //store for 10 minutes
 	long nLengthCount = 0;
@@ -192,7 +189,7 @@ void PiCam::save_thread()
             // Extract frame from vector
 			cv::Mat matSaveFrame;
 			m_mutex.lock();	
-					
+			
 			matSaveFrame = m_videoFrames.front();
 			m_videoFrames.pop_front();
 			
