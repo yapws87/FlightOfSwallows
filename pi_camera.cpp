@@ -79,7 +79,7 @@ int main(int argc, char * argv[])
 		//VideoWriter vWriter;
 
         picom.printStdLog( "Starting all threads" );
-		//threads.push_back(std::thread(streamFrame_thread));
+		threads.push_back(std::thread(streamFrame_thread));
 		//threads.push_back(std::thread(process_thread));
 		//threads.push_back(std::thread(saveFrame_thread));
 		//threads.push_back(std::thread(&CBirdCounter::tweet_thread, birdCounterPtr));
