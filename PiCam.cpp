@@ -88,7 +88,7 @@ void PiCam::runFrame_thread()
 			m_picom.printStdLog( "Camera is not loaded properly. Exiting thread...");
 			break;
 		}
-			
+			continue;
 		if (!frameColor.empty())
 		{
 			// Preprocess the frames
