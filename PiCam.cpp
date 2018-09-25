@@ -81,14 +81,16 @@ void PiCam::runFrame_thread()
 		picom.countFPSStart();
 		
 		cv::Mat frame, frameColor,frameBGR;
-		if (m_cap.isOpened())
+		if (m_cap.isOpened()){
 			m_cap.read(frameColor); // get a new frame from camera
+			m_picom.printStdLog( "reading from cam");
+		}
 		else
 		{
 			m_picom.printStdLog( "Camera is not loaded properly. Exiting thread...");
 			break;
 		}
-			break;
+			
 		if (!frameColor.empty())
 		{
 			// Preprocess the frames
