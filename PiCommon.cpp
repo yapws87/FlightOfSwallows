@@ -190,7 +190,7 @@ void PiCommon::printStdLog(std::string data)
 void PiCommon::uniSleep(int nSleepTime_milisec)
 {
 #ifndef PERSONAL_COMPUTER
-	usleep(nSleepTime_milisec);
+	usleep(nSleepTime_milisec*1000);
 #else
 	std::this_thread::sleep_for(std::chrono::milliseconds(nSleepTime_milisec));
 #endif
