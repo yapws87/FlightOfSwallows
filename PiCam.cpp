@@ -136,8 +136,9 @@ void PiCam::runFrame_thread()
 			m_mutex.unlock();
 		}
 		else{
-			picom.printStdLog( "Frame is empty." );
-			break;
+			picom.printStdLog( "Frame is empty... wait 1 sec" );
+			picom.uniSleep(1000);
+			//break;
 		}
 
 		picom.countFPSEnd();
