@@ -71,6 +71,7 @@ int main(int argc, char * argv[])
 		nInit_fps = atoi(argv[3]);
 		m_nDisplay_flag = atoi(argv[4]);
 		bCamInitFlag = m_piCam.init_cam(nInit_width,nInit_height,nInit_fps);
+		m_piCam.uniSleep(1000);
 	}
 	
 	std::vector<std::thread> threads;
