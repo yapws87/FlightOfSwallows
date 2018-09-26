@@ -83,13 +83,12 @@ void PiCam::runFrame_thread()
 		cv::Mat frame, frameColor,frameBGR;
 		if (m_cap.isOpened()){
 			m_picom.printStdLog( "reading from cam1");
-			m_cap.read(frameColor); // get a new frame from camera
+			m_cap.read(	frameColor); // get a new frame from camera
 			m_picom.printStdLog( "reading from cam");
 		}
 		else
 		{
 			m_picom.printStdLog( "Camera is not loaded properly. Exiting thread...");
-			break;
 		}
 			
 		if (!frameColor.empty())
