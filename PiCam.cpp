@@ -135,13 +135,15 @@ void PiCam::runFrame_thread()
 
 			m_mutex.unlock();
 		}
-		else
+		else{
+			picom.printStdLog( "Frame is empty." );
 			break;
+		}
 
 		picom.countFPSEnd();
 
 #ifndef PERSONAL_COMPUTER
-		usleep(100);
+		//usleep(100);
 #endif
 
 	}
