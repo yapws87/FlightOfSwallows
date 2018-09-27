@@ -23,13 +23,13 @@ yes | sudo apt-get install python3-dev
 # Download and install OpenCV
 echo "Installing OpenCV.."
 cd ~
-file_dir=opencv-3.4.0
+file_dir=opencv-3.4.3
 if [ -d "$file_dir" ]
 then
 	echo "$file_dir found, skip to next step"
 else
 	echo "$file_dir not found. Downloading..."
-	wget -O opencv.zip https://github.com/Itseez/opencv/archive/3.4.0.zip
+	wget -O opencv.zip https://github.com/Itseez/opencv/archive/3.4.3.zip
 	unzip opencv.zip
 fi
 
@@ -40,7 +40,7 @@ then
 	echo "$file_dir found, skip to next step"
 else
 	echo "$file_dir not found. Downloading..."
-	wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.4.0.zip
+	wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.4.3.zip
 	unzip opencv_contrib.zip
 fi
 
