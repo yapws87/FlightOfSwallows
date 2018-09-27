@@ -33,16 +33,16 @@ else
 	unzip opencv.zip
 fi
 
-echo "Installing OpenCV Contrib.."
-file_dir=opencv_contrib-3.4.3
-if [ -d "$file_dir" ]
-then
-	echo "$file_dir found, skip to next step"
-else
-	echo "$file_dir not found. Downloading..."
-	wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.4.3.zip
-	unzip opencv_contrib.zip
-fi
+# echo "Installing OpenCV Contrib.."
+# file_dir=opencv_contrib-3.4.3
+# if [ -d "$file_dir" ]
+# then
+# 	echo "$file_dir found, skip to next step"
+# else
+# 	echo "$file_dir not found. Downloading..."
+# 	wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.4.3.zip
+# 	unzip opencv_contrib.zip
+# fi
 
 
 echo "Installing Pip "
@@ -94,10 +94,10 @@ mkdir build
 cd build
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
-    -D INSTALL_PYTHON_EXAMPLES=ON \
+    # -D INSTALL_PYTHON_EXAMPLES=ON \
 	-D ENABLE_PRECOMPILED_HEADERS=OFF \
-    -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib-3.4.3/modules \
-    -D BUILD_EXAMPLES=ON ..
+    # -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib-3.4.3/modules \
+    # -D BUILD_EXAMPLES=ON ..
 
 make -j4
 sudo make install
