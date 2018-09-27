@@ -34,7 +34,7 @@ else
 fi
 
 echo "Installing OpenCV Contrib.."
-file_dir=opencv_contrib-3.4.0
+file_dir=opencv_contrib-3.4.3
 if [ -d "$file_dir" ]
 then
 	echo "$file_dir found, skip to next step"
@@ -89,14 +89,14 @@ sudo /etc/init.d/dphys-swapfile stop
 sudo /etc/init.d/dphys-swapfile start
 
 # start compiling
-cd ~/opencv-3.1.0/
+cd ~/opencv-3.4.3/
 mkdir build
 cd build
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
     -D INSTALL_PYTHON_EXAMPLES=ON \
 	-D ENABLE_PRECOMPILED_HEADERS=OFF \
-    -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib-3.1.0/modules \
+    -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib-3.4.3/modules \
     -D BUILD_EXAMPLES=ON ..
 
 make -j4
