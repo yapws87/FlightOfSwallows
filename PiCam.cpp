@@ -84,7 +84,7 @@ void PiCam::runFrame_thread()
 		cv::Mat frame, frameColor,frameBGR;
 		if (m_cap.isOpened()){
 			
-			if( m_cap.grab());
+			if( m_cap.grab())
 				m_cap.retrieve(frameColor);
 			else
 				m_picom.printStdLog("Grab Fail");
