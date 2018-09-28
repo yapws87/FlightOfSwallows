@@ -29,7 +29,7 @@ then
 	echo "$file_dir found, skip to next step"
 else
 	echo "$file_dir not found. Downloading..."
-	wget -O opencv.zip https://github.com/Itseez/opencv/archive/3.3.1.zip
+	wget -O opencv.zip https://codeload.github.com/opencv/opencv/zip/3.3.1
 	unzip opencv.zip
 fi
 
@@ -95,7 +95,7 @@ cd build
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
     # -D INSTALL_PYTHON_EXAMPLES=ON \
-	-D ENABLE_PRECOMPILED_HEADERS=OFF \
+	-D ENABLE_PRECOMPILED_HEADERS=OFF ..
     # -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib-3.4.3/modules \
     # -D BUILD_EXAMPLES=ON ..
 
