@@ -23,13 +23,15 @@ yes | sudo apt-get install python3-dev
 # Download and install OpenCV
 echo "Installing OpenCV.."
 cd ~
-file_dir=opencv-3.3.1
+ver_num=3.3.1
+file_dir=opencv-$ver_num
+
 if [ -d "$file_dir" ]
 then
 	echo "$file_dir found, skip to next step"
 else
 	echo "$file_dir not found. Downloading..."
-	wget -O opencv.zip https://codeload.github.com/opencv/opencv/zip/3.3.1
+	wget -O opencv.zip https://codeload.github.com/opencv/opencv/zip/$ver_num
 	unzip opencv.zip
 fi
 
@@ -89,7 +91,9 @@ sudo /etc/init.d/dphys-swapfile stop
 sudo /etc/init.d/dphys-swapfile start
 
 # start compiling
-cd ~/opencv-3.3.1/
+echo "Start Compiling openCV"
+workon cv
+cd ~/opencv-$ver_num/
 mkdir build
 cd build
 cmake -D CMAKE_BUILD_TYPE=RELEASE \

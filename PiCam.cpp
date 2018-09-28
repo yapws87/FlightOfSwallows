@@ -39,7 +39,8 @@ bool PiCam::init_cam(int nWidth , int nHeight , int nFPS)
     status_check("Camera Init"," ",bCam_status);
     
     if(!bCam_status) 
-        return false;
+		return false;
+        
 
 	m_picom.uniSleep(500);
 	// Set parameters for width
@@ -82,9 +83,15 @@ void PiCam::runFrame_thread()
 		
 		cv::Mat frame, frameColor,frameBGR;
 		if (m_cap.isOpened()){
-			m_picom.printStdLog( "reading from cam1");
-			m_cap.read(	frameColor); // get a new frame from camera
-			m_picom.printStdLog( "reading from cam");
+			
+			if( m_cap.grab());
+				m_cap.retrieve(frameColor);
+			else
+				m_picom.printStdLog("Grab Fail");
+			
+			if( !m_cap.read(frameColor))
+				m_picom.printStdLog("Read Fail"); // get a new frame from camera
+			
 		}
 		else
 		{
