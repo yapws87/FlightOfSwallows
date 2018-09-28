@@ -245,7 +245,7 @@ protected:
 	int m_nFps = 0;
 	std::deque<cv::Mat> m_matFrameGray;
 	std::deque<cv::Mat> m_matFrameColor;
-	cv::VideoCapture m_cap;
+	//cv::VideoCapture m_cap;
 
 	bool m_bOnce = true;
 	std::string m_videoFilename;
