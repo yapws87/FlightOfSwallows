@@ -93,7 +93,9 @@ sudo /etc/init.d/dphys-swapfile start
 # start compiling
 echo "Start Compiling openCV"
 workon cv
+echo "opencv-$ver_num"
 cd ~/opencv-$ver_num/
+rm -r build
 mkdir build
 cd build
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
@@ -101,7 +103,7 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D ENABLE_NEON=ON \
 	-D WITH_LIBV4L=ON \
 	-D ENABLE_PRECOMPILED_HEADERS=OFF \
-	.. /
+	.. 
 	# -D INSTALL_PYTHON_EXAMPLES=ON \
 	# -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib-3.4.3/modules \
     # -D BUILD_EXAMPLES=ON ..
