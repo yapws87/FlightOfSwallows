@@ -94,7 +94,7 @@ mkdir build
 cd build
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
-	-DWITH_LIBV4L=ON
+	-DWITH_LIBV4L=ON \
     # -D INSTALL_PYTHON_EXAMPLES=ON \
 	-D ENABLE_PRECOMPILED_HEADERS=OFF ..
     # -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib-3.4.3/modules \
