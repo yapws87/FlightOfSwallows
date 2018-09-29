@@ -1,4 +1,8 @@
 
+# Update Raspberry
+yes | sudo apt-get update
+yes | sudo apt-get upgrade
+
 # Installing all prerequisites
 echo "Installing all prerequisites.."
 yes | sudo apt-get install build-essential 
@@ -19,6 +23,9 @@ yes | sudo apt-get install libatlas-base-dev
 yes | sudo apt-get install gfortran 
 yes | sudo apt-get install python2.7-dev 
 yes | sudo apt-get install python3-dev 
+
+echo "Remove unsed"
+yes | sudo apt-get autoremove
 
 # Download and install OpenCV
 echo "Installing OpenCV.."
