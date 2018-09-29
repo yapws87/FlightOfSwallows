@@ -46,7 +46,6 @@ bool PiCam::init_cam(int nWidth , int nHeight , int nFPS)
 	// Set parameters for width
 	m_cap.set(CV_CAP_PROP_FRAME_HEIGHT, m_nFrameHeight);
 	m_cap.set(CV_CAP_PROP_FRAME_WIDTH, m_nFrameWidth);
-    
     m_cap.set(CV_CAP_PROP_FPS, m_nFPS);
 
 
