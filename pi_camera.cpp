@@ -4,12 +4,14 @@
 #include "opencv2/opencv.hpp"
 
 #include <thread>
+#include "PiCam.h"
 #include "BirdCounter.h"
 #include "PiCommon.h"
-#include "PiCam.h"
+
 
 CBirdCounter m_birdCount;
 PiCam m_piCam;
+PiTwitter
 
 int m_nDisplay_flag = 0;
 

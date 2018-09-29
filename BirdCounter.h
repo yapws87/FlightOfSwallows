@@ -213,10 +213,7 @@ protected:
 
 	// Functions
 	void insertText(cv::Mat & matDisplay, int nFPS, double nMean, double nThreshold);
-	void tweet_bird();
-	void tweet_graph(std::string strdate);
 	void prepareSaveImage(const cv::Mat matFg, cv::Mat matDisplay, int nfps, double dThreshold);
-
 	
 	bool countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &matDisplay,bool bDisplay = false);
 	cv::Rect boundingBirds(std::vector<cv::Point> birdPts);
@@ -225,7 +222,8 @@ protected:
 
 	void insertBirdLog(BirdData bird_data);
 	void printBirdLog();
-	void printStatus();
+	void printStatus_thread();
+	void printStatus_thread_func();
 	void resetBirdCount();
 
 	// Variables
@@ -243,15 +241,13 @@ protected:
 	int m_nFrameWidth = 0;
 	int m_nFrameHeight = 0;
 	int m_nFps = 0;
-	std::deque<cv::Mat> m_matFrameGray;
-	std::deque<cv::Mat> m_matFrameColor;
-	//cv::VideoCapture m_cap;
+
 
 	bool m_bOnce = true;
 	std::string m_videoFilename;
-	int m_nVideoCount = 0;
+	
 	double m_dthresh = 0;
-	std::mutex m_mutex, m_mutex_save;
+	std::mutex m_mutex;
 	cv::Ptr<cv::BackgroundSubtractor> m_pMOG; //MOG Background subtractor
 	cv::Mat m_matForeground;
 	cv::Mat m_matSaveImage;
@@ -289,6 +285,7 @@ protected:
 	int m_nToggleLearn = 0;
 
 	PiOpenCV m_cv;
+	PiTwitter m_piTweet;
 
 };
 

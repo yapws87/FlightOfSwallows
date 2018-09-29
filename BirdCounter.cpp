@@ -48,101 +48,6 @@ void CBirdCounter::insertText(cv::Mat & matDisplay, int nFPS, double nMean, doub
 	}
 }
 
-void CBirdCounter::tweet_bird()
-{
-	PiCommon picom;
-
-	std::string piMsg;
-	std::string piCmd = "sudo python /home/pi/Desktop/Twitter/./twitter_pic.py ";
-	std::string piImg = " '/home/pi/openCV_test/image.jpg'";
-	std::string piParallel = " &";
-
-	float fMax = 0.1;
-	float fMin = m_fMinThresh;
-	piMsg = " '";
-	if (m_bOnce) {
-		piMsg += "[pi] TEST IMAGE... printing printing";
-		m_bOnce = false;
-	}
-	else if (m_dthresh <= fMin + fMax * 0.1)
-		piMsg += "[pi] What was that?";
-	else if (m_dthresh < fMin + fMax * 0.2)
-		piMsg += "[pi] Something is there..";
-	else if (m_dthresh < fMin + fMax * 0.3)
-		piMsg += "[pi] Is tat wind?..";
-	else if (m_dthresh < fMin + fMax * 0.4)
-		piMsg += "[pi] Whoosh..";
-	else if (m_dthresh < fMin + fMax * 0.5)
-		piMsg += "[pi] Tat is fast..";
-	else if (m_dthresh < fMin + fMax * 0.6)
-		piMsg += "[pi] Swift as a bird..";
-	else if (m_dthresh < fMin + fMax * 0.7)
-		piMsg += "[pi] Eikk a bug?..";
-	else if (m_dthresh < fMin + fMax * 0.8)
-		piMsg += "[pi] Birdyy ..";
-	else
-		piMsg += "[pi] Too many noise!";
-
-	piMsg += "\n";
-
-	if (m_dTime > 0)
-	{
-		piMsg += "Process Time : " + std::to_string(m_dTime) + " ms \n";
-	}
-
-	piMsg += "Bird-out Count : " + std::to_string(m_nCount_Out) + "\n";
-	piMsg += "Bird-in  Count : " + std::to_string(m_nCount_In) + "\n";
-
-	for (int i = 0; i < m_preRatio.size(); i++)
-	{
-		piMsg += std::to_string(m_preRatio[i]) + "\n";
-	}
-	piMsg += "' ";
-
-	std::string piSys = piCmd + piMsg + piImg + piParallel;
-	system(piSys.c_str());
-
-	printBirdLog();
-	picom.printStdLog( "Tweeted Image!");
-
-}
-
-void CBirdCounter::tweet_graph(std::string strdate)
-{
-	PiCommon picom;
-	std::string piMsg;
-	std::string piCmd_image = "sudo python /home/pi/Desktop/Twitter/./twitter_pic.py ";
-	std::string piCmd_analyzeHisto = "python3 /home/pi/Desktop/Twitter/analyze_birdlog.py ";
-	std::string piImg_path = " /home/pi/openCV_test/histogram.jpg ";
-	std::string piParallel = " &";
-
-	// Calculate and create histogram
-	std::string folder_path = " /home/pi/openCV_test/bird_log/";
-	std::string infile_path = folder_path + strdate + "_in.txt ";
-	std::string outfile_path = folder_path + strdate + "_out.txt ";
-
-
-	std::string piSys = piCmd_analyzeHisto + infile_path + outfile_path + piImg_path;
-	//system(piSys.c_str());
-	picom.printStdLog("Cmd1 : " + piSys);
-	std::string str_out = picom.getString_fromCmd(piSys);
-	picom.printStdLog("Result : " + str_out);
-	picom.uniSleep(10000);
-
-	piMsg = " '";
-	piMsg += strdate + " histogram ";
-	//piMsg += "Bird-out Total Count : " + std::to_string(count_out) + "\n";
-	//piMsg += "Bird-in  Total Count : " + std::to_string(count_in) + "\n";
-	//piMsg += str_out;
-	piMsg += "' ";
-
-	piSys = piCmd_image + piMsg + piImg_path + piParallel;
-	picom.printStdLog("Cmd2 : " + piSys);
-	system(piSys.c_str());
-
-	picom.printStdLog("Tweeted Graph!\n");
-
-}
 
 void CBirdCounter::prepareSaveImage(const cv::Mat matFg, cv::Mat matDisplay, int nfps, double dThreshold)
 {
@@ -495,8 +400,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		cv::Mat matLocalGray;
 		cv::Mat matLocalColor;
 		cv::Mat matLocalFore;
-		matLocalGray = matFrameGray;//m_matFrameGray.front();
-		matLocalColor = matFrameColor;//m_matFrameColor.front();
+		matLocalGray = matFrameGray;
+		matLocalColor = matFrameColor;
 
 
 		// Motion detections
@@ -541,16 +446,9 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		matLocalFore(noiseRect).setTo(0);
 		matLocalFore(noiseRect + cv::Point(0, 0.75 * matLocalFore.rows)).setTo(0);
 
-
-
 		cv::Mat matElement = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(3, 3));
 		cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_OPEN, matElement, cv::Point(-1, -1), 2);
 		cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_CLOSE, matElement, cv::Point(-1, -1), 2);
-
-		//cv::erode(matLocalFore, matLocalFore, cv::Mat(), cv::Point(-1, -1), 1);
-		//cv::dilate(matLocalFore, matLocalFore, cv::Mat(), cv::Point(-1, -1), 3);
-		//cv::erode(matLocalFore, matLocalFore, cv::Mat(), cv::Point(-1, -1), 2);
-
 
 #ifdef PERSONAL_COMPUTER
 		if (!matLocalFore.empty())
@@ -560,12 +458,10 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		}
 #endif
 
-
 		// Calculate ratio
 		// Detect sudden change of video quality
 		dForeRatio = (double)cv::countNonZero(matLocalFore(cntROI)) / (double)(cntROI.area());
 		m_ratios[0] = dForeRatio;
-		
 
 		cv::Mat matDisplayWithBirds;
 		// Skip when too large changes occur
@@ -586,21 +482,18 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 				//picom.printStdLog( "BIRD EXIST");
 			}
 		}
-		
-		
 
 		// If dForeRatio is higher add count continous ratio
 		// Only inform when some thing middle sized moved.
 		// Avoid room light change
 
-		
 		if (m_bOnce)
 		{
 			m_nCountContinuosValid = 1;
-			m_bTweeterFlag = true;
+			//m_bTweeterFlag = true;
+			m_piTweet.tweet_bird_thread(matDisplayWithBirds);
 			m_fSecCount = 10000;
 		}
-
 		
 #ifdef PERSONAL_COMPUTER
 		if (!matDisplayWithBirds.empty())
@@ -617,8 +510,9 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			if (m_fSecCount > 60 * 120) // Write
 			{ 
 				prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
+				m_piTweet.tweet_bird_thread(matDisplayWithBirds);
 				m_bMotionDetected = true;
-				m_bTweeterFlag = true;
+		
 				m_dthresh = dForeRatio;
 				m_fSecCount = 0;
 				m_preRatio = m_ratios;
@@ -645,7 +539,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			{
 				m_nCountIn_tweet = m_nCount_In;
 				m_nCountOut_tweet = m_nCount_Out;
-				m_bTweeterGraph = true;
+				
+				m_piTweet.tweet_graph_thread();
 				picom.printStdLog("date_difference");
 				resetBirdCount();
 			}
@@ -662,56 +557,13 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (elapsed_seconds.count() > 60 * 5)
 		{
 			m_statusTime = tempTime;
-			m_bSaveStatus = true;
-			
+			printStatus_thread();
 		}
 
 	//std::cout << std::endl;
 
 	//}
 }
-
-void CBirdCounter::tweet_thread()
-{
-	PiCommon picom;
-	for (;;)
-	{
-		if (m_bTweeterFlag)
-		{
-			
-			// Saves the image onto HD before python can process 
-#ifndef PERSONAL_COMPUTER
-			system("sudo rm /home/pi/openCV_test/image.jpg");
-			imwrite("/home/pi/openCV_test/image.jpg", m_matSaveImage);
-			//imwrite("/home/pi/openCV_test/FG.jpg", matFg);
-			picom.printStdLog("Saved Image!");
-#endif
-			
-			// Time to wait before tweeting
-			picom.uniSleep(5000); // rest 5 seconds
-			tweet_bird();
-			m_bTweeterFlag = false;
-		}
-		else if (m_bTweeterGraph)
-		{
-			picom.uniSleep(5000); // rest 5 seconds
-			tweet_graph(picom.get_yesterday_date());
-			m_bTweeterGraph = false;
-		}
-		else if (m_bSaveStatus)
-		{
-			picom.uniSleep(5000);
-			printStatus();
-			m_bSaveStatus = false;
-		}
-		else 
-		{
-			picom.uniSleep(5000); // rest 5 seconds
-		}
-	
-	}
-}
-
 
 void CBirdCounter::insertBirdLog(BirdData bird_data) {
 	BirdCell tempCell;
@@ -764,11 +616,15 @@ void CBirdCounter::printBirdLog()
 	out_file.close();
 }
 
+void CBirdCounter::printStatus_thread()
+{
+	std::thread t(printStatus_thread_func());
+}
 
-
-void CBirdCounter::printStatus()
+void CBirdCounter::printStatus_thread_func()
 {
 	PiCommon picom;
+	m_mutex.lock();
 	std::ofstream status_file;
 	std::string filename = "/home/pi/openCV_test/bird_log/" + picom.get_current_date();
 
@@ -778,6 +634,7 @@ void CBirdCounter::printStatus()
 	auto timenow = std::chrono::system_clock::now();
 	auto tt = std::chrono::system_clock::to_time_t(timenow);
 	auto temperature_val = picom.getString_fromCmd("/opt/vc/bin/vcgencmd measure_temp");
+	auto core_val = picom.getString_fromCmd("/opt/vc/bin/vcgencmd measure_clock arm");
 
 	status_file << std::strtok(std::ctime(&tt), "\n") << "\t"
 			<< "Sat=" << m_nSaturationCount << "\t"
@@ -785,7 +642,9 @@ void CBirdCounter::printStatus()
 			<< "Time=" << std::to_string((int)m_dTime) << "\t"
 			<< "Bird_in=" << m_nCount_In << "\t"
 			<< "Bird_out=" << m_nCount_Out << "\t"
-			<< temperature_val;
+			<< "temp=" << temperature_val<< "\t"
+			<< "core=" << core_val<< "\t"
+			;
 
 	std::cout << std::strtok(std::ctime(&tt), "\n") << "\t"
 		<< "Sat=" << m_nSaturationCount << "\t"
@@ -793,12 +652,14 @@ void CBirdCounter::printStatus()
 		<< "Time=" << std::to_string((int)m_dTime) << "\t"
 		<< "Bird_in=" << m_nCount_In << "\t"
 		<< "Bird_out=" << m_nCount_Out << "\t"
-		<< temperature_val;
+		<< "temp=" << temperature_val<< "\t"
+		<< "core=" << core_val<< "\t"
+		;
 			
 
 	m_nSaturationCount = 0;
 	m_nOverflowCount = 0;
 
 	status_file.close();
-
+	m_mutex.unlock();
 }
