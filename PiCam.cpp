@@ -44,9 +44,9 @@ bool PiCam::init_cam(int nWidth , int nHeight , int nFPS)
 
 	m_picom.uniSleep(500);
 	// Set parameters for width
-	
+	m_cap.set(CV_CAP_PROP_FRAME_HEIGHT, m_nFrameHeight);
 	m_cap.set(CV_CAP_PROP_FRAME_WIDTH, m_nFrameWidth);
-    m_cap.set(CV_CAP_PROP_FRAME_HEIGHT, m_nFrameHeight);
+    
     m_cap.set(CV_CAP_PROP_FPS, m_nFPS);
 
 
@@ -61,7 +61,7 @@ bool PiCam::init_cam(int nWidth , int nHeight , int nFPS)
     status_check(" [PARAM_FPS] ", std::to_string(m_nFPS), bFps_status);
    
 
-	m_picom.printStdLog( "Verified Width : " + std::to_string(m_cap.get(CV_CAP_PROP_FRAME_WIDTH)));
+	m_picom.printStdLog "Verified Width : " + std::to_string(m_cap.get(CV_CAP_PROP_FRAME_WIDTH)));
 	m_picom.printStdLog("Verified Height : " + std::to_string(m_cap.get(CV_CAP_PROP_FRAME_HEIGHT)));
 	m_picom.printStdLog("Loaded FPS : " + std::to_string(m_cap.get(CV_CAP_PROP_FPS)));
 	
@@ -150,9 +150,6 @@ void PiCam::runFrame_thread()
 
 		picom.countFPSEnd();
 
-#ifndef PERSONAL_COMPUTER
-		//usleep(100);
-#endif
 
 	}
 }
