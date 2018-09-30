@@ -141,20 +141,30 @@ void tweet_brid_proc(cv::Mat matBirdResult
 
 void PiTwitter::tweet_graph_thread(std::string strdate)
 {
-    std::thread(tweet_graph,strdate);
+    std::thread(tweet_graph_proc
+        , strdate
+        , m_piCmd_tweetPic
+        , m_piCmd_analyzeHisto
+        , m_piHisto
+        , m_piBirdLog
+    );
 }
 
-void tweet_graph_proc(std::string strdate)
+void tweet_graph_proc(std::string strdate
+    , std::string piCmd_image
+    , std::string piCmd_analyzeHisto
+    , std::string piHisto_path
+    ,std::string folder_path )
 {
 	PiCommon picom;
 	std::string piMsg;
-	std::string piCmd_image = m_piCmd_tweetPic;
-	std::string piCmd_analyzeHisto = m_piCmd_analyzeHisto;
-	std::string piHisto_path = m_piHisto;
+	//std::string piCmd_image = m_piCmd_tweetPic;
+	//std::string piCmd_analyzeHisto = m_piCmd_analyzeHisto;
+	//std::string piHisto_path = m_piHisto;
 	std::string piParallel = " &";
 
 	// Calculate and create histogram
-	std::string folder_path = m_piBirdLog;
+	//std::string folder_path = m_piBirdLog;
 	std::string infile_path = folder_path + strdate + "_in.txt ";
 	std::string outfile_path = folder_path + strdate + "_out.txt ";
 
