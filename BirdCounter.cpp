@@ -616,14 +616,57 @@ void CBirdCounter::printBirdLog()
 	out_file.close();
 }
 
-void _printStatus_thread_func()
+void _printStatus_thread_func(int nTime,int nSaturation,int nOverflow, int nCountIn, int nCountOut)
 {
-	printStatus_thread_func();
+	PiCommon picom;
+	std::ofstream status_file;
+	std::string filename = "/home/pi/openCV_test/bird_log/" + picom.get_current_date();
+
+	status_file.open(filename + "_status.txt", std::fstream::out | std::fstream::app);
+	
+	if(status_file.is_open())
+	{
+	// in-data print
+		auto timenow = std::chrono::system_clock::now();
+		auto tt = std::chrono::system_clock::to_time_t(timenow);
+		auto temperature_val = picom.getString_fromCmd("/opt/vc/bin/vcgencmd measure_temp");
+		auto core_val = picom.getString_fromCmd("/opt/vc/bin/vcgencmd measure_clock arm");
+
+		status_file << std::strtok(std::ctime(&tt), "\n") << "\t"
+				<< "Sat=" << nSaturation << "\t"
+				<< "Over=" << nOverflow << "\t"
+				<< "Time=" << std::to_string(nTime) << "\t"
+				<< "Bird_in=" << nCountIn << "\t"
+				<< "Bird_out=" << nCountOut << "\t"
+				<< "temp=" << temperature_val<< "\t"
+				<< "core=" << core_val<< "\t"
+				;
+
+		std::cout << std::strtok(std::ctime(&tt), "\n") << "\t"
+			<< "Sat=" << nSaturation << "\t"
+			<< "Over=" << nOverflow << "\t"
+			<< "Time=" << std::to_string(nTime) << "\t"
+			<< "Bird_in=" << nCountIn << "\t"
+			<< "Bird_out=" << nCountOut << "\t"
+			<< "temp=" << temperature_val<< "\t"
+			<< "core=" << core_val<< "\t"
+			;
+
+		status_file.close();
+	}
+	
 } 
 
 void CBirdCounter::printStatus_thread()
 {
-	std::thread t(_printStatus_thread_func);
+	int nTime,int nSaturation,int nOverflow, int nCountIn, int nCountOut
+	std::thread t(_printStatus_thread_func(m_dTime
+		, m_nSaturationCount
+		, m_nOverflowCount
+		, m_nCount_In
+		, m_nCount_Out
+	));
+
 }
 
 void CBirdCounter::printStatus_thread_func()
@@ -660,10 +703,6 @@ void CBirdCounter::printStatus_thread_func()
 		<< "temp=" << temperature_val<< "\t"
 		<< "core=" << core_val<< "\t"
 		;
-			
-
-	m_nSaturationCount = 0;
-	m_nOverflowCount = 0;
 
 	status_file.close();
 	m_mutex.unlock();
