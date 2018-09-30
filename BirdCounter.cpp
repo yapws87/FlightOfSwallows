@@ -643,8 +643,9 @@ void CBirdCounter::printBirdLog()
 
 void _printStatus_thread_func(int nTime, int nSaturation, int nOverflow, int nCountIn, int nCountOut)
 {
-	picom.printStdLog("_printStatus_thread_func start",1);
 	PiCommon picom;
+	picom.printStdLog("_printStatus_thread_func start",1);
+	
 	std::ofstream status_file;
 	std::string filename = "/home/pi/openCV_test/bird_log/" + picom.get_current_date();
 
@@ -687,7 +688,8 @@ void _printStatus_thread_func(int nTime, int nSaturation, int nOverflow, int nCo
 
 void CBirdCounter::printStatus_thread()
 {
-	picom.printStdLog("printStatus_func ->>",1);
+	PiCommon picom;
+	picom.printStdLog("printStatus_func ->>.",1);
 	std::thread t(_printStatus_thread_func,m_dTime
 		, m_nSaturationCount
 		, m_nOverflowCount
