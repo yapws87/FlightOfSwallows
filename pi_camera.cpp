@@ -11,7 +11,7 @@
 
 CBirdCounter m_birdCount;
 PiCam m_piCam;
-PiTwitter
+
 
 int m_nDisplay_flag = 0;
 
