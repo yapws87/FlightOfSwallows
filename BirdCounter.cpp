@@ -608,7 +608,7 @@ void CBirdCounter::printBirdLog()
 {
 	PiCommon picom;
 	std::ofstream in_file, out_file;
-	std::string filename = "/home/pi/openCV_test/bird_log/" + picom.get_current_date();
+	std::string filename = PROGRAM_FOLDER + "bird_log/" + picom.get_current_date();
 	
 	in_file.open(filename + "_in.txt", std::fstream::out | std::fstream::app);
 	out_file.open(filename + "_out.txt", std::fstream::out | std::fstream::app);
