@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <sstream>
 #include "PiCommon.h"
+#include "PiTwitter.h"
 
 #ifndef PERSONAL_COMPUTER
 #include "unistd.h"
