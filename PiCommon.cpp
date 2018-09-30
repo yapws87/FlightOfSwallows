@@ -180,10 +180,14 @@ bool PiCommon::isHourDiff()
 	return false;
 }
 
-void PiCommon::printStdLog(std::string data)
+void PiCommon::printStdLog(std::string data, int nLevel)
 {
-	std::cout << "[" << get_current_time_and_date() << "]\t";
-	std::cout << data << std::endl;
+	if(nLevel <= LOG_LEVEL)
+	{
+		std::cout << "[" << get_current_time_and_date() << "]\t";
+		std::cout << data << std::endl;
+	}
+
 }
 
 

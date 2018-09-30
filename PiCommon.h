@@ -15,6 +15,7 @@
 #include "unistd.h"
 #endif
 
+#define LOG_LEVEL 1 // 0 for essential only / 1 for more detail
 class PiCommon
 {
 protected:
@@ -40,7 +41,7 @@ public:
 
 	inline std::string getCurrentDate() { return m_currentDate; }
 	inline std::string getYesterdayDate() { return m_previousDate; }
-	void printStdLog(std::string data);
+	void printStdLog(std::string data, int nLevel = 0);
 
 	void countFPSStart();
 	void countFPSEnd();
