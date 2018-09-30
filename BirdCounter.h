@@ -224,7 +224,7 @@ protected:
 	void insertBirdLog(BirdData bird_data);
 	void printBirdLog();
 	void printStatus_thread();
-	void printStatus_thread_func();
+	//void printStatus_thread_func();
 	void resetBirdCount();
 
 	// Variables
