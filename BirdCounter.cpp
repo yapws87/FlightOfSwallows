@@ -580,7 +580,9 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (elapsed_seconds.count() > 60 * 5)
 		{
 			m_statusTime = tempTime;
+			picom.printStdLog( " Start  printStatus_thread",1);
 			printStatus_thread();
+			picom.printStdLog( " printStatus_thread DONE",1);
 		}
 
 	//std::cout << std::endl;
