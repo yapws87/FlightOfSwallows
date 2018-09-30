@@ -12,7 +12,7 @@ PiTwitter::~PiTwitter()
 }
 PiTwitter::tweet_thread()
 {
-    std::thread t(tweet_thread_proc());
+    std::thread t(tweet_thread_proc);
 }
 
 PiTwitter::tweet_thread_proc()
@@ -66,7 +66,7 @@ void PiTwitter::tweet_image(std::string piMsg, cv::Mat matImage)
 
 void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult)
 {
-    std::thread(tweet_bird(matBirdResult));
+    std::thread(tweet_bird(),matBirdResult);
 }
 void PiTwitter::tweet_bird(cv::Mat matBirdResult)
 {
@@ -126,7 +126,7 @@ void PiTwitter::tweet_bird(cv::Mat matBirdResult)
 
 void PiTwitter::tweet_graph_thread(std::string strdate)
 {
-    std::thread(tweet_graph(strdate));
+    std::thread(tweet_graph(),strdate);
 }
 
 void PiTwitter::tweet_graph(std::string strdate)
