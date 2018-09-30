@@ -126,7 +126,7 @@ void PiTwitter::tweet_bird(cv::Mat matBirdResult)
 
 void PiTwitter::tweet_graph_thread(std::string strdate)
 {
-    std::thread(tweet_graph(),strdate);
+    std::thread(tweet_graph,strdate);
 }
 
 void PiTwitter::tweet_graph(std::string strdate)

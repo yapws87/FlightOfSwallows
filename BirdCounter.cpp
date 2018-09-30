@@ -540,7 +540,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 				m_nCountIn_tweet = m_nCount_In;
 				m_nCountOut_tweet = m_nCount_Out;
 				
-				m_piTweet.tweet_graph_thread();
+				m_piTweet.tweet_graph_thread("qwe");
 				picom.printStdLog("date_difference");
 				resetBirdCount();
 			}
@@ -616,7 +616,7 @@ void CBirdCounter::printBirdLog()
 	out_file.close();
 }
 
-void _printStatus_thread_func(int nTime,int nSaturation,int nOverflow, int nCountIn, int nCountOut)
+void _printStatus_thread_func(int nTime, int nSaturation, int nOverflow, int nCountIn, int nCountOut)
 {
 	PiCommon picom;
 	std::ofstream status_file;
