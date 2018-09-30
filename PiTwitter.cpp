@@ -29,7 +29,7 @@ void PiTwitter::tweet_image(std::string piMsg, cv::Mat matImage)
     imwrite(piImg, matImage);
     
     piCom.uniSleep(1000);
-    picom.printStdLog("Saved Image!");
+    piCom.printStdLog("Saved Image!");
 #endif
 
 
@@ -38,23 +38,7 @@ void PiTwitter::tweet_image(std::string piMsg, cv::Mat matImage)
 
 }
 
-void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult
-    , double dThresh
-    , double dTime
-    , int nCountIn
-    , int nCountOut
-    , std::deque<double> preRatio)
-{
-    std::thread(tweet_brid_proc
-        , matBirdResult
-        , dThresh
-        , dTime
-        , nCountIn
-        , nCountOut
-        , preRatio
-        );
-}
-void tweet_brid_proc(cv::Mat matBirdResult
+ tweet_bird_proc(cv::Mat matBirdResult
     , double dThresh
     , double dTime
     , int nCountIn
@@ -113,7 +97,23 @@ void tweet_brid_proc(cv::Mat matBirdResult
 	picom.printStdLog( "Tweeted Image!");
 }
 
-
+void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult
+    , double dThresh
+    , double dTime
+    , int nCountIn
+    , int nCountOut
+    , std::deque<double> preRatio)
+{
+    std::thread(tweet_brid_proc
+        , matBirdResult
+        , dThresh
+        , dTime
+        , nCountIn
+        , nCountOut
+        , preRatio
+        );
+}
+void
 
 void tweet_graph_proc(std::string strdate
     , std::string piCmd_image
