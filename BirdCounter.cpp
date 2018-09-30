@@ -618,7 +618,7 @@ void CBirdCounter::printBirdLog()
 
 void _printStatus_thread_func()
 {
-	printStatus_thread_func()
+	printStatus_thread_func();
 } 
 
 void CBirdCounter::printStatus_thread()
