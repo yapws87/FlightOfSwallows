@@ -23,7 +23,7 @@ protected:
 	bool m_bOnce = false;
 	double m_dTime = 0;
 
-	void tweet_thread_proc();
+
 	void tweet_graph(std::string strdate);
 	void tweet_bird( cv::Mat matBird);
 	void tweet_image(std::string msg, cv::Mat matImage);
@@ -43,8 +43,6 @@ public:
 	}
 
 	//void tweet_image(std::string msg, cv::Mat matImage);
-
-	void tweet_thread();
 
 	void tweet_graph_thread( std::string strdate);
 	void tweet_bird_thread( cv::Mat matBird

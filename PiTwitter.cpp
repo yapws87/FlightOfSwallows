@@ -10,35 +10,7 @@ PiTwitter::PiTwitter()
 PiTwitter::~PiTwitter()
 {
 }
-PiTwitter::tweet_thread()
-{
-    std::thread t(tweet_thread_proc);
-}
 
-PiTwitter::tweet_thread_proc()
-{
-	PiCommon picom;
-
-    if (m_bTweeterFlag)
-    {
-        picom.uniSleep(5000); // rest 5 seconds
-        tweet_bird();
-        m_bTweeterFlag = false;
-    }
-    else if (m_bTweeterGraph)
-    {
-        picom.uniSleep(5000); // rest 5 seconds
-        tweet_graph(picom.get_yesterday_date());
-        m_bTweeterGraph = false;
-    }
-    else 
-    {
-        picom.uniSleep(5000); // rest 5 seconds
-    }
-
-
-
-}
 
 void PiTwitter::tweet_image(std::string piMsg, cv::Mat matImage)
 {
@@ -139,16 +111,7 @@ void tweet_brid_proc(cv::Mat matBirdResult
 	picom.printStdLog( "Tweeted Image!");
 }
 
-void PiTwitter::tweet_graph_thread(std::string strdate)
-{
-    std::thread(tweet_graph_proc
-        , strdate
-        , m_piCmd_tweetPic
-        , m_piCmd_analyzeHisto
-        , m_piHisto
-        , m_piBirdLog
-    );
-}
+
 
 void tweet_graph_proc(std::string strdate
     , std::string piCmd_image
@@ -186,4 +149,15 @@ void tweet_graph_proc(std::string strdate
 
 	picom.printStdLog("Tweeted Graph!\n");
 
+}
+
+void PiTwitter::tweet_graph_thread(std::string strdate)
+{
+    std::thread(tweet_graph_proc
+        , strdate
+        , m_piCmd_tweetPic
+        , m_piCmd_analyzeHisto
+        , m_piHisto
+        , m_piBirdLog
+    );
 }
