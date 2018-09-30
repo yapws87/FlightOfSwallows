@@ -12,12 +12,13 @@ PiTwitter::~PiTwitter()
 }
 
 
-void PiTwitter::tweet_image(std::string piMsg, cv::Mat matImage)
+void tweet_image( std::string piCmd
+    , std::string piImg
+    , std::string piMsg
+    , cv::Mat matImage)
 {
     PiCommon piCom;
-    
-    std::string piCmd = m_piCmd_tweetPic;
-    std::string piImg = m_piImg;
+
     std::string piParallel = " &";
 
     // Saves the image onto HD before python can process 
@@ -39,6 +40,8 @@ void PiTwitter::tweet_image(std::string piMsg, cv::Mat matImage)
 }
 
 void tweet_bird_proc(cv::Mat matBirdResult
+    , std::string piCmd
+    , std::string piImg
     , double dThresh
     , double dTime
     , int nCountIn
@@ -54,7 +57,6 @@ void tweet_bird_proc(cv::Mat matBirdResult
 	piMsg = " '";
 	if (dThresh < 0) {
 		piMsg += "[pi] TEST IMAGE... printing printing";
-		m_bOnce = false;
 	}
 	else if (dThresh <= fMin + fMax * 0.1)
 		piMsg += "[pi] What was that?";
@@ -82,8 +84,8 @@ void tweet_bird_proc(cv::Mat matBirdResult
 		piMsg += "Process Time : " + std::to_string(dTime) + " ms \n";
 	}
 
-	piMsg += "Bird-out Count : " + std::to_string(m_nCount_Out) + "\n";
-	piMsg += "Bird-in  Count : " + std::to_string(m_nCount_In) + "\n";
+	piMsg += "Bird-out Count : " + std::to_string(nCountOut) + "\n";
+	piMsg += "Bird-in  Count : " + std::to_string(nCountIn) + "\n";
 
 	for (int i = 0; i < preRatio.size(); i++)
 	{
@@ -91,7 +93,7 @@ void tweet_bird_proc(cv::Mat matBirdResult
 	}
 	piMsg += "' ";
 
-	tweet_image(piMsg,matBirdResult);
+	tweet_image(piCmd,piImg,piMsg,matBirdResult);
 
 	printBirdLog();
 	picom.printStdLog( "Tweeted Image!");
@@ -105,6 +107,8 @@ void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult
     , std::deque<double> preRatio)
 {
     std::thread(tweet_brid_proc
+        , m_piCmd_tweetPic
+        , m_piImg
         , matBirdResult
         , dThresh
         , dTime
