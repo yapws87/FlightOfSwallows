@@ -1,5 +1,7 @@
 #include "BirdCounter.h"
 
+#define PROGRAM_FOLDER "/home/pi/projects/FlightOfSwallows/"
+
 CBirdCounter::CBirdCounter()
 {
 	m_pMOG = cv::createBackgroundSubtractorMOG2(100,2 * 2, false);
