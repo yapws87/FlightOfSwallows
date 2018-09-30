@@ -52,5 +52,5 @@ public:
     	, double dTime
     	, int nCountIn
    		 , int nCountOut
-    	, std::vector<double> preRatio);
+    	, std::deque<double> preRatio);
 };

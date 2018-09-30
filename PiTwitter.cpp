@@ -69,7 +69,7 @@ void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult,
     , double dTime
     , int nCountIn
     , int nCountOut
-    , std::vector<double> preRatio)
+    , std::deque<double> preRatio)
 {
     std::thread(tweet_brid_proc
         , matBirdResult
@@ -85,7 +85,7 @@ void tweet_brid_proc(cv::Mat matBirdResult
     , double dTime
     , int nCountIn
     , int nCountOut
-    , std::vector<double> preRatio )
+    , std::deque<double> preRatio )
 {
     PiCommon picom;
 	std::string piMsg;
