@@ -621,7 +621,7 @@ void CBirdCounter::printStatus_thread()
 	std::thread t(printStatus_thread_func);
 }
 
-void CBirdCounter::printStatus_thread_func()
+static void CBirdCounter::printStatus_thread_func()
 {
 	PiCommon picom;
 	m_mutex.lock();
