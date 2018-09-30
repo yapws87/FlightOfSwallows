@@ -419,7 +419,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (m_nToggleLearn > 10) {
 			m_pMOG->apply(smallLocalGray, matLocalFore);
 			m_nToggleLearn = 0;
-			picom.printStdLog( "Learning BG");
+			picom.printStdLog( "Learning BG",1);
 		}
 		m_nToggleLearn++;
 
@@ -428,7 +428,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		m_pMOG->getBackgroundImage(matBG);
 		if (matBG.empty())
 		{
-			picom.printStdLog( "matBG Empty");	
+			picom.printStdLog( "matBG Empty",1);	
 			return;
 		}
 
@@ -462,6 +462,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		}
 #endif
 
+		picom.printStdLog( "Calculate ratio",1);
 		// Calculate ratio
 		// Detect sudden change of video quality
 		dForeRatio = (double)cv::countNonZero(matLocalFore(cntROI)) / (double)(cntROI.area());
@@ -478,7 +479,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			m_birds.clear();
 		}
 		else {
-		
+			picom.printStdLog( "countBird",1);
 			bool bExistBird = countBird(matLocalFore, matLocalColor, matDisplayWithBirds,true);
 			if (bExistBird) {
 				m_nCountContinuosValid++;
@@ -493,6 +494,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 
 		if (m_bOnce)
 		{
+			picom.printStdLog( "m_bOnce",1);
 			m_nCountContinuosValid = 1;
 			//m_bTweeterFlag = true;
 			/*
@@ -567,6 +569,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			
 		}
 
+		picom.printStdLog( " Status update",1);
 		// Status update
 		auto tempTime = std::chrono::system_clock::now();
 		std::chrono::duration<double> elapsed_seconds = tempTime - m_statusTime;
