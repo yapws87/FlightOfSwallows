@@ -647,7 +647,7 @@ void _printStatus_thread_func(int nTime, int nSaturation, int nOverflow, int nCo
 	std::ofstream status_file;
 	std::string filename = "/home/pi/openCV_test/bird_log/" + picom.get_current_date();
 
-	picom.printStdLog("Opening file for status print",1)
+	picom.printStdLog("Opening file for status print",1);
 	status_file.open(filename + "_status.txt", std::fstream::out | std::fstream::app);
 	
 	if(status_file.is_open())
