@@ -46,7 +46,7 @@ void tweet_bird_proc(cv::Mat matBirdResult
     , double dTime
     , int nCountIn
     , int nCountOut
-    , std::deque<double> preRatio )
+    )
 {
     PiCommon picom;
 	std::string piMsg;
@@ -87,10 +87,10 @@ void tweet_bird_proc(cv::Mat matBirdResult
 	piMsg += "Bird-out Count : " + std::to_string(nCountOut) + "\n";
 	piMsg += "Bird-in  Count : " + std::to_string(nCountIn) + "\n";
 
-	for (int i = 0; i < preRatio.size(); i++)
-	{
-		piMsg += std::to_string(preRatio[i]) + "\n";
-	}
+	// for (int i = 0; i < preRatio.size(); i++)
+	// {
+	// 	piMsg += std::to_string(preRatio[i]) + "\n";
+	// }
 	piMsg += "' ";
 
 	tweet_image(piCmd,piImg,piMsg,matBirdResult);
@@ -112,7 +112,6 @@ void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult
         , dTime
         , nCountIn
         , nCountOut
-        , std::ref(preRatio)
         );
 }
 
