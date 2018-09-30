@@ -42,8 +42,6 @@ public:
 		m_piBirdLog = piBirdLog;
 	}
 
-	//void tweet_image(std::string msg, cv::Mat matImage);
-
 	void tweet_graph_thread( std::string strdate);
 	void tweet_bird_thread( cv::Mat matBird
 	  	, double dThresh
