@@ -104,7 +104,7 @@ void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult
     , int nCountOut
     , std::deque<double> preRatio)
 {
-    std::thread(tweet_bird_proc
+    std::thread t(tweet_bird_proc
         , m_piCmd_tweetPic
         , m_piImg
         , matBirdResult
@@ -156,7 +156,7 @@ void tweet_graph_proc(std::string strdate
 
 void PiTwitter::tweet_graph_thread(std::string strdate)
 {
-    std::thread(tweet_graph_proc
+    std::thread t(tweet_graph_proc
         , strdate
         , m_piCmd_tweetPic
         , m_piCmd_analyzeHisto
