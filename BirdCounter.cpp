@@ -678,7 +678,7 @@ void _printStatus_thread_func(int nTime, int nSaturation, int nOverflow, int nCo
 			<< "core=" << core_val<< "\t"
 			;
 
-		picom.printStdLog("Print Done",1)
+		picom.printStdLog("Print Done",1);
 		status_file.close();
 	}
 	
