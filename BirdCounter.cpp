@@ -394,8 +394,11 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		int nFrameHeight = matFrameGray.rows;//m_nFrameHeight;
 
 		// Exceptions
-		if (matFrameGray.empty())
+		if (matFrameGray.empty()){
+			picom.printStdLog( "matFrameGray Empty");	
 			return;
+		}
+			
 
 		cv::Mat matLocalGray;
 		cv::Mat matLocalColor;
@@ -424,7 +427,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		m_pMOG->getBackgroundImage(matBG);
 		if (matBG.empty())
 		{
-			//continue;
+			picom.printStdLog( "matBG Empty");	
 			return;
 		}
 
