@@ -69,8 +69,6 @@ bool PiCam::init_cam(int nWidth , int nHeight , int nFPS)
 	return true;
 }
 
-
-
 void PiCam::runFrame_thread()
 {
 	PiCommon picom;

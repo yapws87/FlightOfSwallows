@@ -64,13 +64,30 @@ void PiTwitter::tweet_image(std::string piMsg, cv::Mat matImage)
 
 }
 
-void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult)
+void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult,
+    , double dThresh
+    , double dTime
+    , int nCountIn
+    , int nCountOut
+    , std::vector<double> preRatio)
 {
-    std::thread(tweet_bird(),matBirdResult);
+    std::thread(tweet_brid_proc
+        , matBirdResult
+        , dThresh
+        , dTime
+        , nCountIn
+        , nCountOut
+        , preRatio
+        );
 }
-void PiTwitter::tweet_bird(cv::Mat matBirdResult)
+void tweet_brid_proc(cv::Mat matBirdResult
+    , double dThresh
+    , double dTime
+    , int nCountIn
+    , int nCountOut
+    , std::vector<double> preRatio )
 {
-	PiCommon picom;
+    PiCommon picom;
 	std::string piMsg;
 
 
@@ -82,38 +99,38 @@ void PiTwitter::tweet_bird(cv::Mat matBirdResult)
 		piMsg += "[pi] TEST IMAGE... printing printing";
 		m_bOnce = false;
 	}
-	else if (m_dthresh <= fMin + fMax * 0.1)
+	else if (dThresh <= fMin + fMax * 0.1)
 		piMsg += "[pi] What was that?";
-	else if (m_dthresh < fMin + fMax * 0.2)
+	else if (dThresh < fMin + fMax * 0.2)
 		piMsg += "[pi] Something is there..";
-	else if (m_dthresh < fMin + fMax * 0.3)
+	else if (dThresh < fMin + fMax * 0.3)
 		piMsg += "[pi] Is tat wind?..";
-	else if (m_dthresh < fMin + fMax * 0.4)
+	else if (dThresh < fMin + fMax * 0.4)
 		piMsg += "[pi] Whoosh..";
-	else if (m_dthresh < fMin + fMax * 0.5)
+	else if (dThresh < fMin + fMax * 0.5)
 		piMsg += "[pi] Tat is fast..";
-	else if (m_dthresh < fMin + fMax * 0.6)
+	else if (dThresh < fMin + fMax * 0.6)
 		piMsg += "[pi] Swift as a bird..";
-	else if (m_dthresh < fMin + fMax * 0.7)
+	else if (dThresh < fMin + fMax * 0.7)
 		piMsg += "[pi] Eikk a bug?..";
-	else if (m_dthresh < fMin + fMax * 0.8)
+	else if (dThresh < fMin + fMax * 0.8)
 		piMsg += "[pi] Birdyy ..";
 	else
 		piMsg += "[pi] Too many noise!";
 
 	piMsg += "\n";
 
-	if (m_dTime > 0)
+	if (dTime > 0)
 	{
-		piMsg += "Process Time : " + std::to_string(m_dTime) + " ms \n";
+		piMsg += "Process Time : " + std::to_string(dTime) + " ms \n";
 	}
 
 	piMsg += "Bird-out Count : " + std::to_string(m_nCount_Out) + "\n";
 	piMsg += "Bird-in  Count : " + std::to_string(m_nCount_In) + "\n";
 
-	for (int i = 0; i < m_preRatio.size(); i++)
+	for (int i = 0; i < preRatio.size(); i++)
 	{
-		piMsg += std::to_string(m_preRatio[i]) + "\n";
+		piMsg += std::to_string(preRatio[i]) + "\n";
 	}
 	piMsg += "' ";
 
@@ -121,7 +138,6 @@ void PiTwitter::tweet_bird(cv::Mat matBirdResult)
 
 	printBirdLog();
 	picom.printStdLog( "Tweeted Image!");
-
 }
 
 void PiTwitter::tweet_graph_thread(std::string strdate)
@@ -129,7 +145,7 @@ void PiTwitter::tweet_graph_thread(std::string strdate)
     std::thread(tweet_graph,strdate);
 }
 
-void PiTwitter::tweet_graph(std::string strdate)
+void tweet_graph_proc(std::string strdate)
 {
 	PiCommon picom;
 	std::string piMsg;

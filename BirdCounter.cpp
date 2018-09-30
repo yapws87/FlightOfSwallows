@@ -510,12 +510,16 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			if (m_fSecCount > 60 * 120) // Write
 			{ 
 				prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
-				m_piTweet.tweet_bird_thread(matDisplayWithBirds);
+				m_piTweet.tweet_bird_thread(matDisplayWithBirds
+					, dForeRatio
+					, m_dTime
+					, m_nCount_In
+					, m_nCount_Out
+					, m_ratios);
 				m_bMotionDetected = true;
 		
-				m_dthresh = dForeRatio;
 				m_fSecCount = 0;
-				m_preRatio = m_ratios;
+				
 			}
 			m_nCountContinuosValid = 0;
 
@@ -540,7 +544,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 				m_nCountIn_tweet = m_nCount_In;
 				m_nCountOut_tweet = m_nCount_Out;
 				
-				m_piTweet.tweet_graph_thread("qwe");
+				m_piTweet.tweet_graph_thread(picom.getCurrentDate());
 				picom.printStdLog("date_difference");
 				resetBirdCount();
 			}

@@ -20,6 +20,9 @@ protected:
 
 	double m_dthresh = 0;
 
+	bool m_bOnce = false;
+	double m_dTime = 0;
+
 	void tweet_thread_proc();
 	void tweet_graph(std::string strdate);
 	void tweet_bird( cv::Mat matBird);
