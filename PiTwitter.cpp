@@ -90,12 +90,11 @@ void tweet_brid_proc(cv::Mat matBirdResult
     PiCommon picom;
 	std::string piMsg;
 
-
 	float fMax = 0.1;
 	float fMin = 0.01;
 
 	piMsg = " '";
-	if (m_bOnce) {
+	if (dThresh < 0) {
 		piMsg += "[pi] TEST IMAGE... printing printing";
 		m_bOnce = false;
 	}

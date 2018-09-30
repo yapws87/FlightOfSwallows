@@ -491,7 +491,13 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		{
 			m_nCountContinuosValid = 1;
 			//m_bTweeterFlag = true;
-			m_piTweet.tweet_bird_thread(matDisplayWithBirds);
+			m_piTweet.tweet_bird_thread(matDisplayWithBirds
+				, -1
+				, m_dTime
+				, m_nCount_In
+				, m_nCount_Out
+				, m_ratios
+			);
 			m_fSecCount = 10000;
 		}
 		

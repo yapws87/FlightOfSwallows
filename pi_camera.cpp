@@ -80,7 +80,6 @@ int main(int argc, char * argv[])
 	if(bCamInitFlag)
 	{
 		//VideoWriter vWriter;
-
         picom.printStdLog( "Starting all threads" );
 		threads.push_back(std::thread(streamFrame_thread));
 		threads.push_back(std::thread(process_thread));
