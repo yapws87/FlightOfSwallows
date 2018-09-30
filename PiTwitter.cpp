@@ -113,6 +113,8 @@ void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult
         , nCountIn
         , nCountOut
         );
+
+        t.detach();
 }
 
 void tweet_graph_proc(std::string strdate
@@ -159,4 +161,5 @@ void PiTwitter::tweet_graph_thread(std::string strdate)
         , m_piHisto
         , m_piBirdLog
     );
+    t.detach();
 }

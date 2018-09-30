@@ -680,7 +680,7 @@ void _printStatus_thread_func(int nTime, int nSaturation, int nOverflow, int nCo
 			<< "Bird_out=" << nCountOut << "\t"
 			<< "temp=" << temperature_val<< "\t"
 			<< "core=" << core_val<< "\t"
-			;
+			<< std::endl;
 
 		picom.printStdLog("Print Done",1);
 		status_file.close();

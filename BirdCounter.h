@@ -21,6 +21,7 @@
 #endif
 
 
+
 enum {
 	BIRD_UNKNOWN = 0,
 	BIRD_FLY_OUT,
