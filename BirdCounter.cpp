@@ -610,7 +610,7 @@ void CBirdCounter::printBirdLog()
 {
 	PiCommon picom;
 	std::ofstream in_file, out_file;
-	std::string filename = PROGRAM_FOLDER + "bird_log/" + picom.get_current_date();
+	std::string filename = std::string(PROGRAM_FOLDER) + "bird_log/" + picom.get_current_date();
 	
 	in_file.open(filename + "_in.txt", std::fstream::out | std::fstream::app);
 	out_file.open(filename + "_out.txt", std::fstream::out | std::fstream::app);
@@ -649,7 +649,7 @@ void _printStatus_thread_func(int nTime, int nSaturation, int nOverflow, int nCo
 	picom.printStdLog("_printStatus_thread_func start",1);
 	
 	std::ofstream status_file;
-	std::string filename = PROGRAM_FOLDER + "bird_log/" + picom.get_current_date();
+	std::string filename = std::string(PROGRAM_FOLDER) + "bird_log/" + picom.get_current_date();
 
 	picom.printStdLog("Opening file for status print",1);
 	status_file.open(filename + "_status.txt", std::fstream::out | std::fstream::app);
