@@ -616,12 +616,17 @@ void CBirdCounter::printBirdLog()
 	out_file.close();
 }
 
+void _printStatus_thread_func()
+{
+	printStatus_thread_func()
+} 
+
 void CBirdCounter::printStatus_thread()
 {
-	std::thread t(printStatus_thread_func);
+	std::thread t(_printStatus_thread_func);
 }
 
-static void CBirdCounter::printStatus_thread_func()
+void CBirdCounter::printStatus_thread_func()
 {
 	PiCommon picom;
 	m_mutex.lock();
