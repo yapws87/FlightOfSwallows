@@ -38,7 +38,7 @@ void PiTwitter::tweet_image(std::string piMsg, cv::Mat matImage)
 
 }
 
- tweet_bird_proc(cv::Mat matBirdResult
+void tweet_bird_proc(cv::Mat matBirdResult
     , double dThresh
     , double dTime
     , int nCountIn
@@ -113,7 +113,6 @@ void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult
         , preRatio
         );
 }
-void
 
 void tweet_graph_proc(std::string strdate
     , std::string piCmd_image
