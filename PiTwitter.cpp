@@ -94,8 +94,6 @@ void tweet_bird_proc(cv::Mat matBirdResult
 	piMsg += "' ";
 
 	tweet_image(piCmd,piImg,piMsg,matBirdResult);
-
-	printBirdLog();
 	picom.printStdLog( "Tweeted Image!");
 }
 
@@ -106,7 +104,7 @@ void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult
     , int nCountOut
     , std::deque<double> preRatio)
 {
-    std::thread(tweet_brid_proc
+    std::thread(tweet_bird_proc
         , m_piCmd_tweetPic
         , m_piImg
         , matBirdResult
@@ -116,6 +114,7 @@ void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult
         , nCountOut
         , preRatio
         );
+     printBirdLog();
 }
 
 void tweet_graph_proc(std::string strdate
