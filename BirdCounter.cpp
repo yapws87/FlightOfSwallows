@@ -690,11 +690,7 @@ void CBirdCounter::printStatus_thread()
 {
 	PiCommon picom;
 	picom.printStdLog("printStatus_func ->>.",1);
-	picom.printStdLog("m_dTime" + std::to_string(m_dTime),1);
-	picom.printStdLog("m_nSaturationCount" + std::to_string(m_nSaturationCount),1);
-	picom.printStdLog("m_nOverflowCount" + std::to_string(m_nOverflowCount),1);
-	picom.printStdLog("m_nCount_In" + std::to_string(m_nCount_In),1);
-	picom.printStdLog("m_nCount_Out" + std::to_string(m_nCount_Out),1);
+
 
 	std::thread t(_printStatus_thread_func,m_dTime
 		, m_nSaturationCount
@@ -702,5 +698,6 @@ void CBirdCounter::printStatus_thread()
 		, m_nCount_In
 		, m_nCount_Out
 	);
+	t.detach();
 
 }
