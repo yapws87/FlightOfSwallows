@@ -660,12 +660,12 @@ void _printStatus_thread_func(int nTime, int nSaturation, int nOverflow, int nCo
 void CBirdCounter::printStatus_thread()
 {
 	int nTime,int nSaturation,int nOverflow, int nCountIn, int nCountOut
-	std::thread t(_printStatus_thread_func(m_dTime
+	std::thread t(_printStatus_thread_func,m_dTime
 		, m_nSaturationCount
 		, m_nOverflowCount
 		, m_nCount_In
 		, m_nCount_Out
-	));
+	);
 
 }
 
