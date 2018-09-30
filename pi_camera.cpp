@@ -32,7 +32,7 @@ void process_thread()
 	for(;;)
 	{
 		m_piCam.get_frame(matGray,matColor);
-		m_birdCount.process_thread(matGray,matColor);
+	//	m_birdCount.process_thread(matGray,matColor);
 		
 		if(m_nDisplay_flag)
 		{
