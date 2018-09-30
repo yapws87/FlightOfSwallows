@@ -14,6 +14,8 @@ PiTwitter::~PiTwitter()
 
 void PiTwitter::tweet_image(std::string piMsg, cv::Mat matImage)
 {
+    PiCommon piCom;
+    
     std::string piCmd = m_piCmd_tweetPic;
     std::string piImg = m_piImg;
     std::string piParallel = " &";
@@ -36,7 +38,7 @@ void PiTwitter::tweet_image(std::string piMsg, cv::Mat matImage)
 
 }
 
-void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult,
+void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult
     , double dThresh
     , double dTime
     , int nCountIn
