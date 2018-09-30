@@ -30,16 +30,16 @@ public:
 	~PiTwitter();
 
 	void setPathsFunction(std::string piCmd_tweetPic,std::string piCmd_analyzeHisto){
-		m_piCmd_tweetPic = _piCmd;
-		m_piCmd_analyzeHisto = _piImg;
+		m_piCmd_tweetPic = piCmd_tweetPic;
+		m_piCmd_analyzeHisto = piCmd_analyzeHisto;
 	}
 	void setPathsData(std::string piImg,std::string piHisto,std::string piBirdLog){
-		m_piImg = _piImg;
-		m_piHisto = _piHisto;
-		m_piBirdLog = _piBirdLog;
+		m_piImg = piImg;
+		m_piHisto = piHisto;
+		m_piBirdLog = piBirdLog;
 	}
 
-	void tweet_image(std::string msg, cv::Mat matImage);
+	//void tweet_image(std::string msg, cv::Mat matImage);
 
 	void tweet_thread();
 
