@@ -419,6 +419,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (m_nToggleLearn > 10) {
 			m_pMOG->apply(smallLocalGray, matLocalFore);
 			m_nToggleLearn = 0;
+			picom.printStdLog( "Learning BG");
 		}
 		m_nToggleLearn++;
 

@@ -42,7 +42,7 @@ void process_thread()
 
 			if(disp_count > 15)
 			{
-				matDisp = m_birdCount.getDispMat();
+				matDisp = matColor;//m_birdCount.getDispMat();
 				if(!matDisp.empty())
 				{
 					cv::imshow("Display",matDisp);
