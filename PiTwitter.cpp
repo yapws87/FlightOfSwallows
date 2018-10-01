@@ -29,7 +29,7 @@ void tweet_image( std::string piCmd
 
     piCom.printStdLog(remove_img,1);
     system(remove_img.c_str());
-    imwrite("image.jpg",matImage);
+    imwrite("/home/pi/image.jpg",matImage);
     //imwrite("",matImage);
     
     piCom.uniSleep(1000);
