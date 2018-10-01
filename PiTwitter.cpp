@@ -29,13 +29,12 @@ void tweet_image( std::string piCmd
 
     piCom.printStdLog(remove_img,1);
     system(remove_img.c_str());
-    imwrite("/home/pi/image.jpg",matImage);
+    imwrite(piImg,matImage);
     //imwrite("",matImage);
     
     piCom.uniSleep(1000);
     piCom.printStdLog("Saved Image!");
 #endif
-
 
     std::string piSys = piCmd + piMsg + piImg + piParallel;
     piCom.printStdLog(piSys,1);

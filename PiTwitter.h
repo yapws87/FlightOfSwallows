@@ -22,7 +22,6 @@ protected:
 	double m_dthresh = 0;
 	double m_dTime = 0;
 
-
 	void tweet_graph(std::string strdate);
 	void tweet_bird( cv::Mat matBird);
 	void tweet_image(std::string msg, cv::Mat matImage);
