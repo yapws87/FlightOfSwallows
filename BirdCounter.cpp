@@ -525,23 +525,24 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 
 		// Record video if threshold shows continuos 10 frames
 		//m_nCountContinuosValid = 1;
+		int nMinutesToTweet = 5;
 		if (m_nCountContinuosValid >= 1)
 		{
 			// For Uploading pictures to twitter every 60 min interval
 			//picom.printStdLog("m_fSecCount : " +  std::to_string(m_fSecCount_tweet));
-			//if (m_fSecCount_tweet > 60 * 1) // Write
+			if (m_fSecCount_tweet > 60 * nMinutesToTweet ) // Write
 			{ 
-				picom.printStdLog("Tweet 5 Minutes");
+				picom.printStdLog("Tweet" + std::to_string(nMinutesToTweet) +" Minutes");
 				prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
 				
-				/*
+				
 				m_piTweet.tweet_bird_thread(matDisplayWithBirds
 					, dForeRatio
 					, m_dTime
 					, m_nCount_In
 					, m_nCount_Out
 					, m_ratios);
-				*/
+				
 				m_bMotionDetected = true;
 		
 				m_fSecCount_tweet = 0;
