@@ -464,7 +464,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		}
 #endif
 
-		picom.printStdLog( "Calculate ratio",1);
+		//picom.printStdLog( "Calculate ratio",1);
 		// Calculate ratio
 		// Detect sudden change of video quality
 		dForeRatio = (double)cv::countNonZero(matLocalFore(cntROI)) / (double)(cntROI.area());
@@ -481,7 +481,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			m_birds.clear();
 		}
 		else {
-			picom.printStdLog( "countBird",1);
+			//picom.printStdLog( "countBird",1);
 			bool bExistBird = countBird(matLocalFore, matLocalColor, matDisplayWithBirds,true);
 			if (bExistBird) {
 				m_nCountContinuosValid++;
@@ -571,7 +571,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			
 		}
 
-		picom.printStdLog( " Status update",1);
+		//picom.printStdLog( " Status update",1);
 		// Status update
 		auto tempTime = std::chrono::system_clock::now();
 		std::chrono::duration<double> elapsed_seconds = tempTime - m_statusTime;
