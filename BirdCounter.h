@@ -275,7 +275,8 @@ protected:
 	//Time and frame counts
 	double m_dTimeAcc = 0;
 	double m_dTickCount = 0;
-	float m_fSecCount = 0;
+	float m_fSecCount_tweet = 0;
+	float m_fSecCount_status = 0;
 	int m_nCountContinuosValid = 0;
 	bool m_bMotionDetected = false;
 
