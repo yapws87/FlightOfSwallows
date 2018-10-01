@@ -494,7 +494,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		// Only inform when some thing middle sized moved.
 		// Avoid room light change
 
-		if (!m_bOnce)
+		if (m_bOnce)
 		{
 			picom.printStdLog( "m_bOnce",1);
 			m_nCountContinuosValid = 1;
@@ -507,7 +507,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 				, m_nCount_Out
 				, m_ratios
 			);
-			m_bOnce = true;
+			m_bOnce = false;
 			m_fSecCount = 10000;
 		}
 		

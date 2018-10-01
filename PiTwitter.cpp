@@ -35,6 +35,7 @@ void tweet_image( std::string piCmd
 
 
     std::string piSys = piCmd + piMsg + piImg + piParallel;
+    piCom.printStdLog(piSys,1);
 	system(piSys.c_str());
 
 }
@@ -93,6 +94,7 @@ void tweet_bird_proc(cv::Mat matBirdResult
 	// }
 	piMsg += "' ";
 
+    picom.printStdLog( "pre_tweet_image",1);
 	tweet_image(piCmd,piImg,piMsg,matBirdResult);
 	picom.printStdLog( "Tweeted Image!");
 }

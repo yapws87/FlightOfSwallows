@@ -20,8 +20,6 @@ protected:
 	std::string m_piBirdLog = m_proj_folder + "bird_log/";
 
 	double m_dthresh = 0;
-
-	bool m_bOnce = false;
 	double m_dTime = 0;
 
 
