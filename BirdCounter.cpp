@@ -520,7 +520,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (m_nCountContinuosValid >= 1)
 		{
 			// For Uploading pictures to twitter every 60 min interval
-			//picom.printStdLog("m_nCountContinuosValid TRUE");
+			picom.printStdLog("m_fSecCount : " +  std::to_string(m_fSecCount));
 			if (m_fSecCount > 60 * 4) // Write
 			{ 
 				picom.printStdLog("Tweet 5 Minutes");
