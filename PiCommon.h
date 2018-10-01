@@ -15,7 +15,7 @@
 #include "unistd.h"
 #endif
 
-#define LOG_LEVEL 1 // 0 for essential only / 1 for more detail
+#define LOG_LEVEL 0 // 0 for essential only / 1 for more detail
 class PiCommon
 {
 protected:
