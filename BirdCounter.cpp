@@ -522,6 +522,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			// For Uploading pictures to twitter every 60 min interval
 			if (m_fSecCount > 60 * 5) // Write
 			{ 
+				picom.printStdLog("Tweet 5 Minutes");
 				prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
 				
 				m_piTweet.tweet_bird_thread(matDisplayWithBirds
@@ -534,6 +535,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 				m_bMotionDetected = true;
 		
 				m_fSecCount = 0;
+
 				
 			}
 			m_nCountContinuosValid = 0;
