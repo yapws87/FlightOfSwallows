@@ -36,6 +36,7 @@ void tweet_image( std::string piCmd
     piCom.printStdLog("Saved Image!");
 #endif
 
+	return;
     std::string piSys = piCmd + piMsg + piImg + piParallel;
     piCom.printStdLog(piSys,1);
 	system(piSys.c_str());
