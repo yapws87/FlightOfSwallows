@@ -576,7 +576,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		auto tempTime = std::chrono::system_clock::now();
 		std::chrono::duration<double> elapsed_seconds = tempTime - m_statusTime;
 		
-		m_fSecCount = elapsed_seconds.count();
+		m_fSecCount += elapsed_seconds.count() - m_fSecCount;
 		
 		//picom.printStdLog( " TIME : " + std::to_string(m_fSecCount),1);
 		if (elapsed_seconds.count() > 60 * 5)
