@@ -401,13 +401,11 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			return;
 		}
 			
-
 		cv::Mat matLocalGray;
 		cv::Mat matLocalColor;
 		cv::Mat matLocalFore;
 		matLocalGray = matFrameGray;
 		matLocalColor = matFrameColor;
-
 
 		// Motion detections
 		// Reduce size for faster calculation
@@ -417,11 +415,10 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		//cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), 0.5, 0.5);
 		cv::Rect cntROI(0.4 * smallLocalGray.cols, 0, 0.2 * smallLocalGray.cols, smallLocalGray.rows);
 
-
 		if (m_nToggleLearn > 10) {
 			m_pMOG->apply(smallLocalGray, matLocalFore);
 			m_nToggleLearn = 0;
-			picom.printStdLog( "Learning BG",1);
+			//picom.printStdLog( "Learning BG",1);
 		}
 		m_nToggleLearn++;
 
@@ -476,7 +473,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			m_nSaturationCount++;
 			m_nCountContinuosValid = 0;
 
-			picom.printStdLog( "Large Change");		
+			// picom.printStdLog( "Large Change");		
 			// Clear all bird datas
 			m_birds.clear();
 		}

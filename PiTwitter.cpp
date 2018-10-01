@@ -27,9 +27,10 @@ void tweet_image( std::string piCmd
     // Save the image in SD for further process
     std::string remove_img = "sudo rm " + piImg;
 
-     piCom.printStdLog(remove_img,1);
+    piCom.printStdLog(remove_img,1);
     system(remove_img.c_str());
-    imwrite(piImg, matImage);
+    imwrite("/home/pi/projects/image.jpg",matImage);
+    //imwrite("",matImage);
     
     piCom.uniSleep(1000);
     piCom.printStdLog("Saved Image!");
