@@ -60,7 +60,7 @@ bool PiCam::init_cam(int nWidth , int nHeight , int nFPS)
     status_check(" [PARAM_FPS] ", std::to_string(m_nFPS), bFps_status);
    
 
-	m_picom.printStdLog( "Verified Width : " + std::to_string(m_cap.get(CV_CAP_PROP_FRAME_WIDTH)));
+	m_picom.printStdLog("Verified Width : " + std::to_string(m_cap.get(CV_CAP_PROP_FRAME_WIDTH)));
 	m_picom.printStdLog("Verified Height : " + std::to_string(m_cap.get(CV_CAP_PROP_FRAME_HEIGHT)));
 	m_picom.printStdLog("Loaded FPS : " + std::to_string(m_cap.get(CV_CAP_PROP_FPS)));
 	
@@ -82,10 +82,10 @@ void PiCam::runFrame_thread()
 		cv::Mat frame, frameColor,frameBGR;
 		if (m_cap.isOpened()){
 			
-			if( m_cap.grab())
-				m_cap.retrieve(frameColor);
-			else
-				m_picom.printStdLog("Grab Fail");
+			// if( m_cap.grab())
+			// 	m_cap.retrieve(frameColor);
+			// else
+			// 	m_picom.printStdLog("Grab Fail");
 			
 			if( !m_cap.read(frameColor))
 				m_picom.printStdLog("Read Fail"); // get a new frame from camera
