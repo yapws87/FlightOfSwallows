@@ -499,7 +499,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			picom.printStdLog( "m_bOnce",1);
 			m_nCountContinuosValid = 1;
 			//m_bTweeterFlag = true;
-			/*
+			
 			m_piTweet.tweet_bird_thread(matDisplayWithBirds
 				, -1
 				, m_dTime
@@ -507,7 +507,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 				, m_nCount_Out
 				, m_ratios
 			);
-			*/
+			
 			m_fSecCount = 10000;
 		}
 		
@@ -526,14 +526,14 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			if (m_fSecCount > 60 * 120) // Write
 			{ 
 				prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
-				/*
+				
 				m_piTweet.tweet_bird_thread(matDisplayWithBirds
 					, dForeRatio
 					, m_dTime
 					, m_nCount_In
 					, m_nCount_Out
 					, m_ratios);
-				*/
+				
 				m_bMotionDetected = true;
 		
 				m_fSecCount = 0;
@@ -562,9 +562,9 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 				m_nCountIn_tweet = m_nCount_In;
 				m_nCountOut_tweet = m_nCount_Out;
 				
-				/*
+				
 				m_piTweet.tweet_graph_thread(picom.getCurrentDate());
-				*/
+				
 				picom.printStdLog("date_difference");
 				resetBirdCount();
 			}
