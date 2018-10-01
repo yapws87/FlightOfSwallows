@@ -505,7 +505,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 				, m_ratios
 			);
 			m_bOnce = false;
-			m_fSecCount = 10000;
+			//m_fSecCount = 10000;
 		}
 		
 #ifdef PERSONAL_COMPUTER
@@ -574,8 +574,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		std::chrono::duration<double> elapsed_seconds = tempTime - m_statusTime;
 		
 		m_fSecCount = elapsed_seconds.count();
-		//std::cout << "Seconds : " << m_fSecCount;
-		picom.printStdLog( " TIME : " + std::to_string(m_fSecCount),1);
+		
+		//picom.printStdLog( " TIME : " + std::to_string(m_fSecCount),1);
 		if (elapsed_seconds.count() > 60 * 5)
 		{
 			m_statusTime = tempTime;
