@@ -517,10 +517,13 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 #endif
 
 		auto tempTime = std::chrono::system_clock::now();
-		std::chrono::duration<double> elapsed_seconds = tempTime - m_statusTime;
-		
-		m_fSecCount_tweet += elapsed_seconds.count();
-		m_fSecCount_status += elapsed_seconds.count();
+		if(!m_statusTime.empty())
+		{
+			std::chrono::duration<double> elapsed_seconds = tempTime - m_statusTime;
+			m_fSecCount_tweet += elapsed_seconds.count();
+			m_fSecCount_status += elapsed_seconds.count();
+		}
+			
 		m_statusTime = tempTime;
 
 		// Record video if threshold shows continuos 10 frames
@@ -532,7 +535,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			//picom.printStdLog("m_fSecCount : " +  std::to_string(m_fSecCount_tweet));
 			if (m_fSecCount_tweet > 60 * nMinutesToTweet ) // Write
 			{ 
-				picom.printStdLog("Tweet" + std::to_string(nMinutesToTweet) +" Minutes");
+				picom.printStdLog("Tweets in " + std::to_string(nMinutesToTweet) +" minutes interval");
 				prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
 				
 				
