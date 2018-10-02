@@ -491,6 +491,13 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		// Only inform when some thing middle sized moved.
 		// Avoid room light change
 
+		auto tempTime = std::chrono::system_clock::now();
+		
+		std::chrono::duration<double> elapsed_seconds = tempTime - m_statusTime;
+		m_fSecCount_tweet += elapsed_seconds.count();
+		m_fSecCount_status += elapsed_seconds.count();
+		m_statusTime = tempTime;
+
 		if (m_bOnce)
 		{
 			picom.printStdLog( "m_bOnce",1);
@@ -505,6 +512,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 				, m_ratios
 			);
 			m_bOnce = false;
+			m_fSecCount_tweet = 0;
+			m_fSecCount_status = 0;
 			//m_fSecCount = 10000;
 		}
 		
@@ -516,12 +525,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		}
 #endif
 
-		auto tempTime = std::chrono::system_clock::now();
-		
-		std::chrono::duration<double> elapsed_seconds = tempTime - m_statusTime;
-		m_fSecCount_tweet += elapsed_seconds.count();
-		m_fSecCount_status += elapsed_seconds.count();
-		m_statusTime = tempTime;
+	
 
 		// Record video if threshold shows continuos 10 frames
 		//m_nCountContinuosValid = 1;
