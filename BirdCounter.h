@@ -257,7 +257,7 @@ protected:
 	double m_dTime = 0;
 
 	std::deque<cv::Mat> m_videoFrames;
-	bool m_bRecord = false;
+
 
 	int m_nOverflowCount = 0;
 	int m_nSaturationCount = 0;
