@@ -517,7 +517,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 #endif
 
 		auto tempTime = std::chrono::system_clock::now();
-		if(!m_statusTime.empty())
+		if( m_statusTime > 0)
 		{
 			std::chrono::duration<double> elapsed_seconds = tempTime - m_statusTime;
 			m_fSecCount_tweet += elapsed_seconds.count();
