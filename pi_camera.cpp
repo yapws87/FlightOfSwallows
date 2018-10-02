@@ -81,10 +81,14 @@ int main(int argc, char * argv[])
 	if(bCamInitFlag)
 	{
 		//VideoWriter vWriter;
-        picom.printStdLog( "Starting all threads" );
+        picom.printStdLog( "Starting Stream thread" );
 		threads.push_back(std::thread(streamFrame_thread));
+		
+		picom.printStdLog( "Starting Process thread" );
 		threads.push_back(std::thread(process_thread));
-		//threads.push_back(std::thread(saveFrame_thread));
+
+		picom.printStdLog( "Starting Save thread" );
+		threads.push_back(std::thread(saveFrame_thread));
 		//threads.push_back(std::thread(&CBirdCounter::tweet_thread, birdCounterPtr));
 
 		for (auto& thread : threads) {
