@@ -571,6 +571,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		// Upload graph
 		if (picom.isDateDiff())
 		{
+			picom.printStdLog("date_difference");
 			if (!m_bTweeterGraph)
 			{
 				m_nCountIn_tweet = m_nCount_In;
@@ -579,7 +580,6 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 				
 				m_piTweet.tweet_graph_thread(picom.getCurrentDate());
 				
-				picom.printStdLog("date_difference");
 				resetBirdCount();
 			}
 			

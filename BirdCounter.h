@@ -268,7 +268,7 @@ protected:
 
 	// Tweeter
 	bool m_bTweeterFlag = false;
-	bool m_bTweeterGraph = false;
+	bool m_bTweeterGraph = true;
 	bool m_bSaveStatus = false;
 	std::deque<double> m_preRatio;
 
