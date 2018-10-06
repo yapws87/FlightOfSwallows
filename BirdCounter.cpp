@@ -529,7 +529,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 
 		// Record video if threshold shows continuos 10 frames
 		//m_nCountContinuosValid = 1;
-		int nMinutesToTweet = 5;
+		int nMinutesToTweet = 20;
 		if (m_nCountContinuosValid >= 1)
 		{
 			// For Uploading pictures to twitter every 60 min interval
