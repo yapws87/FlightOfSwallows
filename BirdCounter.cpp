@@ -4,7 +4,7 @@
 
 CBirdCounter::CBirdCounter()
 {
-	m_pMOG = cv::createBackgroundSubtractorMOG2(100,2 * 2, false);
+	m_pMOG = cv::createBackgroundSubtractorMOG2(50,2 * 2, false);
 	m_ratios.push_back(0);
 }
 
@@ -411,14 +411,16 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		// Reduce size for faster calculation
 		cv::Mat smallLocalGray;
 		cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), 0.5, 0.5);
+		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(3, 3), -1);
 		//matLocalGray.copyTo(smallLocalGray);
 		//cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), 0.5, 0.5);
 		cv::Rect cntROI(0.4 * smallLocalGray.cols, 0, 0.2 * smallLocalGray.cols, smallLocalGray.rows);
 
-		if (m_nToggleLearn > 10) {
+		if (m_nToggleLearn >= 0) {
 			m_pMOG->apply(smallLocalGray, matLocalFore);
 			m_nToggleLearn = 0;
 			//picom.printStdLog( "Learning BG",1);
+			//cv::imshow("matLocalFore_ori", matLocalFore);
 		}
 		m_nToggleLearn++;
 
@@ -433,10 +435,19 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 
 		// Find subtraction
 		cv::Mat aDiff;
+		cv::Mat show;
 		//cv::absdiff(matSmallGrayFrame, matBg, aDiff);
-		cv::absdiff(smallLocalGray, matBG, aDiff);
-		cv::blur(aDiff, aDiff, cv::Size(3, 3));
-		cv::threshold(aDiff, matLocalFore, 7, 255, CV_THRESH_BINARY);
+		cv::Mat matSrc_blur, matBg_blur;
+	
+		//cv::GaussianBlur(matBG, matBg_blur, cv::Size(3, 3), -1);
+
+		//cv::absdiff(smallLocalGray, matBg_blur, aDiff);
+		//cv::GaussianBlur(aDiff, aDiff,cv::Size(3,3), -1);// cv::Size(3, 3));
+
+
+		cv::normalize(aDiff, show, 0, 255, cv::NORM_MINMAX);
+		//cv::imshow("aDiff", show);
+		//cv::threshold(aDiff, matLocalFore, 5, 255, CV_THRESH_BINARY);
 		//cv::threshold(aDiff, matLocalFore, 3, 255, CV_THRESH_BINARY);
 
 		// Remove upper and lower noise
