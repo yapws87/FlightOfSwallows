@@ -74,7 +74,7 @@ int main(int argc, char * argv[])
 		nInit_width = atoi(argv[1]);
 		nInit_height = atoi(argv[2]);
 		nInit_fps = atoi(argv[3]);
-		m_nDisplay_flag = atoi(argv[4]);
+		m_nDisplay_flag = atoi(argv[4]) > 0 ? true : false;
 		bCamInitFlag = m_piCam.init_cam(nInit_width,nInit_height,nInit_fps);
 		picom.uniSleep(1000);
 	}
