@@ -29,6 +29,7 @@ void process_thread()
 {
 	cv::Mat matGray, matColor;
 	cv::Mat matDisp;
+	m_birdCount.setDisplay(m_nDisplay_flag);
 	for(;;)
 	{
 		m_piCam.get_frame(matGray,matColor);

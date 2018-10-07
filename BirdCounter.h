@@ -211,6 +211,11 @@ public:
 			return m_matSaveImage;
 	};
 
+	void setDisplay(bool bDisplay)
+	{
+		m_bDisplay = bDisplay;
+	}
+
 protected:
 
 	// Functions
@@ -242,6 +247,7 @@ protected:
 	// Temp problems
 	int m_nFrameWidth = 0;
 	int m_nFrameHeight = 0;
+	bool m_bDisplay = false;
 	int m_nFps = 0;
 
 

@@ -529,7 +529,10 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 
 		// Record video if threshold shows continuos 10 frames
 		//m_nCountContinuosValid = 1;
-		matDisplayWithBirds.copyTo(m_matSaveImage);
+		if(m_bDisplay){
+			matDisplayWithBirds.copyTo(m_matSaveImage);
+		}
+		
 		int nMinutesToTweet = 20;
 		if (m_nCountContinuosValid >= 1)
 		{
