@@ -417,7 +417,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		cv::Rect cntROI(0.4 * smallLocalGray.cols, 0, 0.2 * smallLocalGray.cols, smallLocalGray.rows);
 
 		if (m_nToggleLearn >= 0) {
-			m_pMOG->apply(smallLocalGray, matLocalFore,-1);
+			m_pMOG->apply(smallLocalGray, v ,-1);
 			m_nToggleLearn = 0;
 			//picom.printStdLog( "Learning BG",1);
 			//cv::imshow("matLocalFore_ori", matLocalFore);
@@ -456,9 +456,14 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		matLocalFore(cv::Rect(0, matLocalFore.rows - nimgOff, matLocalFore.cols, nimgOff)).setTo(0);
 
 		// Remove Noise Area
-		cv::Rect noiseRect(0, 0, 0.25 * matLocalFore.cols, 0.25 * matLocalFore.rows);
+		cv::Rect noiseRect(0, 0, matLocalFore.cols, 0.25 * matLocalFore.rows);
 		matLocalFore(noiseRect).setTo(0);
-		matLocalFore(noiseRect + cv::Point(0, 0.75 * matLocalFore.rows)).setTo(0);
+		//matLocalFore(noiseRect + cv::Point(0, 0.75 * matLocalFore.rows)).setTo(0);
+		noiseRect = cv::Rect(matLocalFore.cols - (matLocalFore.cols * 0.1)
+			, 0
+			, (matLocalFore.cols * 0.1)
+			, matLocalFore.rows);
+		matLocalFore(noiseRect).setTo(0);
 
 		cv::Mat matElement = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(3, 3));
 		cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_OPEN, matElement, cv::Point(-1, -1), 2);
