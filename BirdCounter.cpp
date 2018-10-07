@@ -417,7 +417,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		cv::Rect cntROI(0.4 * smallLocalGray.cols, 0, 0.2 * smallLocalGray.cols, smallLocalGray.rows);
 
 		if (m_nToggleLearn >= 0) {
-			m_pMOG->apply(smallLocalGray, matLocalFore);
+			m_pMOG->apply(smallLocalGray, matLocalFore,-1);
 			m_nToggleLearn = 0;
 			//picom.printStdLog( "Learning BG",1);
 			//cv::imshow("matLocalFore_ori", matLocalFore);
