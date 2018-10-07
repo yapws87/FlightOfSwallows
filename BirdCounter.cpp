@@ -532,8 +532,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if(m_bDisplay){
 			matDisplayWithBirds.copyTo(m_matSaveImage);
 		}
-		
-		int nMinutesToTweet = 20;
+
+		int nMinutesToTweet = 5;
 		if (m_nCountContinuosValid >= 1)
 		{
 			// For Uploading pictures to twitter every 60 min interval
