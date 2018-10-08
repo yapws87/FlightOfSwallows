@@ -104,12 +104,12 @@ def drawHisto(histo_in,histo_out,hist_width,histo_img_path):
 	
 	
 # load files
-#txt_inFile =sys.argv[1]
-#txt_outFile =sys.argv[2]
-#histo_img_path =sys.argv[3]
-txt_inFile ='C:/Users/yapws87/Documents/SideProj/Raspberry/FlightOfSwallows/2018-04-27_in.txt'
-txt_outFile ='C:/Users/yapws87/Documents/SideProj/Raspberry/FlightOfSwallows/2018-04-27_out.txt'
-histo_img_path ='C:/Users/yapws87/Desktop/FlightOfSwallows/histo.jpg' 
+txt_inFile =sys.argv[1]
+txt_outFile =sys.argv[2]
+histo_img_path =sys.argv[3]
+#txt_inFile ='C:/Users/yapws87/Documents/SideProj/Raspberry/FlightOfSwallows/2018-04-27_in.txt'
+#txt_outFile ='C:/Users/yapws87/Documents/SideProj/Raspberry/FlightOfSwallows/2018-04-27_out.txt'
+#histo_img_path ='C:/Users/yapws87/Desktop/FlightOfSwallows/histo.jpg' 
 #
 
 file_inBird = open(txt_inFile,'r')
