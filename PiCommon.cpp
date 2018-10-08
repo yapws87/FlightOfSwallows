@@ -160,7 +160,8 @@ bool PiCommon::isDateDiff()
 		std::string cur_date = get_current_date();
 		if (m_currentDate != cur_date)
 		{
-			std::cout << m_currentDate << "  " << cur_date << "\n";
+			printStdLog(m_currentDate + " " + cur_date);
+			//std::cout << m_currentDate << "  " << cur_date << "\n";
 			m_previousDate = m_currentDate;
 			m_currentDate = cur_date;
 			return true;

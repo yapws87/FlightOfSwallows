@@ -589,9 +589,10 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		//std::cout << dTime << "\t" << m_dTime << "\n";
 		
 		// Upload graph
-		if (picom.isDateDiff())
+		
+		if (picom.get_current_time() == "00:00:01")
 		{
-			picom.printStdLog("date_difference");
+			picom.printStdLog("New Day!");
 			if (!m_bTweeterGraph)
 			{
 				m_nCountIn_tweet = m_nCount_In;
