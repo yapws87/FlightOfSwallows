@@ -13,7 +13,7 @@ protected:
 
 	std::string m_proj_folder = "/home/pi/projects/FlightOfSwallows/";
 	std::string m_piCmd_tweetPic = "sudo python " + m_proj_folder + "twitter/./twitter_pic.py ";
-	std::string m_piCmd_analyzeHisto = "python3 " +  m_proj_folder + "twitter/analyze_birdlog.py ";
+	std::string m_piCmd_analyzeHisto = "python3 " +  m_proj_folder + "python/analyze_birdlog.py ";
 
 	std::string m_piImg =  m_proj_folder + "image.jpg";
 	std::string m_piHisto =  m_proj_folder + "histogram.jpg";

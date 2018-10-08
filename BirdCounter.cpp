@@ -611,7 +611,11 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (picom.get_current_time() == "00:00:02")
 			bActivate = false;
 
-		m_piTweet.tweet_graph_thread("2018-10-06");
+		static bool bone_time = false;
+		if (!bone_time) {
+			m_piTweet.tweet_graph_thread("2018-10-06");
+			bone_time = true;
+		}
 		//picom.printStdLog( " Status update",1);
 		// Status update
 		
