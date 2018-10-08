@@ -23,6 +23,7 @@ yes | sudo apt-get install libatlas-base-dev
 yes | sudo apt-get install gfortran 
 yes | sudo apt-get install python2.7-dev 
 yes | sudo apt-get install python3-dev 
+yes | sudo apt-get install python3-matplotlib
 
 echo "Remove unsed"
 yes | sudo apt-get autoremove
