@@ -406,24 +406,41 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		cv::Mat matLocalFore;
 		matLocalGray = matFrameGray;
 		matLocalColor = matFrameColor;
-
 		// Motion detections
 		// Reduce size for faster calculation
 		cv::Mat smallLocalGray;
+		cv::Mat finalGray;
 		cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), 0.5, 0.5);
 		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(3, 3), -1);
-		cv::equalizeHist(smallLocalGray, smallLocalGray);
-		//matLocalGray.copyTo(smallLocalGray);
-		//cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), 0.5, 0.5);
-		cv::Rect cntROI(0.4 * smallLocalGray.cols, 0, 0.2 * smallLocalGray.cols, smallLocalGray.rows);
+		cv::equalizeHist(smallLocalGray, finalGray);
+		
+		//cv::imshow("smallLocalGray", smallLocalGray);
+		
+		cv::Rect cntROI(0.4 * finalGray.cols, 0, 0.2 * finalGray.cols, finalGray.rows);
 
-		if (m_nToggleLearn >= 0) {
-			m_pMOG->apply(smallLocalGray, matLocalFore,-1);
+		double dBG_mean = cv::mean(smallLocalGray)[0];
+		//std::cout << cv::mean(smallLocalGray)[0] << "  " << cv::mean(finalGray)[0] << std::endl;
+	
+
+
+		// Learn bacjground and extract foreground
+		if (m_nToggleLearn >= 0 ) {
+			m_pMOG->apply(finalGray, matLocalFore,-1);
 			m_nToggleLearn = 0;
 			//picom.printStdLog( "Learning BG",1);
 			//cv::imshow("matLocalFore_ori", matLocalFore);
 		}
 		m_nToggleLearn++;
+
+		// Set all to zero if average intensity is low
+		if (dBG_mean < 70) {
+			matLocalFore = cv::Mat::zeros(finalGray.size(), CV_8UC1);
+		}
+
+		
+
+
+
 
 		// Get the background image
 		cv::Mat matBG;
@@ -434,21 +451,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			return;
 		}
 
-		// Find subtraction
-		cv::Mat aDiff;
-		cv::Mat show;
-		//cv::absdiff(matSmallGrayFrame, matBg, aDiff);
-		cv::Mat matSrc_blur, matBg_blur;
-	
-		//cv::GaussianBlur(matBG, matBg_blur, cv::Size(3, 3), -1);
-		//cv::absdiff(smallLocalGray, matBg_blur, aDiff);
-		//cv::GaussianBlur(aDiff, aDiff,cv::Size(3,3), -1);// cv::Size(3, 3));
 
-
-		cv::normalize(aDiff, show, 0, 255, cv::NORM_MINMAX);
-		//cv::imshow("aDiff", show);
-		//cv::threshold(aDiff, matLocalFore, 5, 255, CV_THRESH_BINARY);
-		//cv::threshold(aDiff, matLocalFore, 3, 255, CV_THRESH_BINARY);
 
 		// Remove Noise Area
 		cv::Rect noiseRect = cv::Rect(matLocalFore.cols - (matLocalFore.cols * 0.28)
