@@ -437,9 +437,6 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			matLocalFore = cv::Mat::zeros(finalGray.size(), CV_8UC1);
 		}
 
-		
-
-
 
 
 		// Get the background image
@@ -589,12 +586,18 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		//std::cout << dTime << "\t" << m_dTime << "\n";
 		
 		// Upload graph
-		
-		if (picom.get_current_time() == "00:00:01")
+
+		// Flag to avoid multiple calls
+		static bool bActivate = false;
+
+		if (picom.get_current_time() == "00:00:01" && bActivate == false)
 		{
 			picom.printStdLog("New Day!");
+			bActivate = true;
 			if (!m_bTweeterGraph)
 			{
+				picom.printStdLog("Tweeting Graph!\n");
+
 				m_nCountIn_tweet = m_nCount_In;
 				m_nCountOut_tweet = m_nCount_Out;
 				
@@ -605,7 +608,10 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			}
 			
 		}
+		if (picom.get_current_time() == "00:00:02")
+			bActivate = false;
 
+		m_piTweet.tweet_graph_thread("2018-10-06");
 		//picom.printStdLog( " Status update",1);
 		// Status update
 		
