@@ -113,8 +113,8 @@ struct BirdData
 				}
 
 				// Determine direction 
-				// only Motions more than 20 pixel
-				if(abs(nDirection) - 20 > 0)
+				// only Motions more than 10 pixel
+				if(abs(nDirection) - 10 > 0)
 					nBirdDirection = nDirection > 0 ? BIRD_FLY_OUT : BIRD_FLY_IN;
 				
 			}

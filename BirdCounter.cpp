@@ -4,7 +4,7 @@
 
 CBirdCounter::CBirdCounter()
 {
-	m_pMOG = cv::createBackgroundSubtractorMOG2(115, 16, false);
+	m_pMOG = cv::createBackgroundSubtractorMOG2(50, 9, false);
 	m_ratios.push_back(0);
 }
 
@@ -532,7 +532,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (!matDisplayWithBirds.empty())
 		{
 			cv::imshow("matDisplayWithBirds",matDisplayWithBirds);
-			cv::waitKey(0);
+			cv::waitKey(1);
 		}
 #endif
 
@@ -549,8 +549,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		int nMinutesToTweet = 15;
 		if (m_nCountContinuosValid >= 1)
 		{
-			// For Uploading pictures every 500 birds 
-			int nPrintBirdNumFlag = 250;
+			// For Uploading pictures every 1000 birds 
+			int nPrintBirdNumFlag = 1000;
 		
 			if ((m_nCount_In % nPrintBirdNumFlag == 0 && m_nCount_In != nPre_inBird )
 				|| (m_nCount_Out % nPrintBirdNumFlag == 0 && m_nCount_Out != nPre_outBird) ) // Write
