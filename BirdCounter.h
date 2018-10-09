@@ -241,8 +241,6 @@ protected:
 	int m_nCount_In = 0;
 	int m_nCount_Out = 0;
 
-	int m_nCountIn_tweet = 0;
-	int m_nCountOut_tweet = 0;
 
 	// Temp problems
 	int m_nFrameWidth = 0;

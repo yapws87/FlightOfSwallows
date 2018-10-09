@@ -4,7 +4,7 @@
 
 CBirdCounter::CBirdCounter()
 {
-	m_pMOG = cv::createBackgroundSubtractorMOG2(15, 5, false);
+	m_pMOG = cv::createBackgroundSubtractorMOG2(115, 16, false);
 	m_ratios.push_back(0);
 }
 
@@ -174,7 +174,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	matRealSrc.copyTo(matDisplay);
 
 	// Set bounding block for detected birds
-	int nMinBirdSize = 1;
+	int nMinBirdSize = 2;
 	std::vector<BirdData> bird_candidates;
 	//for (int n = 0; n < birdRects.size(); n++)
 	for (int n = 0; n < bird_blocks.size(); n++)
@@ -196,7 +196,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 
 		// Remove abnormal looking shapes
 		float fSizeRatio = (birdBox.width > birdBox.height) ? birdBox.width / (float)birdBox.height : birdBox.height / (float)birdBox.width;
-		if (fSizeRatio > 15)
+		if (fSizeRatio > 10)
 			continue;
 
 
@@ -272,8 +272,8 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	}
 
 	// Count Birds
-	int nIn_Line = 0.4 * nSrcWidth;
-	int nOut_Line = 0.8 * nSrcWidth;
+	int nIn_Line = 0.35 * nSrcWidth;
+	int nOut_Line = 0.6 * nSrcWidth;
 	int nCnt_line = (nIn_Line + nOut_Line) / 2;
 
 	for(int i = 0;  i < new_birds.size(); i++)
@@ -412,9 +412,17 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		cv::Mat finalGray;
 		cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), 0.5, 0.5);
 		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(3, 3), -1);
+
+		// Remove Noise Area
+		cv::Rect noiseRect = cv::Rect(smallLocalGray.cols - (smallLocalGray.cols * 0.28)
+			, 0
+			, (smallLocalGray.cols * 0.28)
+			, smallLocalGray.rows);
+		smallLocalGray(noiseRect).setTo(0);
+
 		cv::equalizeHist(smallLocalGray, finalGray);
 		
-		//cv::imshow("smallLocalGray", smallLocalGray);
+		//cv::imshow("finalGray", finalGray);
 		
 		cv::Rect cntROI(0.4 * finalGray.cols, 0, 0.2 * finalGray.cols, finalGray.rows);
 
@@ -433,7 +441,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		m_nToggleLearn++;
 
 		// Set all to zero if average intensity is low
-		if (dBG_mean < 70) {
+		if (dBG_mean < 50) {
 			matLocalFore = cv::Mat::zeros(finalGray.size(), CV_8UC1);
 		}
 
@@ -450,12 +458,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 
 
 
-		// Remove Noise Area
-		cv::Rect noiseRect = cv::Rect(matLocalFore.cols - (matLocalFore.cols * 0.28)
-			, 0
-			, (matLocalFore.cols * 0.28)
-			, matLocalFore.rows);
-		matLocalFore(noiseRect).setTo(0);
+		
 
 		cv::Mat matElement = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(3, 3));
 		cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_OPEN, matElement, cv::Point(-1, -1), 2);
@@ -465,7 +468,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (!matLocalFore.empty())
 		{
 			cv::imshow("matLocalFore", matLocalFore);
-			cv::waitKey(0);
+		
 		}
 #endif
 
@@ -529,7 +532,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (!matDisplayWithBirds.empty())
 		{
 			cv::imshow("matDisplayWithBirds",matDisplayWithBirds);
-			cv::waitKey(1);
+			cv::waitKey(0);
 		}
 #endif
 
@@ -547,12 +550,12 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (m_nCountContinuosValid >= 1)
 		{
 			// For Uploading pictures every 500 birds 
-			int nPrintBirdNumFlag = 500;
-
-			if ((m_nCountIn_tweet % nPrintBirdNumFlag == 0 && m_nCountIn_tweet  != nPre_inBird )
-				|| (m_nCountOut_tweet % nPrintBirdNumFlag == 0 && m_nCountOut_tweet != nPre_outBird) ) // Write
+			int nPrintBirdNumFlag = 50;
+		
+			if ((m_nCount_In % nPrintBirdNumFlag == 0 && m_nCount_In != nPre_inBird )
+				|| (m_nCount_Out % nPrintBirdNumFlag == 0 && m_nCount_Out != nPre_outBird) ) // Write
 			{ 
-				picom.printStdLog("Tweets in " + std::to_string(nMinutesToTweet) +" minutes interval");
+				picom.printStdLog("Tweets bird count flag reached.");
 				prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
 				
 				
@@ -567,8 +570,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		
 				m_fSecCount_tweet = 0;
 
-				nPre_inBird = m_nCountIn_tweet;
-				nPre_outBird = m_nCountOut_tweet;
+				nPre_inBird = m_nCount_In;
+				nPre_outBird = m_nCount_Out;
 			}
 			m_nCountContinuosValid = 0;
 
@@ -598,10 +601,6 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			{
 				picom.printStdLog("Tweeting Graph!\n");
 
-				m_nCountIn_tweet = m_nCount_In;
-				m_nCountOut_tweet = m_nCount_Out;
-				
-				
 				m_piTweet.tweet_graph_thread(picom.getCurrentDate());
 				
 				resetBirdCount();
