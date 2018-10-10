@@ -595,13 +595,14 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		// Flag to avoid multiple calls
 		static bool bActivate = false;
 
+		
 		if (picom.get_current_time() == "00:00:01" && bActivate == false)
 		{
 			picom.printStdLog("New Day!");
 			bActivate = true;
 
 			picom.printStdLog("Tweeting Graph!\n");
-			m_piTweet.tweet_graph_thread(picom.getCurrentDate());
+			m_piTweet.tweet_graph_thread(picom.get_current_date());
 			resetBirdCount();
 
 		}
