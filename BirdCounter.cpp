@@ -550,8 +550,10 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (m_nCountContinuosValid >= 1)
 		{
 			// For Uploading pictures every 1000 birds 
-			int nPrintBirdNumFlag = 1000;
+			int nPrintBirdNumFlag = 2000;
 		
+			// At Least 15 mins inteval
+			if(m_fSecCount_tweet > 60 * 15)
 			if ((m_nCount_In % nPrintBirdNumFlag == 0 && m_nCount_In != nPre_inBird )
 				|| (m_nCount_Out % nPrintBirdNumFlag == 0 && m_nCount_Out != nPre_outBird) ) // Write
 			{ 
