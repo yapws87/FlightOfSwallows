@@ -23,7 +23,10 @@ yes | sudo apt-get install libatlas-base-dev
 yes | sudo apt-get install gfortran 
 yes | sudo apt-get install python2.7-dev 
 yes | sudo apt-get install python3-dev 
+
+# For twitter use
 yes | sudo apt-get install python3-matplotlib
+yes | sudo apt-get install twython
 
 echo "Remove unsed"
 yes | sudo apt-get autoremove
