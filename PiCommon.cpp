@@ -153,6 +153,21 @@ std::string PiCommon::get_current_day()
 	return return_str;
 }
 
+float PiCommon::get_temperature()
+{
+	FILE *temperatureFile;
+	double T;
+	temperatureFile = fopen ("/sys/class/thermal/thermal_zone0/temp", "r");
+	if (temperatureFile == NULL)
+		return -1;
+	
+	fscanf (temperatureFile, "%lf", &T);
+	T /= 1000;
+	fclose (temperatureFile);
+
+	return float(T);
+}
+
 bool PiCommon::isDateDiff()
 {
 	if (m_currentDate != "")
