@@ -514,7 +514,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			picom.printStdLog( "m_bOnce",1);
 			m_nCountContinuosValid = 0;
 			//m_bTweeterFlag = true;
-			m_dTemperature = m picom.get_temperature();
+			m_dTemperature = picom.get_temperature();
 			m_piTweet.tweet_bird_thread(matDisplayWithBirds
 				, -1
 				, m_dTime 
@@ -561,7 +561,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 				picom.printStdLog("Tweets bird count flag reached.");
 				prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
 				
-				m_dTemperature = m picom.get_temperature();
+				m_dTemperature = picom.get_temperature();
 				m_piTweet.tweet_bird_thread(matDisplayWithBirds
 					, dForeRatio
 					, m_dTime
