@@ -602,7 +602,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			bActivate = true;
 
 			picom.printStdLog("Tweeting Graph!\n");
-			m_piTweet.tweet_graph_thread(picom.get_current_date());
+			m_piTweet.tweet_graph_thread(picom.get_yesterday_date());
 			resetBirdCount();
 
 		}

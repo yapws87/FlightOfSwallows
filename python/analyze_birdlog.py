@@ -6,6 +6,7 @@ import matplotlib
 matplotlib.use('Agg')
 from matplotlib.dates import date2num
 from matplotlib import pyplot as plt
+from pathlib import Path
 
 
 class BirdResult:
@@ -76,7 +77,7 @@ def extractData(file_bird,bin_minutes):
 	
 	#return arr_histo
 
-def drawHisto(histo_in,histo_out,hist_width,histo_img_path):
+def drawHisto(histo_in,histo_out,hist_width,histo_img_path,date_string):
 
 	fig, ax = plt.subplots(figsize=(10,5))
 	
@@ -91,9 +92,10 @@ def drawHisto(histo_in,histo_out,hist_width,histo_img_path):
 	ax.set_ylabel('Bird Count')
 	ax.set_xlabel('Time (Hour)')
 	
-	now = datetime.now()
+	#now = date_string
 
-	bar_title = 'Frequency of Birds : [' + str(now.year) + '.' + str(now.month) + '.' + str(now.day) + ']'
+	#bar_title = 'Frequency of Birds : [' + str(now.year) + '.' + str(now.month) + '.' + str(now.day) + ']'
+	bar_title = 'Frequency of Birds : [' + date_string + ']'
 	ax.set_title(bar_title)
 	ax.set_xticks(np.arange(0,24,1))
 	ax.legend((p1[0], p2[0]), ('Bird In', 'Bird Out'))
@@ -107,9 +109,9 @@ def drawHisto(histo_in,histo_out,hist_width,histo_img_path):
 txt_inFile =sys.argv[1]
 txt_outFile =sys.argv[2]
 histo_img_path =sys.argv[3]
-#txt_inFile ='C:/Users/yapws87/Documents/SideProj/Raspberry/FlightOfSwallows/2018-04-27_in.txt'
-#txt_outFile ='C:/Users/yapws87/Documents/SideProj/Raspberry/FlightOfSwallows/2018-04-27_out.txt'
-#histo_img_path ='C:/Users/yapws87/Desktop/FlightOfSwallows/histo.jpg' 
+#txt_inFile ='C:/Users/yapws87/Desktop/FlightOfSwallows/2018-10-09_in.txt'
+#txt_outFile ='C:/Users/yapws87/Desktop/FlightOfSwallows/2018-10-09_out.txt'
+#histo_img_path ='C:/Users/yapws87/Desktop/FlightOfSwallows/histo_2018-10-09.jpg'
 #
 
 file_inBird = open(txt_inFile,'r')
@@ -123,5 +125,7 @@ time_interval = 5#minutes
 birdRes_in = extractData(file_inBird,time_interval)
 birdRes_out = extractData(file_outBird,time_interval)
 
-drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_path)
+histoname = Path(histo_img_path)
+print(histoname.stem)
+drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_path,histoname.stem)
 print ('In:', birdRes_in.total, '\t','Out:', birdRes_out.total)
