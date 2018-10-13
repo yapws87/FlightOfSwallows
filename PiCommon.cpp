@@ -153,7 +153,7 @@ std::string PiCommon::get_current_day()
 	return return_str;
 }
 
-float PiCommon::get_temperature()
+double PiCommon::get_temperature()
 {
 	FILE *temperatureFile;
 	double T;
@@ -165,7 +165,7 @@ float PiCommon::get_temperature()
 	T /= 1000;
 	fclose (temperatureFile);
 
-	return float(T);
+	return T;
 }
 
 bool PiCommon::isDateDiff()

@@ -240,6 +240,7 @@ protected:
 
 	int m_nCount_In = 0;
 	int m_nCount_Out = 0;
+	double m_dTemperature = 0;
 
 
 	// Temp problems
@@ -271,9 +272,6 @@ protected:
 	int m_nFrameAcc = 0;
 
 	// Tweeter
-	bool m_bTweeterFlag = false;
-	bool m_bTweeterGraph = true;
-	bool m_bSaveStatus = false;
 	std::deque<double> m_preRatio;
 
 	//Time and frame counts

@@ -44,6 +44,7 @@ public:
 	void tweet_bird_thread( cv::Mat matBird
 	  	, double dThresh
     	, double dTime
+		, double dTemperature
     	, int nCountIn
    		 , int nCountOut
     	, std::deque<double> preRatio);
