@@ -65,7 +65,7 @@ int main(int argc, char * argv[])
 	static int nInit_fps;
 
 	m_piCam.set_save_directory( "/home/pi/projects/FlightOfSwallows/CCTV" );
-	picom.printStdLog("Current Temp : ",picom.get_temperature());
+	picom.printStdLog("Current Temp : %f", picom.get_temperature());
 	if (argc < 4)
 	{
 		picom.printStdLog("Not enough arguments given. Default value will be use." );
