@@ -34,6 +34,8 @@ public:
 	std::string get_current_time_and_date();
 	std::string get_current_day();
 	std::string get_yesterday_date();
+
+	float get_temperature();
 	void uniSleep(int nSleepTime_milisec);
 
 	bool isDateDiff();
