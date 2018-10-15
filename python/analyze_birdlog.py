@@ -1,4 +1,5 @@
 import sys
+#import datetime
 from datetime import datetime, date, time
 from datetime import timedelta
 import numpy as np
@@ -48,7 +49,7 @@ def extractData(file_bird,bin_minutes):
 		
 		#print(data)
 		#if  15 < int(data[5]) < 70:
-		bin_acc = bin_acc + 1
+		bin_acc  = bin_acc + 1
 		speed_acc = speed_acc + int(data[5])
 		total_bird = total_bird + 1
 		
@@ -62,7 +63,7 @@ def extractData(file_bird,bin_minutes):
 				bin_acc = 0
 			else:
 				histo[idx] = [time_anchor / 3600.0, 0,0]
-				
+			
 			
 			idx = idx + 1
 		
@@ -103,29 +104,120 @@ def drawHisto(histo_in,histo_out,hist_width,histo_img_path,date_string):
 	plt.savefig(histo_img_path)
 	#plt.show()
 	
+def getHistoStat(histo_data,time_start, time_end):
 	
+	# Get data info
+	bin_total = len(histo_data)
+	bin_val = 24 / float(bin_total)
+	
+	acc_data = 0;
+	
+	for i in range(1,bin_total):
+		loop_time = i * bin_val
+		
+		if loop_time >=  time_start and loop_time <= time_end:
+			acc_data = acc_data + histo_data[i,1]
+			
+	return acc_data
+	
+def saveData(date_stamp, bird_out, bird_in):
+	daily_file = open("daily_bird.txt", "a")
+	
+	date_string = [str(date_stamp.year), "-", str(date_stamp.month), "-", str(date_stamp.day) ]
+	daily_file.write(''.join(date_string))
+	
+	bird_out = int(bird_out)
+	bird_in = int(bird_in)
+	data_string = [ "\t", str(bird_out), "\t",str(bird_in),"\n"]
+	daily_file.write(''.join(data_string))
+	
+	daily_file.close()
+
+# Change date string YYYY-MM-DD to datetime
+def getDateFromString(date_entry):
+	
+	print(date_entry)
+	year, month, day = map(int, date_entry.split('-'))
+	local_date = date(int(year),int(month),int(day))
+		
+	return local_date
+	
+def plotBirdTrendLine(data_filename, graph_path):
+	# Extract data from file
+	daily_file = open(data_filename, "r")
+	
+	b_dates = []
+	b_outs = []
+	b_ins = []
+	lines = daily_file.readlines()
+	for line in lines:
+		b_date, b_out, b_in = line.split('\t')	
+		b_dates.append(b_date)
+		b_outs.append( int(float(b_out)))
+		b_ins.append( int(float(b_in)))
+	daily_file.close()
+	
+	# Draw graph
+	x_axis = np.arange(0,len(b_dates))
+	
+	
+	fig, ax = plt.subplots(figsize=(10,5))
+	
+	line1, line2, = plt.plot(x_axis, b_outs,'b',x_axis, b_ins,'r')
+	
+	ax.set_ylabel('Bird Count (During Peak Hours)')
+	ax.set_xlabel('Date')
+	
+	bar_title = 'Daily Bird Count'
+	ax.set_title(bar_title)
+	
+	ax.legend((line1, line2), ('Bird Out', 'Bird In'))
+	
+	
+	plt.xticks(x_axis, b_dates, rotation='vertical')
+	# Pad margins so that markers don't get clipped by the axes
+	plt.margins(0.25)
+	# Tweak spacing to prevent clipping of tick-labels
+	plt.subplots_adjust(bottom=0.25)
+	plt.grid()
+	plt.savefig(graph_path)
+	#plt.show()
+	
+		
+	
+##--------------------------- Main Process --------------------------------
 	
 # load files
 txt_inFile =sys.argv[1]
 txt_outFile =sys.argv[2]
 histo_img_path =sys.argv[3]
-#txt_inFile ='C:/Users/yapws87/Desktop/FlightOfSwallows/2018-10-09_in.txt'
-#txt_outFile ='C:/Users/yapws87/Desktop/FlightOfSwallows/2018-10-09_out.txt'
-#histo_img_path ='C:/Users/yapws87/Desktop/FlightOfSwallows/histo_2018-10-09.jpg'
-#
+txt_dailytxt_path = sys.argv[4]
+line_img_path =sys.argv[5]
+#txt_inFile ='C:/Users/yapws87/Desktop/FlightOfSwallows/2018-10-12_in.txt'
+#txt_outFile ='C:/Users/yapws87/Desktop/FlightOfSwallows/2018-10-12_out.txt'
+#histo_img_path ='C:/Users/yapws87/Desktop/FlightOfSwallows/histo_2018-10-12.jpg'
 
 file_inBird = open(txt_inFile,'r')
 file_outBird = open(txt_outFile,'r')
 
 time_interval = 5#minutes
 
-
 # Extract Data
-
 birdRes_in = extractData(file_inBird,time_interval)
 birdRes_out = extractData(file_outBird,time_interval)
 
 histoname = Path(histo_img_path)
-print(histoname.stem)
-drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_path,histoname.stem)
+#drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_path,histoname.stem)
 print ('In:', birdRes_in.total, '\t','Out:', birdRes_out.total)
+
+main_bird_out = getHistoStat(birdRes_out.histo,6,7)
+main_bird_in = getHistoStat(birdRes_in.histo,18.2,19.2)
+
+print ('Morning Bird: ', main_bird_out, '\t','Evening Bird: ', main_bird_in)
+
+
+
+date_stamp = getDateFromString(histoname.stem.split('_')[1])
+#saveData(date_stamp, main_bird_out,main_bird_in)
+
+plotBirdTrendLine(txt_dailytxt_path,line_img_path)

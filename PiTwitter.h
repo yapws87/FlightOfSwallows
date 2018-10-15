@@ -17,6 +17,7 @@ protected:
 
 	std::string m_piImg =  m_proj_folder + "image.jpg";
 	std::string m_piHisto =  m_proj_folder + "histogram.jpg";
+	std::string m_piLineGraph =  m_proj_folder + "daily_graph.jpg";
 	std::string m_piBirdLog = m_proj_folder + "bird_log/";
 
 	double m_dthresh = 0;
@@ -34,9 +35,10 @@ public:
 		m_piCmd_tweetPic = piCmd_tweetPic;
 		m_piCmd_analyzeHisto = piCmd_analyzeHisto;
 	}
-	void setPathsData(std::string piImg,std::string piHisto,std::string piBirdLog){
+	void setPathsData(std::string piImg,std::string piHisto,std::string piLineGraph,std::string piBirdLog){
 		m_piImg = piImg;
 		m_piHisto = piHisto;
+		m_piLineGraph = piLineGraph;
 		m_piBirdLog = piBirdLog;
 	}
 

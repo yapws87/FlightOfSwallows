@@ -131,6 +131,7 @@ void tweet_graph_proc(std::string strdate
     , std::string piCmd_image
     , std::string piCmd_analyzeHisto
     , std::string piHisto_path
+	, std::string piLineGraph_path
     ,std::string folder_path )
 {
 	PiCommon picom;
@@ -141,15 +142,23 @@ void tweet_graph_proc(std::string strdate
 	// Calculate and create histogram
 	std::string infile_path = folder_path + strdate + "_in.txt ";
 	std::string outfile_path = folder_path + strdate + "_out.txt ";
+	std::string dailyFilePath = folder_path + "daily_bird.txt ";
 
-
-	std::string piSys = piCmd_analyzeHisto + infile_path + outfile_path + piHisto_path;
+	// Analyze Data to form histogram and line graph
+	std::string piSys = piCmd_analyzeHisto  
+		+ " " + infile_path 
+		+ " " + outfile_path 
+		+ " " + piHisto_path 
+		+ " " + dailyFilePath 
+		+ " " + piLineGraph_path
+	;
 	//system(piSys.c_str());
 	picom.printStdLog("Cmd1 : " + piSys);
 	std::string str_out = picom.getString_fromCmd(piSys);
 	picom.printStdLog("Result : " + str_out);
 	picom.uniSleep(2000);
 
+	// Tweet histogram
 	piMsg = " '";
 	piMsg += strdate + " histogram ";
 	piMsg += "' ";
@@ -158,8 +167,18 @@ void tweet_graph_proc(std::string strdate
 	picom.printStdLog("Cmd2 : " + piSys);
 	system(piSys.c_str());
 
-	picom.printStdLog("Tweeted Graph!\n");
+	picom.printStdLog("Tweeted Histogram!\n");
 
+	// Tweet line graph
+	piMsg = " '";
+	piMsg +=" Line Graph ";
+	piMsg += "' ";
+
+	piSys = piCmd_image + piMsg + piLineGraph_path + piParallel;
+	picom.printStdLog("Cmd2 : " + piSys);
+	system(piSys.c_str());
+
+	picom.printStdLog("Tweeted Line graph!\n");
 }
 
 void PiTwitter::tweet_graph_thread(std::string strdate)
@@ -169,6 +188,7 @@ void PiTwitter::tweet_graph_thread(std::string strdate)
         , m_piCmd_tweetPic
         , m_piCmd_analyzeHisto
         , m_piHisto
+		, m_piLineGraph
         , m_piBirdLog
     );
     t.detach();
