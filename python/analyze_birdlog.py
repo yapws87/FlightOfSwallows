@@ -78,6 +78,7 @@ def extractData(file_bird,bin_minutes):
 	
 	#return arr_histo
 
+# Draws histogram
 def drawHisto(histo_in,histo_out,hist_width,histo_img_path,date_string):
 
 	fig, ax = plt.subplots(figsize=(10,5))
@@ -119,9 +120,10 @@ def getHistoStat(histo_data,time_start, time_end):
 			acc_data = acc_data + histo_data[i,1]
 			
 	return acc_data
-	
-def saveData(date_stamp, bird_out, bird_in):
-	daily_file = open("daily_bird.txt", "a")
+
+# saves the daily bird count
+def saveData(txt_dailytxt_path,date_stamp, bird_out, bird_in):
+	daily_file = open(txt_dailytxt_path, "a")
 	
 	date_string = [str(date_stamp.year), "-", str(date_stamp.month), "-", str(date_stamp.day) ]
 	daily_file.write(''.join(date_string))
@@ -142,6 +144,7 @@ def getDateFromString(date_entry):
 		
 	return local_date
 	
+# Plots the daily bird line graph
 def plotBirdTrendLine(data_filename, graph_path):
 	# Extract data from file
 	daily_file = open(data_filename, "r")
@@ -219,6 +222,6 @@ print ('Morning Bird: ', main_bird_out, '\t','Evening Bird: ', main_bird_in)
 
 
 date_stamp = getDateFromString(txtname.stem.split('_')[0])
-#saveData(date_stamp, main_bird_out,main_bird_in)
+saveData(txt_dailytxt_path,date_stamp, main_bird_out,main_bird_in)
 
 plotBirdTrendLine(txt_dailytxt_path,line_img_path)
