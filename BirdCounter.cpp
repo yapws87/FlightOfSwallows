@@ -711,6 +711,7 @@ void _printStatus_thread_func(int nTime, int nSaturation, int nOverflow, int nCo
 				<< "Bird_out=" << nCountOut << "\t"
 				<< "temp=" << temperature_val<< "\t"
 				<< "core=" << core_val<< "\t"
+				<< "\n"
 				;
 
 		std::cout << std::strtok(std::ctime(&tt), "\n") << "\t"
