@@ -41,7 +41,7 @@ protected:
 	int m_nFrameHeight;
 	int m_nFPS;
     bool m_bRecord = false;
-	bool m_bEnableRecord = false;
+	bool m_bEnableRecord = true;
     
     std::string m_save_directory;
     std::mutex m_mutex; 
