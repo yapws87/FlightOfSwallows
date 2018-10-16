@@ -203,25 +203,29 @@ line_img_path =sys.argv[5]
 file_inBird = open(txt_inFile,'r')
 file_outBird = open(txt_outFile,'r')
 
+histoname = Path(histo_img_path)
+txtname = Path(txt_inFile)
+
 time_interval = 5#minutes
+date_str = txtname.stem.split('_')[0]
+date_stamp = getDateFromString(date_str)
 
 # Extract Data
 birdRes_in = extractData(file_inBird,time_interval)
 birdRes_out = extractData(file_outBird,time_interval)
 
-histoname = Path(histo_img_path)
-txtname = Path(txt_inFile)
-#drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_path,histoname.stem)
+
+drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_path,date_str)
 print ('In:', birdRes_in.total, '\t','Out:', birdRes_out.total)
 
 main_bird_out = getHistoStat(birdRes_out.histo,6,7)
-main_bird_in = getHistoStat(birdRes_in.histo,18.2,19.2)
+main_bird_in = getHistoStat(birdRes_in.histo,18.0,19.0)
 
 print ('Morning Bird: ', main_bird_out, '\t','Evening Bird: ', main_bird_in)
 
 
 
-date_stamp = getDateFromString(txtname.stem.split('_')[0])
+
 saveData(txt_dailytxt_path,date_stamp, main_bird_out,main_bird_in)
 
 plotBirdTrendLine(txt_dailytxt_path,line_img_path)
