@@ -713,18 +713,16 @@ void _printStatus_thread_func(int nTime, int nSaturation, int nOverflow, int nCo
 				<< "core=" << core_val<< "\t"
 				<< "\n"
 				;
+		picom.printStdLog( "Sat=" + std::to_string(nSaturation) + "\t"
+			+ "Over="  		+ std::to_string( nOverflow) + "\t"
+			+ "Time=" 		+ std::to_string( nTime)  +  "\t"
+			+ "Bird_in=" 	+ std::to_string( nCountIn)  +  "\t"
+			+ "Bird_out="	+ std::to_string( nCountOut)  +  "\t"
+			+ "temp=" 		+ std::to_string( temperature_val) +  "\t"
+			+ "core="  		+ std::to_string( core_val) +  "\t"
+		);
 
-		std::cout << std::strtok(std::ctime(&tt), "\n") << "\t"
-			<< "Sat=" << nSaturation << "\t"
-			<< "Over=" << nOverflow << "\t"
-			<< "Time=" << std::to_string(nTime) << "\t"
-			<< "Bird_in=" << nCountIn << "\t"
-			<< "Bird_out=" << nCountOut << "\t"
-			<< "temp=" << temperature_val<< "\t"
-			<< "core=" << core_val<< "\t"
-			<< std::endl;
-
-		picom.printStdLog("Print Done",1);
+		
 		status_file.close();
 	}
 	
