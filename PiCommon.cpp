@@ -17,7 +17,8 @@ std::string PiCommon::getString_fromCmd(std::string cmd)
 	FILE * stream;
 	const int max_buffer = 256;
 	char buffer[max_buffer];
-	cmd.append(" 2>&1");
+	cmd.insert(0,"echo -n $(");
+	cmd.append(") 2>&1");
 
 #ifdef _WIN32
 	stream = _popen(cmd.c_str(), "r");
