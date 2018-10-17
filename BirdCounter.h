@@ -232,8 +232,12 @@ protected:
 	void printStatus_thread();
 	//void printStatus_thread_func();
 	void resetBirdCount();
+	void init_birdLog();
 
 	// Variables
+	std::ofstream m_in_file;
+	std::ofstream m_out_file;
+	std::ofstream m_status_file;
 	std::vector<BirdCell> m_inBird_logs;
 	std::vector<BirdCell> m_outBird_logs;
 	std::chrono::time_point<std::chrono::system_clock> m_statusTime;

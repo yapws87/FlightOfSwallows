@@ -78,6 +78,7 @@ void CBirdCounter::resetBirdCount()
 	m_nCount_Out = 0;
 }
 
+
 cv::Rect CBirdCounter::boundingBirds(std::vector<cv::Point> birdPts)
 {
 	cv::Point minPt(INT_MAX, INT_MAX);
@@ -418,6 +419,9 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			, 0
 			, (smallLocalGray.cols * 0.28)
 			, smallLocalGray.rows);
+		cv::Rect signalRect = cv::Rect( 0, 0
+			, (smallLocalGray.cols * 0.7)
+			, smallLocalGray.rows);
 		smallLocalGray(noiseRect).setTo(0);
 
 		cv::equalizeHist(smallLocalGray, finalGray);
@@ -426,7 +430,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		
 		cv::Rect cntROI(0.4 * finalGray.cols, 0, 0.2 * finalGray.cols, finalGray.rows);
 
-		double dBG_mean = cv::mean(smallLocalGray)[0];
+		double dBG_mean = cv::mean(smallLocalGray(signalRect))[0];
 		//std::cout << cv::mean(smallLocalGray)[0] << "  " << cv::mean(finalGray)[0] << std::endl;
 	
 
@@ -493,7 +497,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			bool bExistBird = countBird(matLocalFore, matLocalColor, matDisplayWithBirds,true);
 			if (bExistBird) {
 				m_nCountContinuosValid++;
-				printBirdLog();
+				 printBirdLog();
 				//picom.printStdLog( "BIRD EXIST");
 			}
 		}
@@ -511,6 +515,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 
 		if (m_bOnce)
 		{
+			init_birdLog();
 			picom.printStdLog( "m_bOnce",1);
 			m_nCountContinuosValid = 0;
 			//m_bTweeterFlag = true;
@@ -602,6 +607,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			picom.printStdLog("New Day!");
 			bActivate = true;
 
+			init_birdLog();
 			picom.printStdLog("Tweeting Graph!\n");
 			m_piTweet.tweet_graph_thread(picom.get_yesterday_date());
 			resetBirdCount();
@@ -646,15 +652,30 @@ void CBirdCounter::insertBirdLog(BirdData bird_data) {
 }
 
 
+void CBirdCounter::init_birdLog()
+{
+	PiCommon picom;
+	std::string filename = std::string(PROGRAM_FOLDER) + "bird_log/" + picom.get_current_date();
+
+	// Close file if is open
+	if (m_in_file.is_open())
+		m_in_file.close();
+	if (m_out_file.is_open())
+		m_out_file.close();
+	//if (m_status_file.is_open())
+	//	m_status_file.close();
+
+
+	// Create new files
+	m_out_file.open(filename + "_out.txt", std::fstream::out | std::fstream::app);
+	m_in_file.open(filename + "_in.txt", std::fstream::out | std::fstream::app);
+	//m_status_file.open(filename + "_status.txt", std::fstream::out | std::fstream::app);
+}
 
 void CBirdCounter::printBirdLog()
 {
-	PiCommon picom;
-	std::ofstream in_file, out_file;
-	std::string filename = std::string(PROGRAM_FOLDER) + "bird_log/" + picom.get_current_date();
-	
-	in_file.open(filename + "_in.txt", std::fstream::out | std::fstream::app);
-	out_file.open(filename + "_out.txt", std::fstream::out | std::fstream::app);
+	if (!m_in_file.is_open() || !m_out_file.is_open())
+		return;
 	
 	// in-data print
 	for (int i = 0; i < m_inBird_logs.size(); i++)
@@ -662,7 +683,7 @@ void CBirdCounter::printBirdLog()
 
 		std::time_t tt = std::chrono::system_clock::to_time_t(m_inBird_logs[i].detect_time);
 		
-		in_file << std::strtok(std::ctime(&tt), "\n") << "\t"
+		m_in_file << std::strtok(std::ctime(&tt), "\n") << "\t"
 			<< m_inBird_logs[i].nSpeed << "\t"
 			<< m_inBird_logs[i].nTrailLength << "\n";
 	}
@@ -672,7 +693,7 @@ void CBirdCounter::printBirdLog()
 	{
 		std::time_t tt = std::chrono::system_clock::to_time_t(m_outBird_logs[i].detect_time);
 
-		out_file << std::strtok(std::ctime(&tt), "\n") << "\t"
+		m_out_file << std::strtok(std::ctime(&tt), "\n") << "\t"
 			<< m_outBird_logs[i].nSpeed << "\t"
 			<< m_outBird_logs[i].nTrailLength << "\n";
 	}
@@ -680,21 +701,18 @@ void CBirdCounter::printBirdLog()
 	m_inBird_logs.clear();
 	m_outBird_logs.clear();
 
-	in_file.close();
-	out_file.close();
 }
 
-void _printStatus_thread_func(int nTime, int nSaturation, int nOverflow, int nCountIn, int nCountOut)
+void _printStatus_thread_func( int nTime, int nSaturation, int nOverflow, int nCountIn, int nCountOut)
 {
 	PiCommon picom;
 	picom.printStdLog("_printStatus_thread_func start",1);
 	
-	std::ofstream status_file;
-	std::string filename = std::string(PROGRAM_FOLDER) + "bird_log/" + picom.get_current_date();
 
-	picom.printStdLog("Opening file for status print",1);
+	std::string filename = std::string(PROGRAM_FOLDER) + "bird_log/" + picom.get_current_date();
+	std::ofstream status_file;
 	status_file.open(filename + "_status.txt", std::fstream::out | std::fstream::app);
-	
+
 	if(status_file.is_open())
 	{
 	// in-data print
@@ -721,9 +739,8 @@ void _printStatus_thread_func(int nTime, int nSaturation, int nOverflow, int nCo
 			+ temperature_val +  "\t"
 			+ core_val +  "\t"
 		);
-
-		
 		status_file.close();
+		
 	}
 	
 } 
@@ -734,7 +751,9 @@ void CBirdCounter::printStatus_thread()
 	picom.printStdLog("printStatus_func ->>.",1);
 
 
-	std::thread t(_printStatus_thread_func,m_dTime
+	std::thread t(_printStatus_thread_func
+		//, m_status_file
+		, m_dTime
 		, m_nSaturationCount
 		, m_nOverflowCount
 		, m_nCount_In
