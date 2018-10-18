@@ -4,7 +4,9 @@
 
 CBirdCounter::CBirdCounter()
 {
-	m_pMOG = cv::createBackgroundSubtractorMOG2(50, 9, false);
+	//m_pMOG = cv::createBackgroundSubtractorMOG2(50, 9, false);
+	m_pMOG = cv::createBackgroundSubtractorKNN(50, 50, false);
+	//m_pMOG->SetVarThreshold(12);
 	m_ratios.push_back(0);
 }
 
@@ -424,7 +426,10 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			, smallLocalGray.rows);
 		smallLocalGray(noiseRect).setTo(0);
 
-		cv::equalizeHist(smallLocalGray, finalGray);
+		cv::Mat matEqualized;
+		finalGray = cv::Mat::zeros(smallLocalGray.size(), CV_8UC1);
+		cv::equalizeHist(smallLocalGray(signalRect), matEqualized);
+		matEqualized.copyTo(finalGray(signalRect));
 		
 		//cv::imshow("finalGray", finalGray);
 		
@@ -493,7 +498,9 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			m_birds.clear();
 		}
 		else {
-			//picom.printStdLog( "countBird",1);
+			//picom.printStdLog( "countBird",1);finalGray
+			cv:cvtColor(finalGray, matLocalColor, cv::COLOR_GRAY2BGR);
+			cv::resize(matLocalColor, matLocalColor, cv::Size(), 2, 2);
 			bool bExistBird = countBird(matLocalFore, matLocalColor, matDisplayWithBirds,true);
 			if (bExistBird) {
 				m_nCountContinuosValid++;
@@ -538,7 +545,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (!matDisplayWithBirds.empty())
 		{
 			cv::imshow("matDisplayWithBirds",matDisplayWithBirds);
-			cv::waitKey(1);
+			cv::waitKey(0);
 		}
 #endif
 
