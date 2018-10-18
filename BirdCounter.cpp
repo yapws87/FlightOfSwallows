@@ -322,7 +322,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 		}
 	}
 #ifdef PERSONAL_COMPUTER
-	std::cout << " Bird In : " << m_nCount_In << "\t" << " Bird Out : " << m_nCount_Out << std::endl;
+	//std::cout << " Bird In : " << m_nCount_In << "\t" << " Bird Out : " << m_nCount_Out << std::endl;
 #endif
 	if (bDisplay)
 	{
@@ -409,6 +409,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		cv::Mat matLocalFore;
 		matLocalGray = matFrameGray;
 		matLocalColor = matFrameColor;
+
 		// Motion detections
 		// Reduce size for faster calculation
 		cv::Mat smallLocalGray;
@@ -431,21 +432,14 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		cv::equalizeHist(smallLocalGray(signalRect), matEqualized);
 		matEqualized.copyTo(finalGray(signalRect));
 		
-		//cv::imshow("finalGray", finalGray);
-		
 		cv::Rect cntROI(0.4 * finalGray.cols, 0, 0.2 * finalGray.cols, finalGray.rows);
 
 		double dBG_mean = cv::mean(smallLocalGray(signalRect))[0];
-		//std::cout << cv::mean(smallLocalGray)[0] << "  " << cv::mean(finalGray)[0] << std::endl;
-	
-
 
 		// Learn bacjground and extract foreground
 		if (m_nToggleLearn >= 0 ) {
 			m_pMOG->apply(finalGray, matLocalFore,-1);
 			m_nToggleLearn = 0;
-			//picom.printStdLog( "Learning BG",1);
-			//cv::imshow("matLocalFore_ori", matLocalFore);
 		}
 		m_nToggleLearn++;
 
@@ -453,8 +447,6 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (dBG_mean < 50) {
 			matLocalFore = cv::Mat::zeros(finalGray.size(), CV_8UC1);
 		}
-
-
 
 		// Get the background image
 		cv::Mat matBG;
@@ -465,23 +457,11 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			return;
 		}
 
-
-
-		
-
+		// Morphology process
 		cv::Mat matElement = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(3, 3));
 		cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_OPEN, matElement, cv::Point(-1, -1), 2);
 		cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_CLOSE, matElement, cv::Point(-1, -1), 2);
 
-#ifdef PERSONAL_COMPUTER
-		if (!matLocalFore.empty())
-		{
-			cv::imshow("matLocalFore", matLocalFore);
-		
-		}
-#endif
-
-		//picom.printStdLog( "Calculate ratio",1);
 		// Calculate ratio
 		// Detect sudden change of video quality
 		dForeRatio = (double)cv::countNonZero(matLocalFore(cntROI)) / (double)(cntROI.area());
@@ -492,15 +472,11 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (dForeRatio > 0.5) {
 			m_nSaturationCount++;
 			m_nCountContinuosValid = 0;
-
-			// picom.printStdLog( "Large Change");		
-			// Clear all bird datas
 			m_birds.clear();
 		}
 		else {
-			//picom.printStdLog( "countBird",1);finalGray
-			//cv:cvtColor(finalGray, matLocalColor, cv::COLOR_GRAY2BGR);
-			//cv::resize(matLocalColor, matLocalColor, cv::Size(), 2, 2);
+
+			// Main process
 			bool bExistBird = countBird(matLocalFore, matLocalColor, matDisplayWithBirds,true);
 			if (bExistBird) {
 				m_nCountContinuosValid++;
@@ -520,10 +496,12 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		m_fSecCount_status += elapsed_seconds.count();
 		m_statusTime = tempTime;
 
+
+		// -------------------------------- Process for first frame 
 		if (m_bOnce)
 		{
 			init_birdLog();
-			picom.printStdLog( "m_bOnce",1);
+			picom.printStdLog( "m_bOnce");
 			m_nCountContinuosValid = 0;
 			//m_bTweeterFlag = true;
 			m_dTemperature = picom.get_temperature();
@@ -541,22 +519,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			//m_fSecCount = 10000;
 		}
 		
-#ifdef PERSONAL_COMPUTER
-		if (!matDisplayWithBirds.empty())
-		{
-			cv::imshow("matDisplayWithBirds",matDisplayWithBirds);
-			cv::waitKey(1);
-		}
-#endif
 
-	
-
-		// Record video if threshold shows continuos 10 frames
-		//m_nCountContinuosValid = 1;
-		if(m_bDisplay){
-			matDisplayWithBirds.copyTo(m_matSaveImage);
-		}
-
+		// -------------------------------- Tweet Image
 		static int nPre_inBird = 0;
 		static int nPre_outBird = 0;
 		int nMinutesToTweet = 15;
@@ -593,22 +557,16 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 
 		}
 
-
-#ifndef PERSONAL_COMPUTER
-		// usleep(100);
-#endif
-
+		// -----------------  Calculate FPS
 		dTime = cv::getTickCount() - dTime;
 		dTime = (dTime / cv::getTickFrequency() * 1000);
 		m_dTime = (m_dTime + dTime) / 2;
 		m_nFps_real = 1 / (m_dTime / 1000);
-		//std::cout << dTime << "\t" << m_dTime << "\n";
 		
-		// Upload graph
-
+		
+		//--------------------------- Upload graph
 		// Flag to avoid multiple calls
 		static bool bActivate = false;
-		
 		if (picom.get_current_time() == "00:00:01" && bActivate == false)
 		{
 			picom.printStdLog("New Day!");
@@ -623,16 +581,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (picom.get_current_time() == "00:00:02")
 			bActivate = false;
 
-		//static bool bone_time = false;
-		//if (!bone_time) {
-		//	m_piTweet.tweet_graph_thread("2018-10-06");
-		//	bone_time = true;
-		//}
-		//picom.printStdLog( " Status update",1);
-		// Status update
 		
-		
-		//picom.printStdLog( " TIME : " + std::to_string(m_fSecCount),1);
+		//-------------------------- Update Pi Status
 		if (m_fSecCount_status > 60 * 5)
 		{
 			m_fSecCount_status = 0;
@@ -641,9 +591,12 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			picom.printStdLog( " printStatus_thread DONE",1);
 		}
 
-	//std::cout << std::endl;
 
-	//}
+#ifdef PERSONAL_COMPUTER
+		prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
+		m_matSaveImage = matDisplayWithBirds;
+#endif
+
 }
 
 void CBirdCounter::insertBirdLog(BirdData bird_data) {
