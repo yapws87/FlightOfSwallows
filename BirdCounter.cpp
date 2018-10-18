@@ -414,7 +414,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		cv::Mat smallLocalGray;
 		cv::Mat finalGray;
 		cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), 0.5, 0.5);
-		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(5, 5), 5);
+		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(3, 3), 5);
 
 		// Remove Noise Area
 		cv::Rect noiseRect = cv::Rect(smallLocalGray.cols - (smallLocalGray.cols * 0.28)
@@ -545,7 +545,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (!matDisplayWithBirds.empty())
 		{
 			cv::imshow("matDisplayWithBirds",matDisplayWithBirds);
-			cv::waitKey(0);
+			cv::waitKey(1);
 		}
 #endif
 
