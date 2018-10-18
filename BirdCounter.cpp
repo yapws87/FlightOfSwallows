@@ -639,24 +639,23 @@ void CBirdCounter::printBirdLog()
 	
 	// in-data print
 	for (int i = 0; i < m_inBird_logs.size(); i++)
-	{
-
+	{		
 		std::time_t tt = std::chrono::system_clock::to_time_t(m_inBird_logs[i].detect_time);
-		
 		m_in_file << std::strtok(std::ctime(&tt), "\n") << "\t"
 			<< m_inBird_logs[i].nSpeed << "\t"
 			<< m_inBird_logs[i].nTrailLength << "\n";
 	}
+	m_in_file.flush();
 
 	// out-data print
 	for (int i = 0; i < m_outBird_logs.size(); i++)
 	{
 		std::time_t tt = std::chrono::system_clock::to_time_t(m_outBird_logs[i].detect_time);
-
 		m_out_file << std::strtok(std::ctime(&tt), "\n") << "\t"
 			<< m_outBird_logs[i].nSpeed << "\t"
 			<< m_outBird_logs[i].nTrailLength << "\n";
 	}
+	m_out_file.flush();
 
 	m_inBird_logs.clear();
 	m_outBird_logs.clear();
