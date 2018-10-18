@@ -505,7 +505,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			m_nCountContinuosValid = 0;
 			//m_bTweeterFlag = true;
 			m_dTemperature = picom.get_temperature();
-			m_piTweet.tweet_bird_thread(matDisplayWithBirds
+			m_piTweet.tweet_bird_thread(matLocalColor
 				, -1
 				, m_dTime 
 				, m_dTemperature
