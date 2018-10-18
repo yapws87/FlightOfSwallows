@@ -4,8 +4,8 @@
 
 CBirdCounter::CBirdCounter()
 {
-	//m_pMOG = cv::createBackgroundSubtractorMOG2(50, 9, false);
-	m_pMOG = cv::createBackgroundSubtractorKNN(50, 50, false);
+	m_pMOG = cv::createBackgroundSubtractorMOG2(50, 25, false);
+	//m_pMOG = cv::createBackgroundSubtractorKNN(50, 50, false);
 	//m_pMOG->SetVarThreshold(12);
 	m_ratios.push_back(0);
 }
@@ -414,7 +414,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		cv::Mat smallLocalGray;
 		cv::Mat finalGray;
 		cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), 0.5, 0.5);
-		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(3, 3), -1);
+		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(5, 5), 5);
 
 		// Remove Noise Area
 		cv::Rect noiseRect = cv::Rect(smallLocalGray.cols - (smallLocalGray.cols * 0.28)
