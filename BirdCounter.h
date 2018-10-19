@@ -131,7 +131,7 @@ struct BirdData
 		for (int i = (int)vec_trail.size() - 2; i >= (int)vec_trail.size() - 5 && i > 0; i--)
 		{
 			cv::Point diff = vec_trail[i] - vec_trail[i + 1];
-			float fMag = std::sqrtf(diff.x*diff.x + diff.y*diff.y);
+			float fMag = std::sqrt(diff.x*diff.x + diff.y*diff.y);
 			fAccSpeed += fMag * fPix2Meter / fFrameTime;
 			nValidCount++;
 		}
