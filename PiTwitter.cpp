@@ -51,13 +51,15 @@ void tweet_bird_proc(cv::Mat matBirdResult
 	, double dTemperature
     , int nCountIn
     , int nCountOut
+	, double dAvgIntensity
+
     )
 {
     PiCommon picom;
 	std::string piMsg;
 
-	float fMax = 0.05;
-	float fMin = 0.01;
+	float fMax = 0.05f;
+	float fMin = 0.01f;
 
 	piMsg = " '";
 	if (dThresh < 0) {
@@ -92,6 +94,7 @@ void tweet_bird_proc(cv::Mat matBirdResult
 	piMsg += "Pi Temperature : " + std::to_string(dTemperature) + "\n";
 	piMsg += "Bird-out Count : " + std::to_string(nCountOut) + "\n";
 	piMsg += "Bird-in  Count : " + std::to_string(nCountIn) + "\n";
+	piMsg += "Avg Intensity : " + std::to_string(dAvgIntensity) + "\n";
 
 
 	// for (int i = 0; i < preRatio.size(); i++)
@@ -111,7 +114,7 @@ void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult
 	, double dTemperature
     , int nCountIn
     , int nCountOut
-    , std::deque<double> preRatio)
+    , double dAvgIntensity)
 {
     std::thread t(tweet_bird_proc
         , matBirdResult
@@ -122,6 +125,7 @@ void PiTwitter::tweet_bird_thread(cv::Mat matBirdResult
 		, dTemperature
         , nCountIn
         , nCountOut
+		, dAvgIntensity
         );
 
         t.detach();

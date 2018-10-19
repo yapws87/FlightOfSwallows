@@ -48,6 +48,6 @@ public:
     	, double dTime
 		, double dTemperature
     	, int nCountIn
-   		 , int nCountOut
-    	, std::deque<double> preRatio);
+   		, int nCountOut
+    	, double dAvgIntensity);
 };

@@ -99,7 +99,7 @@ struct BirdData
 		// If direction is unknown
 		if (nBirdDirection == BIRD_UNKNOWN)
 		{
-			int nTotalTrail = vec_trail.size();
+			int nTotalTrail = (int)vec_trail.size();
 			
 			int nDirection = BIRD_UNKNOWN;
 			
@@ -124,14 +124,14 @@ struct BirdData
 		float fAccSpeed = 0;
 		float fFrameTime = 0.01086956f;
 		// (Length of board in m) x (compensate distance from board in z direction) / (length of board in pixel)
-		float fPix2Meter = (0.965f) * 0.6 / (260 - 150);
+		float fPix2Meter = (0.965f) * 0.6f / (260 - 150);
 
 		// Count max of previous 5 frames
 		int nValidCount = 0;
-		for (int i = vec_trail.size() - 2; i >= (int)vec_trail.size() - 5 && i > 0; i--)
+		for (int i = (int)vec_trail.size() - 2; i >= (int)vec_trail.size() - 5 && i > 0; i--)
 		{
 			cv::Point diff = vec_trail[i] - vec_trail[i + 1];
-			float fMag = std::sqrt(diff.x*diff.x + diff.y*diff.y);
+			float fMag = std::sqrtf(diff.x*diff.x + diff.y*diff.y);
 			fAccSpeed += fMag * fPix2Meter / fFrameTime;
 			nValidCount++;
 		}
@@ -153,7 +153,7 @@ struct BirdData
 		int nValidCount = 0;
 		cv::Point ptStep(0, 0);
 		int nHistoryCount = 7;
-		for (int i = vec_trail.size() - 2; i >= (int)vec_trail.size() - nHistoryCount && i > 0; i--)
+		for (int i = (int)vec_trail.size() - 2; i >= (int)vec_trail.size() - nHistoryCount && i > 0; i--)
 		{
 			ptStep += vec_trail[i + 1] - vec_trail[i];
 			nValidCount++;
@@ -270,7 +270,7 @@ protected:
 
 	int m_nOverflowCount = 0;
 	int m_nSaturationCount = 0;
-	float m_fMinThresh = 0.01;
+	float m_fMinThresh = 0.01f;
 
 	int m_nFps_real = 0;
 	int m_nFrameAcc = 0;
@@ -287,7 +287,7 @@ protected:
 	bool m_bMotionDetected = false;
 
 	// Previous 10 frames
-	std::deque<double> m_ratios;
+	double m_avgIntensity;
 
 	std::vector<BirdData> m_birds;
 	DPLabel dpLabel;

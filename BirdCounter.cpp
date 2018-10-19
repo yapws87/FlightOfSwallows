@@ -7,7 +7,7 @@ CBirdCounter::CBirdCounter()
 	m_pMOG = cv::createBackgroundSubtractorMOG2(50, 25, false);
 	//m_pMOG = cv::createBackgroundSubtractorKNN(50, 50, false);
 	//m_pMOG->SetVarThreshold(12);
-	m_ratios.push_back(0);
+	m_avgIntensity = 0;
 }
 
 
@@ -17,7 +17,7 @@ CBirdCounter::~CBirdCounter()
 
 void CBirdCounter::insertText(cv::Mat & matDisplay, int nFPS, double nMean, double nThreshold)
 {
-	float fFontSize = 0.4;
+	float fFontSize = 0.4f;
 	std::string strline;
 	if (!matDisplay.empty())
 	{
@@ -150,7 +150,7 @@ int CBirdCounter::findBestBirdIndex(BirdData bird_src, std::vector<BirdData> bir
 		
 		cv::Rect b1 = EnlargeSafeROI(bird_src.boundingBox, fIntersectRatio, bird_src.nBirdDirection);
 		cv::Rect b2 = EnlargeSafeROI(bird_candidates[i].boundingBox, fIntersectRatio, bird_src.nBirdDirection);
-		int fArea = (b1 & b2).area();
+		float fArea = (b1 & b2).area();
 
 		if (fArea > fMax)
 		{
@@ -275,8 +275,8 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	}
 
 	// Count Birds
-	int nIn_Line = 0.35 * nSrcWidth;
-	int nOut_Line = 0.6 * nSrcWidth;
+	int nIn_Line = (int)(0.35 * nSrcWidth);
+	int nOut_Line = (int)(0.6 * nSrcWidth);
 	int nCnt_line = (nIn_Line + nOut_Line) / 2;
 
 	for(int i = 0;  i < new_birds.size(); i++)
@@ -393,7 +393,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 	double dTime = 0;
 	//for (;;)
 	//{
-		dTime = cv::getTickCount();
+		dTime = (double)cv::getTickCount();
 		double dForeRatio = 0.0;
 		int nFrameWidth = matFrameGray.cols;//m_nFrameWidth;
 		int nFrameHeight = matFrameGray.rows;//m_nFrameHeight;
@@ -465,7 +465,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		// Calculate ratio
 		// Detect sudden change of video quality
 		dForeRatio = (double)cv::countNonZero(matLocalFore(cntROI)) / (double)(cntROI.area());
-		m_ratios[0] = dForeRatio;
+		m_avgIntensity = dForeRatio;
 
 		cv::Mat matDisplayWithBirds;
 		// Skip when too large changes occur
@@ -511,7 +511,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 				, m_dTemperature
 				, m_nCount_In
 				, m_nCount_Out
-				, m_ratios
+				, m_avgIntensity
 			);
 			m_bOnce = false;
 			m_fSecCount_tweet = 0;
@@ -544,7 +544,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 					, m_dTemperature
 					, m_nCount_In
 					, m_nCount_Out
-					, m_ratios);
+					, m_avgIntensity);
 				
 				m_bMotionDetected = true;
 		
@@ -561,7 +561,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		dTime = cv::getTickCount() - dTime;
 		dTime = (dTime / cv::getTickFrequency() * 1000);
 		m_dTime = (m_dTime + dTime) / 2;
-		m_nFps_real = 1 / (m_dTime / 1000);
+		m_nFps_real = 1 / (float)(m_dTime / 1000);
 		
 		
 		//--------------------------- Upload graph
@@ -603,7 +603,7 @@ void CBirdCounter::insertBirdLog(BirdData bird_data) {
 	BirdCell tempCell;
 	tempCell.detect_time = std::chrono::system_clock::now();
 	tempCell.nSpeed = (int)bird_data.fAverageSpeed;
-	tempCell.nTrailLength = bird_data.vec_trail.size();
+	tempCell.nTrailLength = (int)bird_data.vec_trail.size();
 
 	if (bird_data.nBirdDirection == BIRD_FLY_OUT)
 		m_outBird_logs.push_back(tempCell);
