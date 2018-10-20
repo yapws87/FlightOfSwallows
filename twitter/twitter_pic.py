@@ -37,14 +37,14 @@ twitter = Twython(
       access_token_secret
   )
 
-total_tries = 5
+total_tries = 15
 for i in range(0,total_tries,1):
 	if is_connected(REMOTE_SERVER):
 		print("Internet Connection established")
 		break
 	else:
 		print('Connection failed. Trying again, {} attempt'.format(i))
-		time.sleep(5000)
+		time.sleep(10000)
 	
 	print('Failed to establish connection after {} tries'.format(total_tries))
 		
