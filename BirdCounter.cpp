@@ -435,6 +435,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		cv::Rect cntROI(0.4 * finalGray.cols, 0, 0.2 * finalGray.cols, finalGray.rows);
 
 		double dBG_mean = cv::mean(smallLocalGray(signalRect))[0];
+		m_avgIntensity = dBG_mean;
 
 		// Learn bacjground and extract foreground
 		if (m_nToggleLearn >= 0 ) {
@@ -465,7 +466,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		// Calculate ratio
 		// Detect sudden change of video quality
 		dForeRatio = (double)cv::countNonZero(matLocalFore(cntROI)) / (double)(cntROI.area());
-		m_avgIntensity = dForeRatio;
+		
 
 		cv::Mat matDisplayWithBirds;
 		// Skip when too large changes occur
@@ -662,7 +663,7 @@ void CBirdCounter::printBirdLog()
 
 }
 
-void _printStatus_thread_func( int nTime, int nSaturation, int nOverflow, int nCountIn, int nCountOut)
+void _printStatus_thread_func( int nTime, int nSaturation, int nOverflow, int nCountIn, int nCountOut, double dAvgIntensity)
 {
 	PiCommon picom;
 	picom.printStdLog("_printStatus_thread_func start",1);
@@ -688,6 +689,7 @@ void _printStatus_thread_func( int nTime, int nSaturation, int nOverflow, int nC
 				<< "Bird_out=" << nCountOut << "\t"
 				<< temperature_val<< "\t"
 				<< core_val<< "\t"
+				<< "Avg_iten=" << dAvgIntensity << "\t"
 				<< "\n"
 				;
 		picom.printStdLog( "Sat=" + std::to_string(nSaturation) + "\t"
@@ -697,6 +699,7 @@ void _printStatus_thread_func( int nTime, int nSaturation, int nOverflow, int nC
 			+ "Bird_out="	+ std::to_string( nCountOut)  +  "\t"
 			+ temperature_val +  "\t"
 			+ core_val +  "\t"
+			+ "Avg_iten=" + std::to_string(dAvgIntensity) + "\t"
 		);
 		status_file.close();
 		
@@ -717,6 +720,7 @@ void CBirdCounter::printStatus_thread()
 		, m_nOverflowCount
 		, m_nCount_In
 		, m_nCount_Out
+		, m_avgIntensity
 	);
 	t.detach();
 
