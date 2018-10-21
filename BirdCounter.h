@@ -136,7 +136,7 @@ struct BirdData
 			nValidCount++;
 		}
 		if (nValidCount > 0)
-			fAverageSpeed = birdBox.width / (float)birdBox.height;//fAccSpeed / (float)nValidCount * 3.6; // change m/s to km/h by multiplying 3.6
+			fAverageSpeed = fAccSpeed / (float)nValidCount * 3.6; // change m/s to km/h by multiplying 3.6
 
 	}
 

@@ -4,7 +4,7 @@
 
 CBirdCounter::CBirdCounter()
 {
-	m_pMOG = cv::createBackgroundSubtractorMOG2(50, 25, false);
+	m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 55, false);
 	//m_pMOG = cv::createBackgroundSubtractorKNN(50, 50, false);
 	//m_pMOG->SetVarThreshold(12);
 	m_avgIntensity = 0;
@@ -445,7 +445,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		m_nToggleLearn++;
 
 		// Set all to zero if average intensity is low
-		if (dBG_mean < 50) {
+		if (dBG_mean < 80) {
 			matLocalFore = cv::Mat::zeros(finalGray.size(), CV_8UC1);
 		}
 
