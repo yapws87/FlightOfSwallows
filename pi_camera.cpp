@@ -30,11 +30,15 @@ void process_thread()
 	cv::Mat matGray, matColor;
 	cv::Mat matDisp;
 	m_birdCount.setDisplay(m_nDisplay_flag);
+	m_birdCount.start_measure();
 	for(;;)
 	{
 		m_piCam.get_frame(matGray,matColor);
-		if(!matGray.empty())
+		if(!matGray.empty()){
 			m_birdCount.process_thread(matGray,matColor);
+			m_birdCount.end_measure();
+			m_birdCount.start_measure();
+		}
 		
 		if(m_nDisplay_flag)
 		{
