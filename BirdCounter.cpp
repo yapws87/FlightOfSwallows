@@ -595,8 +595,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 
 #ifdef PERSONAL_COMPUTER
 		prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
-		m_matSaveImage = matDisplayWithBirds;
 #endif
+		m_matSaveImage = matDisplayWithBirds;
 
 }
 

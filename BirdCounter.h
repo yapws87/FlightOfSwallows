@@ -122,7 +122,7 @@ struct BirdData
 
 		// Calculate Average Speed
 		float fAccSpeed = 0;
-		float fFrameTime = 0.01086956f;
+		float fFrameTime = 0.01086956f; // 1 frame seconds
 		// (Length of board in m) x (compensate distance from board in z direction) / (length of board in pixel)
 		float fPix2Meter = (0.965f) * 0.6f / (260 - 150);
 
