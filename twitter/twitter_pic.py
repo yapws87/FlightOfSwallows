@@ -44,7 +44,7 @@ for i in range(0,total_tries,1):
 		break
 	else:
 		print('Connection failed. Trying again, {} attempt'.format(i))
-		time.sleep(10000)
+		time.sleep(100)
 	
 	print('Failed to establish connection after {} tries'.format(total_tries))
 		
