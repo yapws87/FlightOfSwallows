@@ -17,15 +17,15 @@ CBirdCounter::~CBirdCounter()
 
 void CBirdCounter::start_measure()
 {
-	m_dTime = cv::getTickCount();
+	m_dTickCount = cv::getTickCount();
 }
 
 void CBirdCounter::end_measure()
 {
 	// -----------------  Calculate FPS
-	m_dTime = cv::getTickCount() - m_dTime;
+	m_dTime = (cv::getTickCount() - m_dTickCount) / cv::getTickFrequency() ;
 	double dFPS;
-	dFPS = (cv::getTickFrequency() / m_dTime);
+	dFPS = 1 / m_dTime;
 	m_nFps_real = (m_nFps_real + dFPS) / 2;
 }
 
@@ -730,7 +730,7 @@ void CBirdCounter::printStatus_thread()
 
 	std::thread t(_printStatus_thread_func
 		//, m_status_file
-		, m_dTime / cv::getTickFrequency() 
+		, m_dTime
 		, m_nSaturationCount
 		, m_nOverflowCount
 		, m_nCount_In
