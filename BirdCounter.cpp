@@ -730,7 +730,7 @@ void CBirdCounter::printStatus_thread()
 
 	std::thread t(_printStatus_thread_func
 		//, m_status_file
-		, m_dTime
+		, m_dTime / cv::getTickFrequency() 
 		, m_nSaturationCount
 		, m_nOverflowCount
 		, m_nCount_In
