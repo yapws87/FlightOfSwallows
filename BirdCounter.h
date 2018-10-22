@@ -254,7 +254,7 @@ protected:
 	int m_nFrameWidth = 0;
 	int m_nFrameHeight = 0;
 	bool m_bDisplay = false;
-	int m_nFps = 0;
+	//int m_nFps = 0;
 
 
 	bool m_bOnce = true;

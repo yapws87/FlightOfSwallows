@@ -599,7 +599,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (m_fSecCount_status > 60 * 5)
 		{
 			m_fSecCount_status = 0;
-			picom.printStdLog( " Start  printStatus_thread",1);
+			picom.printStdLog( " Start  printStatus_thread",0);
 			printStatus_thread();
 			picom.printStdLog( " printStatus_thread DONE",1);
 		}
@@ -736,7 +736,7 @@ void CBirdCounter::printStatus_thread()
 		, m_nCount_In
 		, m_nCount_Out
 		, m_avgIntensity
-		, m_nFps
+		, m_nFps_real
 	);
 	t.detach();
 
