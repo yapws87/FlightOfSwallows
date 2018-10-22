@@ -15,6 +15,20 @@ CBirdCounter::~CBirdCounter()
 {
 }
 
+void CBirdCounter::start_measure()
+{
+	m_dTime = cv::getTickCount();
+}
+
+void CBirdCounter::end_measure()
+{
+	// -----------------  Calculate FPS
+	m_dTime = cv::getTickCount() - m_dTime;
+	double dFPS;
+	dFPS = (cv::getTickFrequency() / m_dTime);
+	m_nFps_real = (m_nFps_real + dFPS) / 2;
+}
+
 void CBirdCounter::insertText(cv::Mat & matDisplay, int nFPS, double nMean, double nThreshold)
 {
 	float fFontSize = 0.4f;
@@ -445,7 +459,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		m_nToggleLearn++;
 
 		// Set all to zero if average intensity is low
-		if (dBG_mean < 80) {
+		if (dBG_mean < 70) {
 			matLocalFore = cv::Mat::zeros(finalGray.size(), CV_8UC1);
 		}
 
@@ -506,7 +520,9 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			m_nCountContinuosValid = 0;
 			//m_bTweeterFlag = true;
 			m_dTemperature = picom.get_temperature();
-			m_piTweet.tweet_bird_thread(matLocalColor
+
+			prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
+			m_piTweet.tweet_bird_thread(matDisplayWithBirds
 				, -1
 				, m_dTime 
 				, m_dTemperature
@@ -558,11 +574,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 
 		}
 
-		// -----------------  Calculate FPS
-		dTime = cv::getTickCount() - dTime;
-		dTime = (dTime / cv::getTickFrequency() * 1000);
-		m_dTime = (m_dTime + dTime) / 2;
-		m_nFps_real = 1 / (float)(m_dTime / 1000);
+		
 		
 		
 		//--------------------------- Upload graph
@@ -663,7 +675,8 @@ void CBirdCounter::printBirdLog()
 
 }
 
-void _printStatus_thread_func( int nTime, int nSaturation, int nOverflow, int nCountIn, int nCountOut, double dAvgIntensity)
+void _printStatus_thread_func( int nTime, int nSaturation, int nOverflow, int nCountIn, int nCountOut
+	, double dAvgIntensity, int nFPS)
 {
 	PiCommon picom;
 	picom.printStdLog("_printStatus_thread_func start",1);
@@ -690,6 +703,7 @@ void _printStatus_thread_func( int nTime, int nSaturation, int nOverflow, int nC
 				<< temperature_val<< "\t"
 				<< core_val<< "\t"
 				<< "Avg_iten=" << dAvgIntensity << "\t"
+				<< "FPS=" << nFPS << "\t"
 				<< "\n"
 				;
 		picom.printStdLog( "Sat=" + std::to_string(nSaturation) + "\t"
@@ -700,6 +714,7 @@ void _printStatus_thread_func( int nTime, int nSaturation, int nOverflow, int nC
 			+ temperature_val +  "\t"
 			+ core_val +  "\t"
 			+ "Avg_iten=" + std::to_string(dAvgIntensity) + "\t"
+			+ "FPS=" + std::to_string(nFPS) + "\t"
 		);
 		status_file.close();
 		
@@ -721,6 +736,7 @@ void CBirdCounter::printStatus_thread()
 		, m_nCount_In
 		, m_nCount_Out
 		, m_avgIntensity
+		, m_nFps
 	);
 	t.detach();
 

@@ -206,8 +206,8 @@ public:
 	~CBirdCounter();
 
 	void process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor);
-	void tweet_thread();
-	cv::Mat getDispMat(){
+	
+	inline cv::Mat getDispMat(){
 			return m_matSaveImage;
 	};
 
@@ -215,6 +215,9 @@ public:
 	{
 		m_bDisplay = bDisplay;
 	}
+
+	void start_measure();
+	void end_measure();
 
 protected:
 
