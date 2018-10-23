@@ -150,7 +150,7 @@ void PiCam::runFrame_thread()
 		}
 
 		picom.countFPSEnd();
-
+		m_nMeasured_fps = (m_nMeasured_fps + picom.getCountFPS()) / 2;
 
 	}
 }
@@ -192,7 +192,7 @@ void PiCam::save_thread()
 
 				// Saving options
 				picom.printStdLog("Set video : " + videoName);
-				vWriter.open(videoName, CV_FOURCC('M', 'P', '4', '2'), nFps, cv::Size(320, 240));
+				vWriter.open(videoName, CV_FOURCC('M', 'P', '4', '2'), nFps, cv::Size(m_nFrameWidth, m_nFrameHeight));
 				nVideoCount++;
 			}
 		

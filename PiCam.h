@@ -26,6 +26,7 @@ public:
     void get_frame(cv::Mat &matGray, cv::Mat &matColor);
     void set_record();
     void set_save_directory(std::string file_directory);
+    inline int getRealFrameRate(){ return m_nMeasured_fps;}
 
 protected:
 
@@ -42,6 +43,7 @@ protected:
 	int m_nFPS;
     bool m_bRecord = false;
 	bool m_bEnableRecord = true;
+    int m_nMeasured_fps = 0;
     
     std::string m_save_directory;
     std::mutex m_mutex; 
