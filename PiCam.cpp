@@ -247,6 +247,10 @@ void PiCam::get_frame(cv::Mat &matGray)
         m_matFrameGray.pop_front();
         //m_matFrameColor.pop_front();
     }
+	else
+	{
+		matGray = cv::Mat();
+	}
 
 
     m_mutex.unlock();
