@@ -462,6 +462,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		double dBG_mean = cv::mean(smallLocalGray(signalRect))[0];
 		m_avgIntensity = dBG_mean;
 
+#ifndef PERSONAL_COMPUTER
 		// control brightness of input
 		static int nBrightness_offset = 50;
 		int nMaxBrightness = 75;
@@ -490,6 +491,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 			return;
 		}
 		
+#endif
 
 
 		// Learn bacjground and extract foreground
