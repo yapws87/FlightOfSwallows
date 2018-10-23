@@ -473,7 +473,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray)
 			
 			picom.printStdLog("[mean] " + std::to_string(dBG_mean) + " : Reduce brightness to " + std::to_string(nBrightness_offset));
 			m_bResetFrames = true;
-			picom.uniSleep(100);
+			picom.uniSleep(200);
 
 			
 			return;
@@ -484,7 +484,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray)
 			picom.getString_fromCmd("v4l2-ctl -c brightness=" + std::to_string(nBrightness_offset));
 			picom.printStdLog("[mean] " + std::to_string(dBG_mean) + " : Increase brightness to " + std::to_string(nBrightness_offset));
 			m_bResetFrames = true;
-			picom.uniSleep(100);
+			picom.uniSleep(200);
 
 			return;
 		}
