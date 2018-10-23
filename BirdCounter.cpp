@@ -23,10 +23,11 @@ void CBirdCounter::start_measure()
 void CBirdCounter::end_measure(int nInsertFPS)
 {
 	// -----------------  Calculate FPS
+	double dTime;
 	if(!nInsertFPS){
-		m_dTime = (cv::getTickCount() - m_dTickCount) / cv::getTickFrequency() ;
+		dTime = (cv::getTickCount() - m_dTickCount) / cv::getTickFrequency() ;
 		double dFPS;
-		dFPS = 1 / m_dTime;
+		dFPS = 1 / dTime;
 		m_nFps_real = (m_nFps_real + dFPS) / 2;
 
 	}
@@ -637,6 +638,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray)
 		prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
 #endif
 		m_matSaveImage = matDisplayWithBirds;
+
+		m_dTime = ((double)cv::getTickCount() - dTime) / cv::getTickFrequency();
 
 }
 
