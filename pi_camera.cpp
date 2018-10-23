@@ -44,7 +44,7 @@ void process_thread()
 
 			if(m_birdCount.checkReset())
 			{
-				picom.printBirdLog("Reset Frames");
+				picom.printStdLog("Reset Frames");
 				m_picam.resetFrames();
 			}
 		}
