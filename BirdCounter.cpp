@@ -409,7 +409,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	return bExistBird;
 }
 
-void CBirdCounter::process_thread(cv::Mat matFrameGray)
+void CBirdCounter::process_thread(cv::Mat matFrame)
 {
 	PiCommon picom;
 	double dTime = 0;
@@ -417,11 +417,11 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray)
 	//{
 		dTime = (double)cv::getTickCount();
 		double dForeRatio = 0.0;
-		int nFrameWidth = matFrameGray.cols;//m_nFrameWidth;
-		int nFrameHeight = matFrameGray.rows;//m_nFrameHeight;
+		int nFrameWidth = matFrame.cols;//m_nFrameWidth;
+		int nFrameHeight = matFrame.rows;//m_nFrameHeight;
 
 		// Exceptions
-		if (matFrameGray.empty()){
+		if (matFrame.empty()){
 			picom.printStdLog( "matFrameGray Empty");	
 			return;
 		}
@@ -429,7 +429,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray)
 		cv::Mat matLocalGray;
 		cv::Mat matLocalColor;
 		cv::Mat matLocalFore;
-		matLocalGray = matFrameGray;
+		cv::cvtColor(matFrame, matLocalColor, cv::COLOR_GRAY2BGR);
+		matLocalGray = matFrame;
 		//matLocalColor = matFrameColor;
 
 		// Motion detections
@@ -462,7 +463,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray)
 		m_avgIntensity = dBG_mean;
 
 		// control brightness of input
-		static int nBrightness_offset = 50;
+/*		static int nBrightness_offset = 50;
 		int nMaxBrightness = 75;
 		int nMinBrightness = 35;
 		int nIncrement = 2;
@@ -488,7 +489,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray)
 
 			return;
 		}
-			
+		*/	
 
 
 		// Learn bacjground and extract foreground
