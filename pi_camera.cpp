@@ -27,15 +27,15 @@ void saveFrame_thread()
 
 void process_thread()
 {
-	cv::Mat matGray, matColor;
+	cv::Mat matGray;
 	cv::Mat matDisp;
 	m_birdCount.setDisplay(m_nDisplay_flag);
 	m_birdCount.start_measure();
 	for(;;)
 	{
-		m_piCam.get_frame(matGray,matColor);
+		m_piCam.get_frame(matGray);
 		if(!matGray.empty()){
-			m_birdCount.process_thread(matGray,matColor);
+			m_birdCount.process_thread(matGray);
 			
 			int nRealFPS = m_piCam.getRealFrameRate();
 			m_birdCount.end_measure(nRealFPS);

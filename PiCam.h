@@ -23,7 +23,7 @@ public:
 
    
 
-    void get_frame(cv::Mat &matGray, cv::Mat &matColor);
+    void get_frame(cv::Mat &matGray);
     void set_record();
     void set_save_directory(std::string file_directory);
     inline int getRealFrameRate(){ return m_nMeasured_fps;}
@@ -32,7 +32,7 @@ protected:
 
     // Image related variables
 	cv::VideoCapture m_cap;
-	std::deque<cv::Mat> m_matFrameColor;
+	//std::deque<cv::Mat> m_matFrameColor;
 	std::deque<cv::Mat> m_matFrameGray;
     std::deque<cv::Mat> m_videoFrames;
     PiCommon m_picom;

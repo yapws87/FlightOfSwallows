@@ -112,7 +112,7 @@ void PiCam::runFrame_thread()
 			{
 				picom.printStdLog( "Overflow gray frame");
 				m_matFrameGray.clear();
-				m_matFrameColor.clear();
+				//m_matFrameColor.clear();
 			}
 			if( m_videoFrames.size() > 100)
 			{
@@ -134,7 +134,7 @@ void PiCam::runFrame_thread()
 				//m_videoFrames
 			}
 				
-			m_matFrameColor.push_back(frameColor);
+			//m_matFrameColor.push_back(frameColor);
 			m_matFrameGray.push_back(frame);
 			// for recordings
 			if (m_bRecord) {
@@ -235,17 +235,17 @@ void PiCam::save_thread()
 	}
 }
 
-void PiCam::get_frame(cv::Mat &matGray, cv::Mat &matColor)
+void PiCam::get_frame(cv::Mat &matGray)
 {
     m_mutex.lock();
 
-    if( m_matFrameGray.size() > 0 &&  m_matFrameColor.size() > 0)
+    if( m_matFrameGray.size() > 0)
     {
         m_matFrameGray.front().copyTo(matGray);
-        m_matFrameColor.front().copyTo(matColor);
+       // m_matFrameColor.front().copyTo(matColor);
 
         m_matFrameGray.pop_front();
-        m_matFrameColor.pop_front();
+        //m_matFrameColor.pop_front();
     }
 
 

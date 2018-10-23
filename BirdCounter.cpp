@@ -408,7 +408,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	return bExistBird;
 }
 
-void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
+void CBirdCounter::process_thread(cv::Mat matFrameGray)
 {
 	PiCommon picom;
 	double dTime = 0;
@@ -429,7 +429,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		cv::Mat matLocalColor;
 		cv::Mat matLocalFore;
 		matLocalGray = matFrameGray;
-		matLocalColor = matFrameColor;
+		//matLocalColor = matFrameColor;
 
 		// Motion detections
 		// Reduce size for faster calculation
@@ -528,8 +528,8 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 			//m_bTweeterFlag = true;
 			m_dTemperature = picom.get_temperature();
 
-			prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
-			m_piTweet.tweet_bird_thread(matDisplayWithBirds
+			//prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
+			m_piTweet.tweet_bird_thread(matLocalGray
 				, -1
 				, m_dTime 
 				, m_dTemperature

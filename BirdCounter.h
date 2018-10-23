@@ -205,7 +205,7 @@ public:
 	CBirdCounter();
 	~CBirdCounter();
 
-	void process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor);
+	void process_thread(cv::Mat matFrameGray);
 	
 	inline cv::Mat getDispMat(){
 			return m_matSaveImage;
