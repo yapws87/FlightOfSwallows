@@ -20,13 +20,20 @@ void CBirdCounter::start_measure()
 	m_dTickCount = cv::getTickCount();
 }
 
-void CBirdCounter::end_measure()
+void CBirdCounter::end_measure(int nInsertFPS)
 {
 	// -----------------  Calculate FPS
-	m_dTime = (cv::getTickCount() - m_dTickCount) / cv::getTickFrequency() ;
-	double dFPS;
-	dFPS = 1 / m_dTime;
-	m_nFps_real = (m_nFps_real + dFPS) / 2;
+	if(!nInsertFPS){
+		m_dTime = (cv::getTickCount() - m_dTickCount) / cv::getTickFrequency() ;
+		double dFPS;
+		dFPS = 1 / m_dTime;
+		m_nFps_real = (m_nFps_real + dFPS) / 2;
+
+	}
+	else{
+		m_nFps_real = nInsertFPS;
+	}
+	
 }
 
 void CBirdCounter::insertText(cv::Mat & matDisplay, int nFPS, double nMean, double nThreshold)
@@ -599,7 +606,7 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray, cv::Mat matFrameColor)
 		if (m_fSecCount_status > 60 * 5)
 		{
 			m_fSecCount_status = 0;
-			picom.printStdLog( " Start  printStatus_thread",0);
+			picom.printStdLog( " Start  printStatus_thread",1);
 			printStatus_thread();
 			picom.printStdLog( " printStatus_thread DONE",1);
 		}
@@ -730,7 +737,7 @@ void CBirdCounter::printStatus_thread()
 
 	std::thread t(_printStatus_thread_func
 		//, m_status_file
-		, m_dTime
+		, m_dTime * 1000 // in miliseconds
 		, m_nSaturationCount
 		, m_nOverflowCount
 		, m_nCount_In

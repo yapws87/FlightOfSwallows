@@ -124,7 +124,7 @@ struct BirdData
 		float fAccSpeed = 0;
 		float fFrameTime = 0.01086956f; // 1 frame seconds
 		// (Length of board in m) x (compensate distance from board in z direction) / (length of board in pixel)
-		float fPix2Meter = (0.965f) * 0.6f / (260 - 150);
+		float fPix2Meter = (1.2f) * 1.1f / (240);
 
 		// Count max of previous 5 frames
 		int nValidCount = 0;
@@ -217,7 +217,7 @@ public:
 	}
 
 	void start_measure();
-	void end_measure();
+	void end_measure(int nInsertFPS = 0);
 
 protected:
 
