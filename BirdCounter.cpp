@@ -455,8 +455,29 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray)
 		
 		cv::Rect cntROI(0.4 * finalGray.cols, 0, 0.2 * finalGray.cols, finalGray.rows);
 
+		
+
 		double dBG_mean = cv::mean(smallLocalGray(signalRect))[0];
 		m_avgIntensity = dBG_mean;
+
+		// control brightness of input
+		static int nBrightness_offset = 50;
+		if (dBG_mean > 145) {
+			nBrightness_offset--;
+			nBrightness_offset = nBrightness_offset < 35 ? 35 : nBrightness_offset;
+			picom.getString_fromCmd("v4l2-ctl -c brightness=" + std::to_string(nBrightness_offset));
+			picom.printStdLog("[mean] " + std::to_string(dBG_mean) + " : Reduce brightness to " + std::to_string(nBrightness_offset));
+			return;
+		}
+		else if (dBG_mean < 70) {
+			nBrightness_offset++;
+			nBrightness_offset = nBrightness_offset > 70 ? 70 : nBrightness_offset;
+			picom.getString_fromCmd("v4l2-ctl -c brightness=" + std::to_string(nBrightness_offset));
+			picom.printStdLog("[mean] " + std::to_string(dBG_mean) + " : Increase brightness to " + std::to_string(nBrightness_offset));
+			return;
+		}
+			
+
 
 		// Learn bacjground and extract foreground
 		if (m_nToggleLearn >= 0 ) {
