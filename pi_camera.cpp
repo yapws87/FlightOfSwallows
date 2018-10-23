@@ -36,7 +36,9 @@ void process_thread()
 		m_piCam.get_frame(matGray,matColor);
 		if(!matGray.empty()){
 			m_birdCount.process_thread(matGray,matColor);
-			m_birdCount.end_measure();
+			
+			int nRealFPS = m_piCam.getRealFrameRate();
+			m_birdCount.end_measure(nRealFPS);
 			m_birdCount.start_measure();
 		}
 		
