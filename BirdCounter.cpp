@@ -465,7 +465,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 #ifndef PERSONAL_COMPUTER
 		// control brightness of input
 		static int nBrightness_offset = 50;
-		int nMaxBrightness = 75;
+		int nMaxBrightness = 70;
 		int nMinBrightness = 35;
 		int nIncrement = 2;
 		if (dBG_mean > 145 && nBrightness_offset > nMinBrightness) {
