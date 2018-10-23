@@ -463,18 +463,29 @@ void CBirdCounter::process_thread(cv::Mat matFrameGray)
 
 		// control brightness of input
 		static int nBrightness_offset = 50;
-		if (dBG_mean > 145) {
-			nBrightness_offset--;
-			nBrightness_offset = nBrightness_offset < 35 ? 35 : nBrightness_offset;
+		int nMaxBrightness = 75;
+		int nMinBrightness = 35;
+		int nIncrement = 2;
+		if (dBG_mean > 145 && nBrightness_offset > nMinBrightness) {
+			nBrightness_offset = nBrightness_offset - nIncrement;
+			nBrightness_offset = nBrightness_offset < nMinBrightness ? nMinBrightness : nBrightness_offset;
 			picom.getString_fromCmd("v4l2-ctl -c brightness=" + std::to_string(nBrightness_offset));
+			
 			picom.printStdLog("[mean] " + std::to_string(dBG_mean) + " : Reduce brightness to " + std::to_string(nBrightness_offset));
+			m_bResetFrames = true;
+			picom.uniSleep(100);
+
+			
 			return;
 		}
-		else if (dBG_mean < 85) {
-			nBrightness_offset++;
-			nBrightness_offset = nBrightness_offset > 70 ? 70 : nBrightness_offset;
+		else if (dBG_mean < 85 && nBrightness_offset < nMaxBrightness) {
+			nBrightness_offset = nBrightness_offset + nIncrement;
+			nBrightness_offset = nBrightness_offset > nMaxBrightness ? nMaxBrightness : nBrightness_offset;
 			picom.getString_fromCmd("v4l2-ctl -c brightness=" + std::to_string(nBrightness_offset));
 			picom.printStdLog("[mean] " + std::to_string(dBG_mean) + " : Increase brightness to " + std::to_string(nBrightness_offset));
+			m_bResetFrames = true;
+			picom.uniSleep(100);
+
 			return;
 		}
 			

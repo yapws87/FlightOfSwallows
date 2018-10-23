@@ -167,6 +167,13 @@ void PiCam::set_save_directory(std::string file_directory)
 
 }
 
+void PiCam::resetFrames()
+{
+	m_mutex.lock();
+	m_matFrameGray.clear();
+	m_mutex.unlock();
+}
+
 void PiCam::save_thread()
 {
 	PiCommon picom;

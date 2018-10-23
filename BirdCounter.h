@@ -218,6 +218,13 @@ public:
 
 	void start_measure();
 	void end_measure(int nInsertFPS = 0);
+	inline bool checkReset() { 
+		if (m_bResetFrames) {
+			m_bResetFrames = false;
+			return true;
+		}
+		else
+			return false; }
 
 protected:
 
@@ -254,6 +261,7 @@ protected:
 	int m_nFrameWidth = 0;
 	int m_nFrameHeight = 0;
 	bool m_bDisplay = false;
+	bool m_bResetFrames = false;
 	//int m_nFps = 0;
 
 

@@ -27,6 +27,7 @@ public:
     void set_record();
     void set_save_directory(std::string file_directory);
     inline int getRealFrameRate(){ return m_nMeasured_fps;}
+	void resetFrames();
 
 protected:
 

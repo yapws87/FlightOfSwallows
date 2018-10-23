@@ -27,6 +27,7 @@ void saveFrame_thread()
 
 void process_thread()
 {
+	PiCommon picom;
 	cv::Mat matGray;
 	cv::Mat matDisp;
 	m_birdCount.setDisplay(m_nDisplay_flag);
@@ -40,6 +41,12 @@ void process_thread()
 			int nRealFPS = m_piCam.getRealFrameRate();
 			m_birdCount.end_measure(nRealFPS);
 			m_birdCount.start_measure();
+
+			if(m_birdCount.checkReset())
+			{
+				picom.printBirdLog("Reset Frames");
+				m_picam.resetFrames();
+			}
 		}
 		
 		if(m_nDisplay_flag)
