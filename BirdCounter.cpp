@@ -4,7 +4,7 @@
 
 CBirdCounter::CBirdCounter()
 {
-	m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 55, false);
+	m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 25, false);
 	//m_pMOG = cv::createBackgroundSubtractorKNN(50, 50, false);
 	//m_pMOG->SetVarThreshold(12);
 	m_avgIntensity = 0;
@@ -257,8 +257,17 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 			else
 			{
 				
-				if (m_birds[i].predict())
-					new_birds.push_back(m_birds[i]);
+				if (m_birds[i].predict()) {
+
+					// Birds within FOV
+					if (m_birds[i].location.x >= 0
+						&& m_birds[i].location.x < nSrcWidth) {
+					
+						new_birds.push_back(m_birds[i]);
+					}
+					
+				}
+				
 			}
 			
 		}
@@ -525,7 +534,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		// Morphology process
 		cv::Mat matElement = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(3, 3));
 		cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_OPEN, matElement, cv::Point(-1, -1), 2);
-		cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_CLOSE, matElement, cv::Point(-1, -1), 2);
+		//cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_CLOSE, matElement, cv::Point(-1, -1), 2);
 
 		// Calculate ratio
 		// Detect sudden change of video quality
@@ -590,16 +599,21 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		// -------------------------------- Tweet Image
 		static int nPre_inBird = 0;
 		static int nPre_outBird = 0;
+		static bool bLargeNumber_flag = false;
 		int nMinutesToTweet = 15;
-		if (m_nCountContinuosValid >= 1)
-		{
-			// For Uploading pictures every 1000 birds 
-			int nPrintBirdNumFlag = 2500;
+		int nPrintBirdNumFlag = 2500; // For Uploading pictures every 2500 birds 
 		
+		// Flag for detectiong large bird number
+		if ((m_nCount_In % nPrintBirdNumFlag == 0 && m_nCount_In != nPre_inBird)
+			|| (m_nCount_Out % nPrintBirdNumFlag == 0 && m_nCount_Out != nPre_outBird))	
+		{
+			bLargeNumber_flag = true;
+		}
+
+		if (m_nCountContinuosValid >= 1)
+		{		
 			// At Least 15 mins inteval
-			if(m_fSecCount_tweet > 60 * 15)
-			if ((m_nCount_In % nPrintBirdNumFlag == 0 && m_nCount_In != nPre_inBird )
-				|| (m_nCount_Out % nPrintBirdNumFlag == 0 && m_nCount_Out != nPre_outBird) ) // Write
+			if(m_fSecCount_tweet > 60 * 15 && bLargeNumber_flag)
 			{ 
 				picom.printStdLog("Tweets bird count flag reached.");
 				prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
@@ -616,6 +630,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 				m_bMotionDetected = true;
 		
 				m_fSecCount_tweet = 0;
+				bLargeNumber_flag = false;
 
 				nPre_inBird = m_nCount_In;
 				nPre_outBird = m_nCount_Out;
