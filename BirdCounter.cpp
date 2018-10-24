@@ -448,7 +448,14 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		cv::Rect signalRect = cv::Rect( 0, 0
 			, (smallLocalGray.cols * 0.7)
 			, smallLocalGray.rows);
+		cv::Rect hotRect = cv::Rect(smallLocalGray.cols * 0.3
+			, smallLocalGray.rows * 0.1
+			, (smallLocalGray.cols * 0.3)
+			, smallLocalGray.rows * 0.8);
+		
+
 		smallLocalGray(noiseRect).setTo(0);
+
 
 		cv::Mat matEqualized;
 		finalGray = cv::Mat::zeros(smallLocalGray.size(), CV_8UC1);
@@ -459,7 +466,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 
 		
 
-		double dBG_mean = cv::mean(smallLocalGray(signalRect))[0];
+		double dBG_mean = cv::mean(smallLocalGray(hotRect))[0];
 		m_avgIntensity = dBG_mean;
 
 #ifndef PERSONAL_COMPUTER
@@ -468,7 +475,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		int nMaxBrightness = 70;
 		int nMinBrightness = 35;
 		int nIncrement = 2;
-		if (dBG_mean > 145 && nBrightness_offset > nMinBrightness) {
+		if (dBG_mean > 128 && nBrightness_offset > nMinBrightness) {
 			nBrightness_offset = nBrightness_offset - nIncrement;
 			nBrightness_offset = nBrightness_offset < nMinBrightness ? nMinBrightness : nBrightness_offset;
 			picom.getString_fromCmd("v4l2-ctl -c brightness=" + std::to_string(nBrightness_offset));
