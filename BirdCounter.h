@@ -85,7 +85,7 @@ struct BirdData
 		return nBirdDirection != BIRD_UNKNOWN;
 	}
 
-	void update(cv::Rect birdBox)
+	void update(cv::Rect birdBox, bool nPredict = false)
 	{
 		// If empty use own value
 		if (birdBox.area() == 0)
@@ -95,7 +95,8 @@ struct BirdData
 		boundingBox = birdBox;
 		bMatched = true;
 		vec_trail.push_back(location);
-		nPredictLimit++;
+		if(!nPredict)
+			nPredictLimit++;
 
 		// If direction is unknown
 		if (nBirdDirection == BIRD_UNKNOWN)
@@ -180,7 +181,7 @@ struct BirdData
 		
 
 		// Update the steps
-		update(updatedBox);
+		update(updatedBox, true);
 		nPredictLimit--;
 
 		return true;
