@@ -4,7 +4,7 @@
 
 CBirdCounter::CBirdCounter()
 {
-	m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 20, false);
+	m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 30, false);
 	//m_pMOG = cv::createBackgroundSubtractorKNN(50, 50, false);
 	//m_pMOG->SetVarThreshold(12);
 	m_avgIntensity = 0;
@@ -476,7 +476,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		
 
 		double dBG_mean = cv::mean(smallLocalGray(hotRect))[0];
-		m_avgIntensity = dBG_mean;
+		m_avgIntensity = m_avgIntensity*(0.7) + dBG_mean*(0.3);
 
 #ifndef PERSONAL_COMPUTER
 		// control brightness of input
@@ -518,7 +518,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		m_nToggleLearn++;
 
 		// Set all to zero if average intensity is low
-		if (dBG_mean < 70) {
+		if (m_avgIntensity < 75) {
 			matLocalFore = cv::Mat::zeros(finalGray.size(), CV_8UC1);
 		}
 
@@ -601,7 +601,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		static int nPre_outBird = 0;
 		static bool bLargeNumber_flag = false;
 		int nMinutesToTweet = 15;
-		int nPrintBirdNumFlag = 100; // For Uploading pictures every 2500 birds 
+		int nPrintBirdNumFlag = 2500; // For Uploading pictures every 2500 birds 
 		
 		// Flag for detectiong large bird number
 		if ((m_nCount_In % nPrintBirdNumFlag == 0 && m_nCount_In != nPre_inBird)
