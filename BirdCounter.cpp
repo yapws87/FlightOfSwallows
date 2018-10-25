@@ -484,23 +484,23 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		int nMaxBrightness = 70;
 		int nMinBrightness = 35;
 		int nIncrement = 2;
-		if (dBG_mean > 128 && nBrightness_offset > nMinBrightness) {
+		if (m_avgIntensity > 128 && nBrightness_offset > nMinBrightness) {
 			nBrightness_offset = nBrightness_offset - nIncrement;
 			nBrightness_offset = nBrightness_offset < nMinBrightness ? nMinBrightness : nBrightness_offset;
 			picom.getString_fromCmd("v4l2-ctl -c brightness=" + std::to_string(nBrightness_offset));
 			
-			picom.printStdLog("[mean] " + std::to_string(dBG_mean) + " : Reduce brightness to " + std::to_string(nBrightness_offset));
+			picom.printStdLog("[mean] " + std::to_string(m_avgIntensity) + " : Reduce brightness to " + std::to_string(nBrightness_offset));
 			m_bResetFrames = true;
 			picom.uniSleep(500);
 
 			
 			return;
 		}
-		else if (dBG_mean < 85 && nBrightness_offset < nMaxBrightness) {
+		else if (m_avgIntensity < 96 && nBrightness_offset < nMaxBrightness) {
 			nBrightness_offset = nBrightness_offset + nIncrement;
 			nBrightness_offset = nBrightness_offset > nMaxBrightness ? nMaxBrightness : nBrightness_offset;
 			picom.getString_fromCmd("v4l2-ctl -c brightness=" + std::to_string(nBrightness_offset));
-			picom.printStdLog("[mean] " + std::to_string(dBG_mean) + " : Increase brightness to " + std::to_string(nBrightness_offset));
+			picom.printStdLog("[mean] " + std::to_string(m_avgIntensity) + " : Increase brightness to " + std::to_string(nBrightness_offset));
 			m_bResetFrames = true;
 			picom.uniSleep(500);
 
@@ -518,7 +518,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		m_nToggleLearn++;
 
 		// Set all to zero if average intensity is low
-		if (m_avgIntensity < 75) {
+		if (m_avgIntensity < 80) {
 			matLocalFore = cv::Mat::zeros(finalGray.size(), CV_8UC1);
 		}
 
