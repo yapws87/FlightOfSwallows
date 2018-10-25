@@ -608,6 +608,10 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 			|| (m_nCount_Out % nPrintBirdNumFlag == 0 && m_nCount_Out != nPre_outBird))	
 		{
 			bLargeNumber_flag = true;
+			picom.printStdLog("Tweets bird count flag reached.");
+			nPre_inBird = m_nCount_In;
+			nPre_outBird = m_nCount_Out;
+			
 		}
 
 		if (m_nCountContinuosValid >= 1)
@@ -615,7 +619,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 			// At Least 15 mins inteval
 			if(m_fSecCount_tweet > 60 * 15 && bLargeNumber_flag)
 			{ 
-				picom.printStdLog("Tweets bird count flag reached.");
+				picom.printStdLog("Tweets picture condition matched.");
 				prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
 				
 				m_dTemperature = picom.get_temperature();
@@ -631,9 +635,9 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		
 				m_fSecCount_tweet = 0;
 				bLargeNumber_flag = false;
-
 				nPre_inBird = m_nCount_In;
 				nPre_outBird = m_nCount_Out;
+				
 			}
 			m_nCountContinuosValid = 0;
 
