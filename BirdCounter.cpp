@@ -601,7 +601,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		static int nPre_outBird = 0;
 		static bool bLargeNumber_flag = false;
 		int nMinutesToTweet = 15;
-		int nPrintBirdNumFlag = 2500; // For Uploading pictures every 2500 birds 
+		int nPrintBirdNumFlag = 100; // For Uploading pictures every 2500 birds 
 		
 		// Flag for detectiong large bird number
 		if ((m_nCount_In % nPrintBirdNumFlag == 0 && m_nCount_In != nPre_inBird)

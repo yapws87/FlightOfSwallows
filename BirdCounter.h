@@ -51,7 +51,7 @@ struct BirdData
 	bool bCounted;
 	std::vector<cv::Point> vec_trail;
 	float fAverageSpeed;
-	int nPredictLimit = 5;
+	int nPredictLimit = 0;// 5;
 
 	BirdData()
 	{
@@ -95,8 +95,8 @@ struct BirdData
 		boundingBox = birdBox;
 		bMatched = true;
 		vec_trail.push_back(location);
-		//if(!nPredict)
-		//	nPredictLimit++;
+		if(!nPredict)
+			nPredictLimit++;
 
 		// If direction is unknown
 		if (nBirdDirection == BIRD_UNKNOWN)
@@ -151,10 +151,13 @@ struct BirdData
 		if (nBirdDirection == BIRD_UNKNOWN)
 			return false;
 
+		if (vec_trail.size() < 7)
+			return false;
+
 		// Calculate the next step by averaging past steps
 		int nValidCount = 0;
 		cv::Point ptStep(0, 0);
-		int nHistoryCount = 3; // Takes the information of previous 3 steps
+		int nHistoryCount = 4; // Takes the information of previous 3 steps
 		for (int i = (int)vec_trail.size() - 2; i >= (int)vec_trail.size() - nHistoryCount && i > 0; i--)
 		{
 			ptStep += vec_trail[i + 1] - vec_trail[i];
@@ -177,8 +180,6 @@ struct BirdData
 		// Opposite direction
 		if (nBirdDirection == BIRD_FLY_IN && ptStep.x > 0)
 			return false;
-
-		
 
 		// Update the steps
 		update(updatedBox, true);
