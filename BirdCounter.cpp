@@ -5,7 +5,7 @@
 CBirdCounter::CBirdCounter()
 {
 	//m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 30, false);
-	m_pMOG = cv::createBackgroundSubtractorKNN(90 * 2, 150, false);
+	m_pMOG = cv::createBackgroundSubtractorKNN(90 * 5, 150, false);
 	//m_pMOG->SetVarThreshold(12);
 	m_avgIntensity = 0;
 }
@@ -220,12 +220,9 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 		if (fNonZeroRatio < fNonZeroRatioThresh)
 			continue;
 
-		birdBox.x *= fScale;
-		birdBox.y *= fScale;
-		birdBox.width *= fScale;
-		birdBox.height *= fScale;
+	
 		
-		if (birdBox.width <= nMinBirdSize &&  birdBox.height <= nMinBirdSize)
+		if (birdBox.width <= nMinBirdSize/2 &&  birdBox.height <= nMinBirdSize/2)
 			continue;
 
 		// Remove abnormal looking shapes
@@ -233,32 +230,41 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 		if (fSizeRatio > fBoxSizeRatio)
 			continue;
 
-		if (birdBox.area() > nBoxSizeLimit)
+		if (birdBox.area() > nBoxSizeLimit/2)
 			continue;
 
-		bird_candidates.push_back(BirdData(birdBox));
-		//cv::Rect baseRect(0,0,20,40);
-		//if (birdBox.width >= 30 || birdBox.height >= 40)
-		//{
-		//	int nMaxBox = birdBox.width > birdBox.height ? birdBox.width : birdBox.height;
-		//	cv::Mat matROI = matForeBig(birdBox);
-		//	cv::Mat matCross = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5));
-		//	cv::morphologyEx(matROI, matROI, cv::MORPH_OPEN, cv::Mat(), cv::Point(-1,-1), nMaxBox / 10);
-		//	
+		//bird_candidates.push_back(BirdData(birdBox));
+		if (birdBox.width >= 30/2 || birdBox.height >= 40/2)
+		{
+			int nMaxBox = birdBox.width > birdBox.height ? birdBox.width : birdBox.height;
+			cv::Mat matROI = matForeBird(birdBox);
+			cv::Mat matCross = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5));
+			cv::morphologyEx(matROI, matROI, cv::MORPH_OPEN, cv::Mat(), cv::Point(-1,-1), nMaxBox / 15);
+			
 
-		//	std::vector<std::vector<cv::Point>> subBlocks;
-		//	cv::findContours(matROI, subBlocks, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
-		//	for (int i = 0; i < subBlocks.size(); i++) {
-		//		cv::Rect temp = cv::boundingRect(subBlocks[i]);
-		//		temp = temp + birdBox.tl();
-		//		bird_candidates.push_back(BirdData(temp));
-		//	
-		//	}
-		//}
-		//else
-		//{
-		//	bird_candidates.push_back(BirdData(birdBox));
-		//}
+			std::vector<std::vector<cv::Point>> subBlocks;
+			cv::findContours(matROI, subBlocks, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+			for (int i = 0; i < subBlocks.size(); i++) {
+				cv::Rect temp = cv::boundingRect(subBlocks[i]);
+				temp = temp + birdBox.tl();
+
+				temp.x *= fScale;
+				temp.y *= fScale;
+				temp.width *= fScale;
+				temp.height *= fScale;
+
+				bird_candidates.push_back(BirdData(temp));
+			
+			}
+		}
+		else
+		{
+			birdBox.x *= fScale;
+			birdBox.y *= fScale;
+			birdBox.width *= fScale;
+			birdBox.height *= fScale;
+			bird_candidates.push_back(BirdData(birdBox));
+		}
 	}
 
 		
@@ -473,7 +479,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		cv::Mat smallLocalGray;
 		cv::Mat finalGray;
 		cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), fScale, fScale,cv::INTER_NEAREST);
-		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(5, 5), 5);
+		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(5, 5), 7);
 
 		// Remove Noise Area
 		cv::Rect noiseRect = cv::Rect(smallLocalGray.cols - (smallLocalGray.cols * 0.28)
@@ -559,7 +565,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 
 		// Morphology process
 		cv::Mat matElement = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(3, 3));
-		cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_OPEN, matElement, cv::Point(-1, -1), 2);
+		//cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_OPEN, matElement, cv::Point(-1, -1), 2);
 		//cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_CLOSE, matElement, cv::Point(-1, -1), 2);
 
 		// Calculate ratio
