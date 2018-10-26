@@ -196,6 +196,9 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	int nSrcHeight = matRealSrc.rows;
 	bool bExistBird = false;
 
+	//cv::Mat matForeBig;
+	//cv::resize(matForeBird, matForeBig, cv::Size(0, 0), fScale, fScale, cv::INTER_NEAREST);
+
 	std::vector<std::vector<cv::Point>> bird_blocks;
 	cv::Mat contourFore ;
 	matForeBird.copyTo(contourFore);
@@ -210,7 +213,8 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	for (int n = 0; n < bird_blocks.size(); n++)
 	{
 		//cv::Rect birdBox = birdRects[n];
-		cv::Rect birdBox = boundingBirds(bird_blocks[n]);
+		//cv::Rect birdBox = boundingBirds(bird_blocks[n]);
+		cv::Rect birdBox = cv::boundingRect(bird_blocks[n]);
 
 		float fNonZeroRatio = cv::countNonZero(matForeBird(birdBox)) / (float)birdBox.area();
 		if (fNonZeroRatio < fNonZeroRatioThresh)
@@ -232,15 +236,32 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 		if (birdBox.area() > nBoxSizeLimit)
 			continue;
 
-
-		//if (birdBox.width >= 35)
-		//{
-		//	matFore()
-		//}
-
-
 		bird_candidates.push_back(BirdData(birdBox));
+		//cv::Rect baseRect(0,0,20,40);
+		//if (birdBox.width >= 30 || birdBox.height >= 40)
+		//{
+		//	int nMaxBox = birdBox.width > birdBox.height ? birdBox.width : birdBox.height;
+		//	cv::Mat matROI = matForeBig(birdBox);
+		//	cv::Mat matCross = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5));
+		//	cv::morphologyEx(matROI, matROI, cv::MORPH_OPEN, cv::Mat(), cv::Point(-1,-1), nMaxBox / 10);
+		//	
+
+		//	std::vector<std::vector<cv::Point>> subBlocks;
+		//	cv::findContours(matROI, subBlocks, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+		//	for (int i = 0; i < subBlocks.size(); i++) {
+		//		cv::Rect temp = cv::boundingRect(subBlocks[i]);
+		//		temp = temp + birdBox.tl();
+		//		bird_candidates.push_back(BirdData(temp));
+		//	
+		//	}
+		//}
+		//else
+		//{
+		//	bird_candidates.push_back(BirdData(birdBox));
+		//}
 	}
+
+		
 
 	//Check for registered birds First
 	std::vector<BirdData> new_birds;
@@ -451,7 +472,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		float fScale = 0.5;
 		cv::Mat smallLocalGray;
 		cv::Mat finalGray;
-		cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), fScale, fScale);
+		cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), fScale, fScale,cv::INTER_NEAREST);
 		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(5, 5), 5);
 
 		// Remove Noise Area
