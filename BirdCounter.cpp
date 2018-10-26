@@ -4,8 +4,8 @@
 
 CBirdCounter::CBirdCounter()
 {
-	m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 30, false);
-	//m_pMOG = cv::createBackgroundSubtractorKNN(50, 50, false);
+	//m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 30, false);
+	m_pMOG = cv::createBackgroundSubtractorKNN(90 * 2, 150, false);
 	//m_pMOG->SetVarThreshold(12);
 	m_avgIntensity = 0;
 }
@@ -184,8 +184,14 @@ int CBirdCounter::findBestBirdIndex(BirdData bird_src, std::vector<BirdData> bir
 	return nBestIdx;
 }
 
-bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &matDisplay, bool bDisplay)
+bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &matDisplay,float fScale, bool bDisplay)
 {
+	int nBoxSizeLimit = 5000;
+	float fBoxSizeRatio = 10;
+	int nMinBirdSize = 8;
+	float fNonZeroRatioThresh = 0.25;
+	float fIntersectRatio = 1.5;
+	
 	int nSrcWidth = matRealSrc.cols;
 	int nSrcHeight = matRealSrc.rows;
 	bool bExistBird = false;
@@ -193,48 +199,51 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	std::vector<std::vector<cv::Point>> bird_blocks;
 	cv::Mat contourFore ;
 	matForeBird.copyTo(contourFore);
-	cv::findContours(contourFore, bird_blocks, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+	cv::findContours(contourFore, bird_blocks, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
 	//cv::Mat matDisplay;
 	matRealSrc.copyTo(matDisplay);
 
 	// Set bounding block for detected birds
-	int nMinBirdSize = 2;
+	
 	std::vector<BirdData> bird_candidates;
-	//for (int n = 0; n < birdRects.size(); n++)
 	for (int n = 0; n < bird_blocks.size(); n++)
 	{
 		//cv::Rect birdBox = birdRects[n];
 		cv::Rect birdBox = boundingBirds(bird_blocks[n]);
 
 		float fNonZeroRatio = cv::countNonZero(matForeBird(birdBox)) / (float)birdBox.area();
-		if (fNonZeroRatio < 0.25)
+		if (fNonZeroRatio < fNonZeroRatioThresh)
 			continue;
 
-
-		birdBox.x *= 2;
-		birdBox.y *= 2;
-		birdBox.width *= 2;
-		birdBox.height *= 2;
+		birdBox.x *= fScale;
+		birdBox.y *= fScale;
+		birdBox.width *= fScale;
+		birdBox.height *= fScale;
+		
 		if (birdBox.width <= nMinBirdSize &&  birdBox.height <= nMinBirdSize)
 			continue;
 
 		// Remove abnormal looking shapes
 		float fSizeRatio = (birdBox.width > birdBox.height) ? birdBox.width / (float)birdBox.height : birdBox.height / (float)birdBox.width;
-		if (fSizeRatio > 10)
+		if (fSizeRatio > fBoxSizeRatio)
+			continue;
+
+		if (birdBox.area() > nBoxSizeLimit)
 			continue;
 
 
-		if (birdBox.area() > 15000)
-			continue;
+		//if (birdBox.width >= 35)
+		//{
+		//	matFore()
+		//}
 
 
 		bird_candidates.push_back(BirdData(birdBox));
 	}
 
-	//Check for registered birds
+	//Check for registered birds First
 	std::vector<BirdData> new_birds;
-	float fIntersectRatio = 2;
 	for (int i = 0; i < m_birds.size(); i++)
 	{
 		// Skip all the unknown birds
@@ -255,8 +264,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 					new_birds.push_back(m_birds[i]);
 			}
 			else
-			{
-				
+			{	
 				if (m_birds[i].predict()) {
 
 					// Birds within FOV
@@ -265,11 +273,8 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 					
 						new_birds.push_back(m_birds[i]);
 					}
-					
 				}
-				
 			}
-			
 		}
 	}
 
@@ -278,7 +283,6 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	{
 		if (!m_birds[i].isMatched())
 		{
-
 			int nidx = findBestBirdIndex(m_birds[i], bird_candidates, fIntersectRatio, true);
 
 			// If best bird found
@@ -286,11 +290,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 			{
 				m_birds[i].update(bird_candidates[nidx].boundingBox);
 				bird_candidates[nidx].update(cv::Rect());
-
-				// Only saves detect birds
-				//if (m_birds[i].vec_trail.size() < 30)
-				if(m_birds[i].bMatched && m_birds[i].vec_trail.size() < 5)
-					new_birds.push_back(m_birds[i]);
+				new_birds.push_back(m_birds[i]);
 			}
 		}
 	}
@@ -395,8 +395,12 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 
 				//cv::Rect safeRect = new_birds[i].getSafeRect(matForeBird.cols, matForeBird.rows);
 				//float fNonZeroRatio = cv::countNonZero(matForeBird(safeRect)) / (float)new_birds[i].boundingBox.area();
-				//std::string str_speed = std::to_string(fNonZeroRatio) + "%";
-				std::string str_speed = std::to_string(new_birds[i].fAverageSpeed) + " km/h";
+				//std::string str_speed = std::to_string(new_birds[i].fRatio) + "%";
+				std::string str_speed = std::to_string(new_birds[i].boundingBox.width)
+					+ " " + std::to_string(new_birds[i].boundingBox.height)
+					//+ " km/h"
+					;
+				//std::string str_speed = std::to_string(new_birds[i].fAverageSpeed) + " km/h";
 				
 				putText(matDisplay, str_speed, new_birds[i].boundingBox.tl() - cv::Point(0,5), cv::FONT_HERSHEY_SIMPLEX, 0.3, birdColor);
 
@@ -444,9 +448,10 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 
 		// Motion detections
 		// Reduce size for faster calculation
+		float fScale = 0.5;
 		cv::Mat smallLocalGray;
 		cv::Mat finalGray;
-		cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), 0.5, 0.5);
+		cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), fScale, fScale);
 		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(5, 5), 5);
 
 		// Remove Noise Area
@@ -551,7 +556,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		else {
 
 			// Main process
-			bool bExistBird = countBird(matLocalFore, matLocalColor, matDisplayWithBirds,true);
+			bool bExistBird = countBird(matLocalFore, matLocalColor, matDisplayWithBirds,1/fScale,true);
 			if (bExistBird) {
 				m_nCountContinuosValid++;
 				 printBirdLog();

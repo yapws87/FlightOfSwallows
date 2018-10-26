@@ -52,6 +52,10 @@ struct BirdData
 	std::vector<cv::Point> vec_trail;
 	float fAverageSpeed;
 	int nPredictLimit = 0;// 5;
+	float fRatio = 0;
+
+	int nMinTrail = 3;
+	int nMinDist = 10;
 
 	BirdData()
 	{
@@ -68,6 +72,7 @@ struct BirdData
 		location = (birdBox.tl() + birdBox.br()) / 2;
 		boundingBox = birdBox;
 		vec_trail.push_back(location);
+
 	}
 
 	inline bool isCounted()
@@ -88,8 +93,8 @@ struct BirdData
 	void update(cv::Rect birdBox, bool nPredict = false)
 	{
 		// If empty use own value
-		if (birdBox.area() == 0)
-			birdBox = boundingBox;
+		//if (birdBox.area() == 0)
+		//	birdBox = boundingBox;
 
 		location = (birdBox.tl() + birdBox.br()) / 2;
 		boundingBox = birdBox;
@@ -104,19 +109,21 @@ struct BirdData
 			int nTotalTrail = (int)vec_trail.size();
 			
 			int nDirection = BIRD_UNKNOWN;
+			//int nDistance = 0;
 			
 			// Start measure when the trail is more than 3
-			if (nTotalTrail >= 3)
+			if (nTotalTrail >= nMinTrail)
 			{
 				// Accumulate direction
 				for (int i = 1; i < nTotalTrail; i++)
 				{
 					nDirection += (vec_trail[i].x - vec_trail[i - 1].x);
+					//nDistance
 				}
 
 				// Determine direction 
 				// only Motions more than 10 pixel
-				if(abs(nDirection) - 10 > 0)
+				if(abs(nDirection) - nMinDist > 0)
 					nBirdDirection = nDirection > 0 ? BIRD_FLY_OUT : BIRD_FLY_IN;
 				
 			}
@@ -241,7 +248,7 @@ protected:
 	void insertText(cv::Mat & matDisplay, int nFPS, double nMean, double nThreshold);
 	void prepareSaveImage(const cv::Mat matFg, cv::Mat matDisplay, int nfps, double dThreshold);
 	
-	bool countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &matDisplay,bool bDisplay = false);
+	bool countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &matDisplay,float fScale = 1, bool bDisplay = false);
 	cv::Rect boundingBirds(std::vector<cv::Point> birdPts);
 	cv::Rect EnlargeSafeROI(cv::Rect oriRect, float fScale, int nBirdDirection);
 	int findBestBirdIndex(BirdData bird_src, std::vector<BirdData> bird_candidates, float fIntersectRatio, bool bLimit = false);
