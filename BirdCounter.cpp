@@ -29,6 +29,8 @@ void CBirdCounter::end_measure(int nInsertFPS)
 		double dFPS;
 		dFPS = 1 / dTime;
 		m_nFps_real = (m_nFps_real + dFPS) / 2;
+		if (m_nFps_real > 1000)
+			m_nFps_real = 0;
 
 	}
 	else{
@@ -190,7 +192,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	float fBoxSizeRatio = 10;
 	int nMinBirdSize = 8;
 	float fNonZeroRatioThresh = 0.25;
-	float fIntersectRatio = 1.5;
+	float fIntersectRatio = 2;
 	
 	int nSrcWidth = matRealSrc.cols;
 	int nSrcHeight = matRealSrc.rows;
@@ -564,7 +566,8 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		}
 
 		// Morphology process
-		cv::Mat matElement = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(3, 3));
+		cv::erode(matLocalFore, matLocalFore, cv::Mat());
+		//cv::Mat matElement = cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(3, 3));
 		//cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_OPEN, matElement, cv::Point(-1, -1), 2);
 		//cv::morphologyEx(matLocalFore, matLocalFore, cv::MORPH_CLOSE, matElement, cv::Point(-1, -1), 2);
 
@@ -615,7 +618,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 			//prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
 			m_piTweet.tweet_bird_thread(matLocalGray
 				, -1
-				, m_dTime 
+				, m_dTime * 1000
 				, m_dTemperature
 				, m_nCount_In
 				, m_nCount_Out
@@ -657,7 +660,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 				m_dTemperature = picom.get_temperature();
 				m_piTweet.tweet_bird_thread(matDisplayWithBirds
 					, dForeRatio
-					, m_dTime
+					, m_dTime * 1000
 					, m_dTemperature
 					, m_nCount_In
 					, m_nCount_Out
