@@ -424,11 +424,11 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 
 				//cv::Rect safeRect = new_birds[i].getSafeRect(matForeBird.cols, matForeBird.rows);
 				//float fNonZeroRatio = cv::countNonZero(matForeBird(safeRect)) / (float)new_birds[i].boundingBox.area();
-				//std::string str_speed = std::to_string(new_birds[i].fRatio) + "%";
-				std::string str_speed = std::to_string(new_birds[i].boundingBox.width)
-					+ " " + std::to_string(new_birds[i].boundingBox.height)
-					//+ " km/h"
-					;
+				std::string str_speed = std::to_string(new_birds[i].fAverageSpeed) + "%";
+				//std::string str_speed = std::to_string(new_birds[i].boundingBox.width)
+					//+ " " + std::to_string(new_birds[i].boundingBox.height)
+					////+ " km/h"
+					//;
 				//std::string str_speed = std::to_string(new_birds[i].fAverageSpeed) + " km/h";
 				
 				putText(matDisplay, str_speed, new_birds[i].boundingBox.tl() - cv::Point(0,5), cv::FONT_HERSHEY_SIMPLEX, 0.3, birdColor);
@@ -653,8 +653,10 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		{		
 			// At Least 15 mins inteval
 			if(m_fSecCount_tweet > 60 * 15 && bLargeNumber_flag)
+			//if (m_fSecCount_tweet > 1)
 			{ 
-				picom.printStdLog("Tweets picture condition matched.");
+				//std::cout << "m_avgIntensity : " << m_avgIntensity << std::endl;
+				//picom.printStdLog("Tweets picture condition matched.");
 				prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
 				
 				m_dTemperature = picom.get_temperature();
