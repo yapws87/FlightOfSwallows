@@ -4,8 +4,8 @@
 
 CBirdCounter::CBirdCounter()
 {
-	//m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 30, false);
-	m_pMOG = cv::createBackgroundSubtractorKNN(90 * 5, 150, false);
+	m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 40, false);
+	//m_pMOG = cv::createBackgroundSubtractorKNN(90 * 5, 100, false);
 	//m_pMOG->SetVarThreshold(12);
 	m_avgIntensity = 0;
 }
@@ -190,7 +190,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 {
 	int nBoxSizeLimit = 5000;
 	float fBoxSizeRatio = 10;
-	int nMinBirdSize = 8;
+	int nMinBirdSize = 4;
 	float fNonZeroRatioThresh = 0.25;
 	float fIntersectRatio = 2;
 	
@@ -221,8 +221,6 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 		float fNonZeroRatio = cv::countNonZero(matForeBird(birdBox)) / (float)birdBox.area();
 		if (fNonZeroRatio < fNonZeroRatioThresh)
 			continue;
-
-	
 		
 		if (birdBox.width <= nMinBirdSize/2 &&  birdBox.height <= nMinBirdSize/2)
 			continue;
@@ -236,12 +234,12 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 			continue;
 
 		//bird_candidates.push_back(BirdData(birdBox));
-		if (birdBox.width >= 30/2 || birdBox.height >= 40/2)
+		if (birdBox.width >= 25/2 || birdBox.height >= 30/2)
 		{
 			int nMaxBox = birdBox.width > birdBox.height ? birdBox.width : birdBox.height;
 			cv::Mat matROI = matForeBird(birdBox);
 			cv::Mat matCross = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5));
-			cv::morphologyEx(matROI, matROI, cv::MORPH_OPEN, cv::Mat(), cv::Point(-1,-1), nMaxBox / 15);
+			cv::morphologyEx(matROI, matROI, cv::MORPH_OPEN, cv::Mat(), cv::Point(-1,-1), nMaxBox / 10);
 			
 
 			std::vector<std::vector<cv::Point>> subBlocks;
@@ -481,7 +479,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		cv::Mat smallLocalGray;
 		cv::Mat finalGray;
 		cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), fScale, fScale,cv::INTER_NEAREST);
-		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(5, 5), 7);
+		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(7, 7), 9);
 
 		// Remove Noise Area
 		cv::Rect noiseRect = cv::Rect(smallLocalGray.cols - (smallLocalGray.cols * 0.28)
@@ -518,7 +516,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		int nMaxBrightness = 70;
 		int nMinBrightness = 35;
 		int nIncrement = 2;
-		if (m_avgIntensity > 128 && nBrightness_offset > nMinBrightness) {
+		if (m_avgIntensity > 135 && nBrightness_offset > nMinBrightness) {
 			nBrightness_offset = nBrightness_offset - nIncrement;
 			nBrightness_offset = nBrightness_offset < nMinBrightness ? nMinBrightness : nBrightness_offset;
 			picom.getString_fromCmd("v4l2-ctl -c brightness=" + std::to_string(nBrightness_offset));
@@ -530,7 +528,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 			
 			return;
 		}
-		else if (m_avgIntensity < 96 && nBrightness_offset < nMaxBrightness) {
+		else if (m_avgIntensity < 90 && nBrightness_offset < nMaxBrightness) {
 			nBrightness_offset = nBrightness_offset + nIncrement;
 			nBrightness_offset = nBrightness_offset > nMaxBrightness ? nMaxBrightness : nBrightness_offset;
 			picom.getString_fromCmd("v4l2-ctl -c brightness=" + std::to_string(nBrightness_offset));
@@ -552,7 +550,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		m_nToggleLearn++;
 
 		// Set all to zero if average intensity is low
-		if (m_avgIntensity < 60) {
+		if (m_avgIntensity < 75) {
 			matLocalFore = cv::Mat::zeros(finalGray.size(), CV_8UC1);
 		}
 
