@@ -508,7 +508,15 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		
 
 		double dBG_mean = cv::mean(smallLocalGray(hotRect))[0];
+		static int nAvgIntensity_count = 20;
+
+		
 		m_avgIntensity = m_avgIntensity*(0.7) + dBG_mean*(0.3);
+		if(nAvgIntensity_count > 0)
+		{
+			nAvgIntensity_count--;
+			return;
+		}
 
 #ifndef PERSONAL_COMPUTER
 		// control brightness of input
@@ -524,7 +532,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 			picom.printStdLog("[mean] " + std::to_string(m_avgIntensity) + " : Reduce brightness to " + std::to_string(nBrightness_offset));
 			m_bResetFrames = true;
 			picom.uniSleep(500);
-
+			nAvgIntensity_count = 20;
 			
 			return;
 		}
@@ -535,7 +543,8 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 			picom.printStdLog("[mean] " + std::to_string(m_avgIntensity) + " : Increase brightness to " + std::to_string(nBrightness_offset));
 			m_bResetFrames = true;
 			picom.uniSleep(500);
-
+			nAvgIntensity_count = 20;
+			
 			return;
 		}
 		
