@@ -4,8 +4,8 @@
 
 CBirdCounter::CBirdCounter()
 {
-	m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 40, false);
-	//m_pMOG = cv::createBackgroundSubtractorKNN(90 * 5, 100, false);
+	//m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 35, false);
+	m_pMOG = cv::createBackgroundSubtractorKNN(90 * 10, 30, false);
 	//m_pMOG->SetVarThreshold(12);
 	m_avgIntensity = 0;
 }
@@ -234,7 +234,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 			continue;
 
 		//bird_candidates.push_back(BirdData(birdBox));
-		if (birdBox.width >= 25/2 || birdBox.height >= 30/2)
+		if (birdBox.width >= 22/2 || birdBox.height >= 30/2)
 		{
 			int nMaxBox = birdBox.width > birdBox.height ? birdBox.width : birdBox.height;
 			cv::Mat matROI = matForeBird(birdBox);
