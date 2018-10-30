@@ -559,7 +559,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		m_nToggleLearn++;
 
 		// Set all to zero if average intensity is low
-		if (m_avgIntensity < 75) {
+		if (m_avgIntensity < 80) {
 			matLocalFore = cv::Mat::zeros(finalGray.size(), CV_8UC1);
 		}
 
