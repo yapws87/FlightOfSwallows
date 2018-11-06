@@ -212,6 +212,11 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	// Set bounding block for detected birds
 	
 	std::vector<BirdData> bird_candidates;
+
+	// Return if too many spurious blobs
+	if (bird_blocks.size() > 30)
+		return false;
+
 	for (int n = 0; n < bird_blocks.size(); n++)
 	{
 		//cv::Rect birdBox = birdRects[n];
@@ -267,7 +272,10 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 		}
 	}
 
-		
+	// Return if too many spurious birds
+	if (bird_candidates.size() > 10)
+		return false;
+	//std::cout << "bird_candidates : " << bird_candidates.size() << std::endl;
 
 	//Check for registered birds First
 	std::vector<BirdData> new_birds;
@@ -585,7 +593,8 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 
 		cv::Mat matDisplayWithBirds;
 		// Skip when too large changes occur
-		if (dForeRatio > 0.5) {
+		std::cout << "dForeRatio : " << dForeRatio << std::endl;
+		if (dForeRatio > 0.2) {
 			m_nSaturationCount++;
 			m_nCountContinuosValid = 0;
 			m_birds.clear();
