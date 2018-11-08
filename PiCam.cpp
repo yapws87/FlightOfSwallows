@@ -121,9 +121,9 @@ void PiCam::runFrame_thread()
 			}
 			
 			// Que to save image
-			if ((picom.get_current_time() == "05:59:00" 
-			|| picom.get_current_time() == "17:59:00" 
-			|| picom.get_current_time() == "18:32:00"
+			if ((picom.get_current_time() == "05:58:00" 
+			|| picom.get_current_time() == "06:59:00" 
+			//|| picom.get_current_time() == "18:32:00"
 			) && m_bEnableRecord)
 			{
 				if(!m_bRecord){
