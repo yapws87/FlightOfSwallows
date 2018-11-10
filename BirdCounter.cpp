@@ -394,8 +394,8 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	{
 		// Display new birds
 		int nWaitTime = 1;
-		cv::Scalar color_in = cv::Scalar(255, 100, 0);
-		cv::Scalar color_out = cv::Scalar(0, 0, 255);
+		cv::Scalar color_in = cv::Scalar(0, 0, 255);
+		cv::Scalar color_out = cv::Scalar(255, 100, 0); 
 		cv::Scalar color_unknown = cv::Scalar(50, 50, 50);
 		cv::line(matDisplay, cv::Point(nIn_Line, 0), cv::Point(nIn_Line, nSrcHeight), color_in, 1);
 		cv::line(matDisplay, cv::Point(nOut_Line, 0), cv::Point(nOut_Line, nSrcHeight), color_out, 1);
@@ -652,7 +652,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		static int nPre_outBird = 0;
 		static bool bLargeNumber_flag = false;
 		int nMinutesToTweet = 15;
-		int nPrintBirdNumFlag = 5000; // For Uploading pictures every 5000 birds 
+		int nPrintBirdNumFlag = 10000; // For Uploading pictures every 10000 birds 
 		
 		// Flag for detectiong large bird number
 		if ((m_nCount_In % nPrintBirdNumFlag == 0 && m_nCount_In != nPre_inBird)
@@ -709,7 +709,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 
 			init_birdLog();
 			picom.printStdLog("Tweeting Graph!\n");
-			m_piTweet.tweet_graph_thread(picom.get_yesterday_date());
+			m_piTweet.tweet_graph_thread(picom.get_yesterday_date(),m_nCount_In, m_nCount_Out);
 			resetBirdCount();
 
 		}

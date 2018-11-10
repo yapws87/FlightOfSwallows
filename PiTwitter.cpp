@@ -136,8 +136,10 @@ void tweet_graph_proc(std::string strdate
     , std::string piCmd_analyzeHisto
     , std::string piHisto_path
 	, std::string piLineGraph_path
-    ,std::string folder_path )
-{
+    ,std::string folder_path
+	, int total_in
+	, int total_out
+){
 	PiCommon picom;
 	std::string piMsg;
 
@@ -162,9 +164,13 @@ void tweet_graph_proc(std::string strdate
 	picom.printStdLog("Result : " + str_out);
 	picom.uniSleep(2000);
 
+	float fAcc = total_in > total_out ? total_out / (float)total_in : total_in / (float)total_out;
 	// Tweet histogram
 	piMsg = " '";
-	piMsg += strdate + " histogram ";
+	piMsg += strdate + " histogram " + "\n";
+	piMsg += "Total Bird In  : " + std::to_string(total_in) + "\n";
+	piMsg += "Total Bird Out : " + std::to_string(total_out) + "\n";
+	piMsg += "Accuracy       : " + std::to_string(fAcc) + "\n";
 	piMsg += "' ";
 
 	piSys = piCmd_image + piMsg + piHisto_path + piParallel;
@@ -185,7 +191,7 @@ void tweet_graph_proc(std::string strdate
 	picom.printStdLog("Tweeted Line graph!\n");
 }
 
-void PiTwitter::tweet_graph_thread(std::string strdate)
+void PiTwitter::tweet_graph_thread(std::string strdate, int nTotalIn, int nTotalOut)
 {
     std::thread t(tweet_graph_proc
         , strdate
@@ -194,6 +200,8 @@ void PiTwitter::tweet_graph_thread(std::string strdate)
         , m_piHisto
 		, m_piLineGraph
         , m_piBirdLog
+		, nTotalIn
+		, nTotalOut
     );
     t.detach();
 }

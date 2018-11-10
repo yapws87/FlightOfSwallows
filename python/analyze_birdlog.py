@@ -253,7 +253,7 @@ line_img_path =sys.argv[5]
 
 file_inBird = open(txt_inFile,'r')
 file_outBird = open(txt_outFile,'r')
-file_status = open(status_path,'r')
+#file_status = open(status_path,'r')
 
 histoname = Path(histo_img_path)
 txtname = Path(txt_inFile)
@@ -280,7 +280,7 @@ main_bird_in = getHistoStat(birdRes_in.histo,18.0,19.0)
 
 print ('Morning Bird: ', main_bird_out, '\t','Evening Bird: ', main_bird_in)
 
-extract_status_data(file_status,5)
+#extract_status_data(file_status,5)
 
 saveData(txt_dailytxt_path,date_stamp, main_bird_out,main_bird_in)
 
@@ -288,4 +288,4 @@ plotBirdTrendLine(txt_dailytxt_path,line_img_path)
 
 file_inBird.close()
 file_outBird.close()
-file_status.close()
+#file_status.close()

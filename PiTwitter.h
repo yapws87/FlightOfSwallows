@@ -42,7 +42,7 @@ public:
 		m_piBirdLog = piBirdLog;
 	}
 
-	void tweet_graph_thread( std::string strdate);
+	void tweet_graph_thread( std::string strdate, int nTotalIn, int nTotalOut);
 	void tweet_bird_thread( cv::Mat matBird
 	  	, double dThresh
     	, double dTime
