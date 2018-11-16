@@ -1,5 +1,5 @@
 #include "PiTwitter.h"
-
+#include <algorithm>
 
 
 PiTwitter::PiTwitter()
@@ -137,11 +137,12 @@ void tweet_graph_proc(std::string strdate
     , std::string piHisto_path
 	, std::string piLineGraph_path
     ,std::string folder_path
-	, int total_in
-	, int total_out
+
 ){
 	PiCommon picom;
 	std::string piMsg;
+	int total_in;
+	int total_out;
 
 	std::string piParallel = " &";
 
@@ -158,11 +159,21 @@ void tweet_graph_proc(std::string strdate
 		+ " " + dailyFilePath 
 		+ " " + piLineGraph_path
 	;
+
+	std::ifstream inFile(infile_path);
+	total_in = std::count(std::istreambuf_iterator<char>(inFile),
+						std::istreambuf_iterator<char>(), '\n');
+
+	std::ifstream outFile(outfile_path);
+	total_out = std::count(std::istreambuf_iterator<char>(outFile),
+		std::istreambuf_iterator<char>(), '\n');
+
+
 	//system(piSys.c_str());
-	picom.printStdLog("Cmd1 : " + piSys);
+	picom.printStdLog("Cmd1 : " + piSys + "\n");
 	std::string str_out = picom.getString_fromCmd(piSys);
-	picom.printStdLog("Result : " + str_out);
-	picom.uniSleep(2000);
+	picom.printStdLog("Result : " + str_out + "\n");
+	picom.uniSleep(5000);
 
 	float fAcc = total_in > total_out ? total_out / (float)total_in : total_in / (float)total_out;
 	// Tweet histogram
@@ -170,12 +181,13 @@ void tweet_graph_proc(std::string strdate
 	piMsg += strdate + " histogram " + "\n";
 	piMsg += "Total Bird In  : " + std::to_string(total_in) + "\n";
 	piMsg += "Total Bird Out : " + std::to_string(total_out) + "\n";
-	piMsg += "Accuracy       : " + std::to_string(fAcc) + "\n";
+	piMsg += "Accuracy       : " + std::to_string((int)(fAcc * 100)) + "%" + "\n";
 	piMsg += "' ";
 
 	piSys = piCmd_image + piMsg + piHisto_path + piParallel;
-	picom.printStdLog("Cmd2 : " + piSys);
+	picom.printStdLog("Cmd2 : " + piSys + "\n");
 	system(piSys.c_str());
+
 
 	picom.printStdLog("Tweeted Histogram!\n");
 
@@ -184,14 +196,15 @@ void tweet_graph_proc(std::string strdate
 	piMsg +=" Line Graph ";
 	piMsg += "' ";
 
-	piSys = piCmd_image + piMsg + piLineGraph_path + piParallel;
-	picom.printStdLog("Cmd2 : " + piSys);
+	piSys = piCmd_image + piMsg + piLineGraph_path +piParallel;
+	picom.printStdLog("Cmd3 : " + piSys + "\n");
+	
 	system(piSys.c_str());
 
 	picom.printStdLog("Tweeted Line graph!\n");
 }
 
-void PiTwitter::tweet_graph_thread(std::string strdate, int nTotalIn, int nTotalOut)
+void PiTwitter::tweet_graph_thread(std::string strdate)
 {
     std::thread t(tweet_graph_proc
         , strdate
@@ -200,8 +213,6 @@ void PiTwitter::tweet_graph_thread(std::string strdate, int nTotalIn, int nTotal
         , m_piHisto
 		, m_piLineGraph
         , m_piBirdLog
-		, nTotalIn
-		, nTotalOut
     );
     t.detach();
 }

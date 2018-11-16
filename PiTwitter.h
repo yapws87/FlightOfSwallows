@@ -11,14 +11,19 @@ protected:
 	bool m_bTweeterGraph = false;
 	bool m_bSaveStatus = false;
 
-	std::string m_proj_folder = "/home/pi/projects/FlightOfSwallows/";
-	std::string m_piCmd_tweetPic = "sudo python " + m_proj_folder + "twitter/./twitter_pic.py ";
-	std::string m_piCmd_analyzeHisto = "python3 " +  m_proj_folder + "python/analyze_birdlog.py ";
+	//std::string m_proj_folder = "/home/pi/projects/FlightOfSwallows/";
+	//std::string m_piCmd_tweetPic = "sudo python " + m_proj_folder + "twitter/./twitter_pic.py ";
+	//std::string m_piCmd_analyzeHisto = "python3 " + m_proj_folder + "python/analyze_birdlog.py ";
+
+	std::string m_proj_folder = "C:\\Users\\yapws87\\Desktop\\FlightOfSwallows\\";
+	std::string m_piCmd_tweetPic = "python " + m_proj_folder + "twitter\\.\\twitter_pic.py ";
+	std::string m_piCmd_analyzeHisto = "python " +  m_proj_folder + "python\\analyze_birdlog.py ";
+	std::string m_piBirdLog = m_proj_folder;
 
 	std::string m_piImg =  m_proj_folder + "image.jpg";
 	std::string m_piHisto =  m_proj_folder + "histogram.jpg";
 	std::string m_piLineGraph =  m_proj_folder + "daily_graph.jpg";
-	std::string m_piBirdLog = m_proj_folder + "bird_log/";
+	//std::string m_piBirdLog = m_proj_folder + "bird_log/"; 
 
 	double m_dthresh = 0;
 	double m_dTime = 0;
@@ -42,7 +47,7 @@ public:
 		m_piBirdLog = piBirdLog;
 	}
 
-	void tweet_graph_thread( std::string strdate, int nTotalIn, int nTotalOut);
+	void tweet_graph_thread( std::string strdate);
 	void tweet_bird_thread( cv::Mat matBird
 	  	, double dThresh
     	, double dTime

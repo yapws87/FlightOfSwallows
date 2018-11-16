@@ -102,6 +102,8 @@ void CBirdCounter::resetBirdCount()
 {
 	m_nCount_In = 0;
 	m_nCount_Out = 0;
+	m_nPre_inBird = 0;
+	m_nPre_outBird = 0;
 }
 
 
@@ -644,24 +646,23 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 			m_fSecCount_tweet = 0;
 			m_fSecCount_status = 0;
 			//m_fSecCount = 10000;
+			
 		}
 		
 
 		// -------------------------------- Tweet Image
-		static int nPre_inBird = 0;
-		static int nPre_outBird = 0;
 		static bool bLargeNumber_flag = false;
 		int nMinutesToTweet = 15;
 		int nPrintBirdNumFlag = 10000; // For Uploading pictures every 10000 birds 
 		
 		// Flag for detectiong large bird number
-		if ((m_nCount_In % nPrintBirdNumFlag == 0 && m_nCount_In != nPre_inBird)
-			|| (m_nCount_Out % nPrintBirdNumFlag == 0 && m_nCount_Out != nPre_outBird))	
+		if ((m_nCount_In % nPrintBirdNumFlag == 0 && m_nCount_In != m_nPre_inBird)
+			|| (m_nCount_Out % nPrintBirdNumFlag == 0 && m_nCount_Out != m_nPre_outBird))	
 		{
 			bLargeNumber_flag = true;
 			picom.printStdLog("Tweets bird count flag reached.");
-			nPre_inBird = m_nCount_In;
-			nPre_outBird = m_nCount_Out;
+			m_nPre_inBird = m_nCount_In;
+			m_nPre_outBird = m_nCount_Out;
 			
 		}
 
@@ -688,8 +689,8 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		
 				m_fSecCount_tweet = 0;
 				bLargeNumber_flag = false;
-				nPre_inBird = m_nCount_In;
-				nPre_outBird = m_nCount_Out;
+				m_nPre_inBird = m_nCount_In;
+				m_nPre_outBird = m_nCount_Out;
 				
 			}
 			m_nCountContinuosValid = 0;
@@ -697,7 +698,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		}
 
 		
-		
+	
 		
 		//--------------------------- Upload graph
 		// Flag to avoid multiple calls
@@ -709,8 +710,10 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 
 			init_birdLog();
 			picom.printStdLog("Tweeting Graph!\n");
-			m_piTweet.tweet_graph_thread(picom.get_yesterday_date(),m_nCount_In, m_nCount_Out);
+			m_piTweet.tweet_graph_thread(picom.get_yesterday_date());
 			resetBirdCount();
+
+		
 
 		}
 		if (picom.get_current_time() == "00:00:02")

@@ -273,12 +273,12 @@ drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_path,da
 #drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,speedName,date_str,2, 'Speed Of Birds', 'Speed [km/h]')
 #drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,trailName,date_str,3, 'Trail Of Birds', 'Trail Count')
 
-print ('In:', birdRes_in.total, '\t','Out:', birdRes_out.total)
+print ('Total_In: ', birdRes_in.total, '\t','Total_Out: ', birdRes_out.total)
 
 main_bird_out = getHistoStat(birdRes_out.histo,6,7)
 main_bird_in = getHistoStat(birdRes_in.histo,18.0,19.0)
 
-print ('Morning Bird: ', main_bird_out, '\t','Evening Bird: ', main_bird_in)
+print ('Peak_Out: ', main_bird_out, '\t','Peak_In: ', main_bird_in)
 
 #extract_status_data(file_status,5)
 
@@ -288,4 +288,4 @@ plotBirdTrendLine(txt_dailytxt_path,line_img_path)
 
 file_inBird.close()
 file_outBird.close()
-#file_status.close()
+file_status.close()

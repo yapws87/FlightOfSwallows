@@ -268,6 +268,8 @@ protected:
 	std::vector<BirdCell> m_outBird_logs;
 	std::chrono::time_point<std::chrono::system_clock> m_statusTime;
 
+	int m_nPre_inBird = 0;
+	int	m_nPre_outBird = 0;
 	int m_nCount_In = 0;
 	int m_nCount_Out = 0;
 	double m_dTemperature = 0;

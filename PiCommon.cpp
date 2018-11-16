@@ -15,13 +15,14 @@ std::string PiCommon::getString_fromCmd(std::string cmd)
 {
 	std::string data;
 	FILE * stream;
-	const int max_buffer = 256;
+	const int max_buffer = 1256;
 	char buffer[max_buffer];
 	cmd.insert(0,"echo -n $(");
 	cmd.append(") 2>&1");
 
 #ifdef _WIN32
 	stream = _popen(cmd.c_str(), "r");
+	uniSleep(30000);
 	if (stream) {
 		while (!feof(stream))
 			if (fgets(buffer, max_buffer, stream) != NULL) data.append(buffer);
