@@ -187,7 +187,7 @@ def saveData(txt_dailytxt_path,date_stamp, bird_out, bird_in):
 # Change date string YYYY-MM-DD to datetime
 def getDateFromString(date_entry):
 	
-	print(date_entry)
+	#print(date_entry)
 	year, month, day = map(int, date_entry.split('-'))
 	local_date = date(int(year),int(month),int(day))
 		
@@ -255,7 +255,7 @@ file_inBird = open(txt_inFile,'r')
 file_outBird = open(txt_outFile,'r')
 #file_status = open(status_path,'r')
 
-histoname = Path(histo_img_path)
+histoname = Path( )
 txtname = Path(txt_inFile)
 
 time_interval = 5#minutes
@@ -273,12 +273,20 @@ drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_path,da
 #drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,speedName,date_str,2, 'Speed Of Birds', 'Speed [km/h]')
 #drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,trailName,date_str,3, 'Trail Of Birds', 'Trail Count')
 
-print ('Total_In: ', birdRes_in.total, '\t','Total_Out: ', birdRes_out.total)
+print ('Total_In: ', birdRes_in.total, '\n','Total_Out: ', birdRes_out.total, '\n')
+
+bird_acc = 0
+if birdRes_in.total > birdRes_out.total:
+	bird_acc = birdRes_out.total / birdRes_in.total * 100
+else :
+	bird_acc = birdRes_in.total / birdRes_out.total * 100
+
+print ('Acc: ', bird_acc, '% \n')
 
 main_bird_out = getHistoStat(birdRes_out.histo,6,7)
 main_bird_in = getHistoStat(birdRes_in.histo,18.0,19.0)
 
-print ('Peak_Out: ', main_bird_out, '\t','Peak_In: ', main_bird_in)
+print ('Peak_Out: ', main_bird_out, '\n','Peak_In: ', main_bird_in, '\n')
 
 #extract_status_data(file_status,5)
 
@@ -288,4 +296,4 @@ plotBirdTrendLine(txt_dailytxt_path,line_img_path)
 
 file_inBird.close()
 file_outBird.close()
-file_status.close()
+#file_status.close()
