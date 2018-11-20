@@ -175,7 +175,7 @@ void tweet_graph_proc(std::string strdate
 	picom.printStdLog("Result : " + str_out + "\n");
 	picom.uniSleep(5000);
 
-	std::cout << "Tweet Result : "<< str_out << std::endl;
+	//std::cout << "Tweet Result : "<< str_out << std::endl;
 
 	float fAcc = total_in > total_out ? total_out / (float)total_in : total_in / (float)total_out;
 	// Tweet histogram
