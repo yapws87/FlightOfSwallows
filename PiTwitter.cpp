@@ -175,6 +175,8 @@ void tweet_graph_proc(std::string strdate
 	picom.printStdLog("Result : " + str_out + "\n");
 	picom.uniSleep(5000);
 
+	std::cout << "Tweet Result : "<< str_out << std::endl;
+
 	float fAcc = total_in > total_out ? total_out / (float)total_in : total_in / (float)total_out;
 	// Tweet histogram
 	piMsg = " '";
@@ -182,6 +184,7 @@ void tweet_graph_proc(std::string strdate
 	piMsg += "Total Bird In  : " + std::to_string(total_in) + "\n";
 	piMsg += "Total Bird Out : " + std::to_string(total_out) + "\n";
 	piMsg += "Accuracy       : " + std::to_string((int)(fAcc * 100)) + "%" + "\n";
+	piMsg += str_out + "\n";
 	piMsg += "' ";
 
 	piSys = piCmd_image + piMsg + piHisto_path + piParallel;

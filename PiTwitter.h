@@ -23,7 +23,7 @@ protected:
 	std::string m_piImg =  m_proj_folder + "image.jpg";
 	std::string m_piHisto =  m_proj_folder + "histogram.jpg";
 	std::string m_piLineGraph =  m_proj_folder + "daily_graph.jpg";
-	std::string m_piBirdLog = m_proj_folder + "bird_log/"; 
+	 std::string m_piBirdLog = m_proj_folder + "bird_log/"; 
 
 	double m_dthresh = 0;
 	double m_dTime = 0;
