@@ -160,14 +160,6 @@ void tweet_graph_proc(std::string strdate
 		+ " " + piLineGraph_path
 	;
 
-	std::ifstream inFile(infile_path);
-	total_in = std::count(std::istreambuf_iterator<char>(inFile),
-						std::istreambuf_iterator<char>(), '\n');
-
-	std::ifstream outFile(outfile_path);
-	total_out = std::count(std::istreambuf_iterator<char>(outFile),
-		std::istreambuf_iterator<char>(), '\n');
-
 
 	//system(piSys.c_str());
 	picom.printStdLog("Cmd1 : " + piSys + "\n");
@@ -178,13 +170,25 @@ void tweet_graph_proc(std::string strdate
 	//std::cout << "Tweet Result : "<< str_out << std::endl;
 
 	float fAcc = total_in > total_out ? total_out / (float)total_in : total_in / (float)total_out;
+
+
+	// Extract the result from python code
+ 	std::istringstream input_string;
+	input_string.str(str_out);
+ 
+	std::vector<std::string> result_str;
+    for (std::string line; std::getline(input_string, line, '|'); ) {
+       result_str.push_back(line);
+    }
+
+
 	// Tweet histogram
 	piMsg = " '";
 	piMsg += strdate + " histogram " + "\n";
-	piMsg += "Total Bird In  : " + std::to_string(total_in) + "\n";
-	piMsg += "Total Bird Out : " + std::to_string(total_out) + "\n";
-	piMsg += "Accuracy       : " + std::to_string((int)(fAcc * 100)) + "%" + "\n";
-	piMsg += str_out + "\n";
+	for(int i = 0; i <result_str.size(); i++)
+	{
+		piMsg += result_str[i] + "\n";
+	}
 	piMsg += "' ";
 
 	piSys = piCmd_image + piMsg + piHisto_path + piParallel;

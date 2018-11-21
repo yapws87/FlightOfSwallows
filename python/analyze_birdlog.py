@@ -273,7 +273,7 @@ drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_path,da
 #drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,speedName,date_str,2, 'Speed Of Birds', 'Speed [km/h]')
 #drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,trailName,date_str,3, 'Trail Of Birds', 'Trail Count')
 
-print ('Total_In: ', birdRes_in.total, '\n','Total_Out: ', birdRes_out.total, '\n')
+print ('Total_In: ', birdRes_in.total, '|\n','Total_Out: ', birdRes_out.total, '|\n')
 
 bird_acc = 0
 if birdRes_in.total > birdRes_out.total:
@@ -281,12 +281,12 @@ if birdRes_in.total > birdRes_out.total:
 else :
 	bird_acc = birdRes_in.total / birdRes_out.total * 100
 
-print ('Acc: ', bird_acc, '% \n')
+print ('Acc: ', bird_acc, '% |\n')
 
 main_bird_out = getHistoStat(birdRes_out.histo,6,7)
 main_bird_in = getHistoStat(birdRes_in.histo,18.0,19.0)
 
-print ('Peak_Out: ', main_bird_out, '\n','Peak_In: ', main_bird_in, '\n')
+print ('Peak_Out: ', main_bird_out, '|\n','Peak_In: ', main_bird_in, '|\n')
 
 #extract_status_data(file_status,5)
 
