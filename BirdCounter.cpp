@@ -432,7 +432,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 
 				//cv::Rect safeRect = new_birds[i].getSafeRect(matForeBird.cols, matForeBird.rows);
 				//float fNonZeroRatio = cv::countNonZero(matForeBird(safeRect)) / (float)new_birds[i].boundingBox.area();
-				std::string str_speed = std::to_string(new_birds[i].fAverageSpeed) + "%";
+				std::string str_speed = std::to_string(int(new_birds[i].fAverageSpeed)) + "%";
 				//std::string str_speed = std::to_string(new_birds[i].boundingBox.width)
 					//+ " " + std::to_string(new_birds[i].boundingBox.height)
 					////+ " km/h"
