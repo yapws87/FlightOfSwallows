@@ -281,7 +281,7 @@ if birdRes_in.total > birdRes_out.total:
 else :
 	bird_acc = birdRes_in.total / birdRes_out.total * 100
 
-print ('Acc: ', bird_acc, '% |\n')
+print ('Acc: ', int(bird_acc), '%|\n')
 
 main_bird_out = getHistoStat(birdRes_out.histo,6,7)
 main_bird_in = getHistoStat(birdRes_in.histo,18.0,19.0)

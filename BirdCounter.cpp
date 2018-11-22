@@ -632,7 +632,6 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 			m_nCountContinuosValid = 0;
 			//m_bTweeterFlag = true;
 			m_dTemperature = picom.get_temperature();
-			m_piTweet.tweet_graph_thread(picom.get_yesterday_date());
 			//prepareSaveImage(matLocalFore, matDisplayWithBirds, m_nFps_real, dForeRatio);
 			m_piTweet.tweet_bird_thread(matLocalGray
 				, -1
