@@ -23,7 +23,7 @@ file_outBird = open(txt_outFile,'r')
 histoname = Path( )
 txtname = Path(txt_inFile)
 
-time_interval = 5#minutes
+time_interval = 30#minutes
 date_str = txtname.stem.split('_')[0]
 date_stamp = b_log.getDateFromString(date_str)
 
@@ -38,20 +38,20 @@ b_log.drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_p
 #drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,speedName,date_str,2, 'Speed Of Birds', 'Speed [km/h]')
 #drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,trailName,date_str,3, 'Trail Of Birds', 'Trail Count')
 
-print ('Total_In: ', birdRes_in.total, '\t','Total_Out: ', birdRes_out.total, '|\n')
+print ('Total_In: ', birdRes_in.total, ' | ','Total_Out: ', birdRes_out.total, '|\n')
 
 bird_acc = 0
 if birdRes_in.total > birdRes_out.total:
-	bird_acc = birdRes_out.total / birdRes_in.total * 100
+	bird_acc = birdRes_out.total / float(birdRes_in.total) * 100
 else :
-	bird_acc = birdRes_in.total / birdRes_out.total * 100
+	bird_acc = birdRes_in.total / float(birdRes_out.total) * 100
 
 print ('Acc: ', int(bird_acc), '%|\n')
 
 main_bird_out = b_log.getHistoStat(birdRes_out.histo,6,7)
 main_bird_in = b_log.getHistoStat(birdRes_in.histo,18.0,19.0)
 
-print ('Peak_In: ', int(main_bird_in), '\t', 'Peak_Out: ', int(main_bird_out),'|\n')
+print ('Peak_In: ', int(main_bird_in), ' | ', 'Peak_Out: ', int(main_bird_out),'|\n')
 
 #extract_status_data(file_status,5)
 
