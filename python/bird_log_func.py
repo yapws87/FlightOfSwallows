@@ -54,10 +54,10 @@ def extractData(file_bird,bin_minutes):
 		total_bird = total_bird + 1
 		
 		
-		while (data_time - time_anchor) >= bin_seconds:
+		while (data_time - time_anchor) >=  bin_seconds * 1.9:
 			#bar_time = str(timedelta(seconds=time_anchor))
 			time_anchor = time_anchor + bin_seconds
-			if (data_time - time_anchor) <  bin_seconds:
+			if (data_time - time_anchor) < bin_seconds:
 			
 				hist_time = time_anchor / 3600.0
 				hist_bird_count = bin_acc
@@ -74,10 +74,11 @@ def extractData(file_bird,bin_minutes):
 				bin_acc = 0
 				trail_acc = 0
 			else:
-				histo[idx] = [time_anchor / 3600.0, 0,0,0]
+				histo[idx] = [time_anchor  / 3600.0, 0,0,0]
 			
 			
 			idx = idx + 1
+			
 		
 		if idx >= total_bins:
 			break
@@ -158,6 +159,9 @@ def getHistoStat(histo_data,time_start, time_end):
 	bin_total = len(histo_data)
 	bin_val = 24 / float(bin_total)
 	
+	#print(bin_total)
+	#print(bin_val)
+	#print(histo_data)
 	acc_data = 0
 	
 	for i in range(1,bin_total):
@@ -165,7 +169,7 @@ def getHistoStat(histo_data,time_start, time_end):
 		
 		if loop_time >=  time_start and loop_time <= time_end:
 			acc_data = acc_data + histo_data[i,1]
-			
+			#print(histo_data[i,1])
 	return acc_data
 
 # saves the daily bird count

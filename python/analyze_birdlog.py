@@ -23,7 +23,7 @@ file_outBird = open(txt_outFile,'r')
 histoname = Path( )
 txtname = Path(txt_inFile)
 
-time_interval = 30#minutes
+time_interval = 5#minutes
 date_str = txtname.stem.split('_')[0]
 date_stamp = b_log.getDateFromString(date_str)
 
@@ -48,8 +48,8 @@ else :
 
 print ('Acc : ', int(bird_acc), '%|\n')
 
-main_bird_out = b_log.getHistoStat(birdRes_out.histo,6,7)
-main_bird_in = b_log.getHistoStat(birdRes_in.histo,18.0,19.0)
+main_bird_out = b_log.getHistoStat(birdRes_out.histo,5.0,20.0)
+main_bird_in = b_log.getHistoStat(birdRes_in.histo,5.0,20.0)
 
 print ('Peak_In : ', int(main_bird_in), ' | ', 'Peak_Out: ', int(main_bird_out),'|\n')
 

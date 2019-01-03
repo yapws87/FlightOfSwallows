@@ -141,8 +141,8 @@ void tweet_graph_proc(std::string strdate
 ){
 	PiCommon picom;
 	std::string piMsg;
-	int total_in;
-	int total_out;
+	//int total_in;
+	//int total_out;
 
 	std::string piParallel = " &";
 
@@ -169,7 +169,7 @@ void tweet_graph_proc(std::string strdate
 
 	//std::cout << "Tweet Result : "<< str_out << std::endl;
 
-	float fAcc = total_in > total_out ? total_out / (float)total_in : total_in / (float)total_out;
+	//float fAcc = total_in > total_out ? total_out / (float)total_in : total_in / (float)total_out;
 
 
 	// Extract the result from python code
