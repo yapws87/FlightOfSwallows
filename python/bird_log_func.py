@@ -53,12 +53,13 @@ def extractData(file_bird,bin_minutes):
 		trail_acc = trail_acc + int(data[6])
 		total_bird = total_bird + 1
 		
-		
-		while (data_time - time_anchor) >=  bin_seconds * 1.9:
+		#print(1,data_time - time_anchor,bin_seconds * 1.2)
+		while (data_time - time_anchor) >=  bin_seconds * 0.9:
 			#bar_time = str(timedelta(seconds=time_anchor))
 			time_anchor = time_anchor + bin_seconds
-			if (data_time - time_anchor) < bin_seconds:
-			
+			#print(2,data_time - time_anchor,bin_seconds,bin_acc)
+			if (data_time - time_anchor) < bin_seconds * 0.9:
+				
 				hist_time = time_anchor / 3600.0
 				hist_bird_count = bin_acc
 				hist_speed = speed_acc / (bin_acc + 0.001)
@@ -68,11 +69,14 @@ def extractData(file_bird,bin_minutes):
 				if hist_bird_count < 10 :
 					hist_speed = 0
 					hist_trail = 0
-					
+								
 				histo[idx] = [ hist_time, hist_bird_count , hist_speed, hist_trail ]
 				speed_acc = 0
 				bin_acc = 0
 				trail_acc = 0
+
+				#print(idx,histo[idx])
+
 			else:
 				histo[idx] = [time_anchor  / 3600.0, 0,0,0]
 			
@@ -85,7 +89,7 @@ def extractData(file_bird,bin_minutes):
 			
 	
 	arr_histo = np.array(histo).reshape(len(histo),4)
-	
+	#print(np.transpose(arr_histo[:,1]))
 	#print('Total Bird : ', total_bird )
 	return BirdResult(arr_histo,total_bird)
 	
