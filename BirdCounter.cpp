@@ -702,20 +702,18 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		//--------------------------- Upload graph
 		// Flag to avoid multiple calls
 		static bool bActivate = false;
-		if (picom.get_current_time() == "00:00:01" && bActivate == false)
+		if (picom.get_current_time() == "20:30:01" && bActivate == false)
 		{
-			picom.printStdLog("New Day!");
+			picom.printStdLog("Tweet Result !");
 			bActivate = true;
 
 			init_birdLog();
 			picom.printStdLog("Tweeting Graph!\n");
-			m_piTweet.tweet_graph_thread(picom.get_yesterday_date());
-			resetBirdCount();
-
-		
+			m_piTweet.tweet_graph_thread(picom.get_current_date());
+			resetBirdCount();	
 
 		}
-		if (picom.get_current_time() == "00:00:02")
+		if (picom.get_current_time() == "21:00:02")
 			bActivate = false;
 
 		
