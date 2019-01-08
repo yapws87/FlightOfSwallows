@@ -49,8 +49,8 @@ else :
 
 print ('Acc : ', int(bird_acc), '%|\n')
 
-main_bird_out = b_log.getHistoStat(birdRes_out.histo,5.6,7.5)
-main_bird_in = b_log.getHistoStat(birdRes_in.histo,5.18.25,20.0)
+main_bird_out = b_log.getHistoStat(birdRes_out.histo,5,6,7.5)
+main_bird_in = b_log.getHistoStat(birdRes_in.histo,5,18.25,20.0)
 
 
 print ('Peak_In : ', int(main_bird_in), ' | ', 'Peak_Out: ', int(main_bird_out),'|\n')
