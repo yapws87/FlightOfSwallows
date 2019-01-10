@@ -126,8 +126,8 @@ void PiCam::runFrame_thread()
 			|| picom.get_current_time() == "18:52:00"
 			) && m_bEnableRecord)
 			{
-				if(!m_bRecord){
-					m_bRecord = true;
+				if(!m_bRecording_flag){
+					m_bRecording_flag = true;
 					picom.printStdLog( "Record flag turned ON" );
 				}
 					
@@ -137,7 +137,7 @@ void PiCam::runFrame_thread()
 			//m_matFrameColor.push_back(frameColor);
 			m_matFrameGray.push_back(frame);
 			// for recordings
-			if (m_bRecord) {
+			if (m_bRecording_flag) {
 				m_videoFrames.push_back(frameColor);
 			}
 
@@ -157,7 +157,7 @@ void PiCam::runFrame_thread()
 void PiCam::set_record()
 {
     m_mutex.lock(); 
-    m_bRecord = true;
+    m_bRecording_flag = true;
     m_mutex.unlock(); 
 }
 
@@ -221,8 +221,8 @@ void PiCam::save_thread()
 			if (nLengthCount > nLengthLimit)
 			{
 				m_mutex.lock(); 
-				if(m_bRecord)
-					m_bRecord = false;
+				if(m_bRecording_flag)
+					m_bRecording_flag = false;
 				m_mutex.unlock();
 
 				if (m_videoFrames.size() == 0)

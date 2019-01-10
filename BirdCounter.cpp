@@ -459,6 +459,51 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	return bExistBird;
 }
 
+void CBirdCounter::new_day_check_init() 
+{
+	PiCommon picom;
+	static bool bActivate_newday = false;
+	if (picom.get_current_time() == "00:00:00" && bActivate_newday == false)
+	{
+		picom.printStdLog("New Day!");
+		bActivate_newday = true;
+
+		init_birdLog();
+		resetBirdCount();
+
+	}
+	if (picom.get_current_time() == "00:00:01")
+		bActivate_newday = false;
+
+}
+
+void CBirdCounter::update_daily_report() 
+{
+	PiCommon picom;
+	static bool bActivate_graph = false;
+	if (picom.get_current_time() == "20:30:01" && bActivate_graph == false)
+	{
+		bActivate_graph = true;
+		picom.printStdLog("Tweeting Graph!\n");
+		m_piTweet.tweet_graph_thread(picom.get_current_date());
+		
+	}
+	if (picom.get_current_time() == "20:30:02")
+		bActivate_graph = false;
+}
+
+void CBirdCounter::update_status()
+{
+	PiCommon picom;
+	if (m_fSecCount_status > 60 * 5)
+	{
+		m_fSecCount_status = 0;
+		picom.printStdLog(" Start  printStatus_thread", 1);
+		printStatus_thread();
+		picom.printStdLog(" printStatus_thread DONE", 1);
+	}
+}
+
 void CBirdCounter::process_thread(cv::Mat matFrame)
 {
 	PiCommon picom;
@@ -696,35 +741,14 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 
 		}
 
-		
-	
-		
-		//--------------------------- Upload graph
-		// Flag to avoid multiple calls
-		static bool bActivate = false;
-		if (picom.get_current_time() == "20:30:01" && bActivate == false)
-		{
-			picom.printStdLog("Tweet Result !");
-			bActivate = true;
+		// Update new day check
+		new_day_check_init();
 
-			init_birdLog();
-			picom.printStdLog("Tweeting Graph!\n");
-			m_piTweet.tweet_graph_thread(picom.get_current_date());
-			resetBirdCount();	
+		// Update daily report
+		update_daily_report();
 
-		}
-		if (picom.get_current_time() == "21:00:02")
-			bActivate = false;
-
-		
-		//-------------------------- Update Pi Status
-		if (m_fSecCount_status > 60 * 5)
-		{
-			m_fSecCount_status = 0;
-			picom.printStdLog( " Start  printStatus_thread",1);
-			printStatus_thread();
-			picom.printStdLog( " printStatus_thread DONE",1);
-		}
+		// update status
+		update_status();
 
 
 #ifdef PERSONAL_COMPUTER

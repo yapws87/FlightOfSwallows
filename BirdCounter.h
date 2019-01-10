@@ -218,6 +218,8 @@ public:
 	CBirdCounter();
 	~CBirdCounter();
 
+	void update_status();
+
 	void process_thread(cv::Mat matFrameGray);
 	
 	inline cv::Mat getDispMat(){
@@ -249,6 +251,8 @@ protected:
 	void prepareSaveImage(const cv::Mat matFg, cv::Mat matDisplay, int nfps, double dThreshold);
 	
 	bool countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &matDisplay,float fScale = 1, bool bDisplay = false);
+	void new_day_check_init();
+	void update_daily_report();
 	cv::Rect boundingBirds(std::vector<cv::Point> birdPts);
 	cv::Rect EnlargeSafeROI(cv::Rect oriRect, float fScale, int nBirdDirection);
 	int findBestBirdIndex(BirdData bird_src, std::vector<BirdData> bird_candidates, float fIntersectRatio, bool bLimit = false);

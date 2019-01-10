@@ -42,8 +42,8 @@ protected:
 	int m_nFrameWidth;
 	int m_nFrameHeight;
 	int m_nFPS;
-	bool m_bRecord = false;
-	bool m_bEnableRecord = true;
+	bool m_bRecording_flag = false;
+	bool m_bEnableRecord = false;
     int m_nMeasured_fps = 0;
     
     std::string m_save_directory;
