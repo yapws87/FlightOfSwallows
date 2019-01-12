@@ -606,7 +606,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 #endif
 
 
-		// Learn bacjground and extract foreground
+		// Learn background and extract foreground
 		if (m_nToggleLearn >= 0 ) {
 			m_pMOG->apply(finalGray, matLocalFore,-1);
 			m_nToggleLearn = 0;
@@ -641,9 +641,9 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		cv::Mat matDisplayWithBirds;
 		// Skip when too large changes occur
 		//std::cout << "dForeRatio : " << dForeRatio << std::endl;
-		if (dForeRatio > 0.2) {
+		if (dForeRatio > 0.3) {
 			m_nSaturationCount++;
-			m_nCountContinuosValid = 0;
+  			m_nCountContinuosValid = 0;
 			m_birds.clear();
 		}
 		else {

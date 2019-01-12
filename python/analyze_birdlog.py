@@ -52,8 +52,8 @@ else :
 
 print ('Acc : ', int(bird_acc), '%|\n')
 
-peak_bo, mu_bo, std_bo, max_bo= b_log.getHistoStat(birdRes_out.histo,6,7.5)
-peak_bi,mu_bi, std_bi, max_bi = b_log.getHistoStat(birdRes_in.histo,18.25,20.0)
+peak_bo, mu_bo, std_bo, max_bo= b_log.getHistoStat(birdRes_out.histo,6,7.2)
+peak_bi,mu_bi, std_bi, max_bi = b_log.getHistoStat(birdRes_in.histo,18.5,20.0)
 
 b_log.drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_path	,date_str,1, 'Frequency Of Birds', 'Bird Count',mu_bo, mu_bi, std_bo, std_bi, max_bo, max_bi)
 
