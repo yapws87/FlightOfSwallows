@@ -7,6 +7,8 @@ import matplotlib
 matplotlib.use('Agg')
 from matplotlib.dates import date2num
 from matplotlib import pyplot as plt
+import matplotlib.mlab as mlab
+import math
 
 class BirdResult:
 
@@ -128,21 +130,50 @@ def extract_status_data(file_status, time_interval_mins):
 		
 			
 
+def calculate_norm_area(mu, std, max_val, interval):
+		
+	if mu == 0:
+		return 0	
+	pdf = mlab.normpdf(mu, mu, std)
+	multiplier = max_val / pdf
+	bin_ = interval / 60.0
+
+	index = mu
+	area = max_val
+	area_part = max_val 
+	while area_part > 10:
+		index += bin_
+		#print('a:{} i:{} b:{}'.format(area_part,index,bin_))
+		area_part = mlab.normpdf(index, mu, std) * multiplier
+		area += 2 * area_part
+		
+	return area
 
 # Draws histogram
-def drawHisto(histo_in,histo_out,hist_width,histo_img_path,date_string,graph_type, histo_title, histo_y_axis_name, ):
+def drawHisto(histo_in,histo_out,hist_width,histo_img_path,date_string,graph_type, histo_title, histo_y_axis_name,mu1,mu2,sig1,sig2,max1,max2 ):
 
 	fig, ax = plt.subplots(figsize=(10,5))
 	
 	#ind = np.arange(N)    # the x locations for the groups
-	width = 0.085  * hist_width    # the width of the bars: can also be len(x) sequence
-	#width = 0.085 * 12
-	
-	#ind = np.arange(len(histo_in))
-	
+	width = 0.08333  * hist_width    # the width of the bars: can also be len(x) sequence
+
+
 	p2 = ax.bar(histo_out[:,0], histo_out[:,graph_type], width, color='b',alpha = 0.5)
 	p1 = ax.bar(histo_in[:,0], histo_in[:,graph_type], width, color='r', alpha = 0.5)
 	
+
+	x = np.arange(0,24,0.01)
+
+	if mu1 > 0 :
+		pdf1 = mlab.normpdf(mu1, mu1, sig1)
+		multiplier1 = max1 / pdf1
+		ax.plot( x ,mlab.normpdf(x , mu1, sig1) * multiplier1,'--')
+	
+	if mu2 > 0 :
+		pdf2 = mlab.normpdf(mu2, mu2, sig2)
+		multiplier2 = max2 / pdf2
+		ax.plot( x ,mlab.normpdf(x , mu2, sig2) * multiplier2,'--')
+
 	ax.set_ylabel(histo_y_axis_name)
 	ax.set_xlabel('Time [Hour]')
 	
@@ -167,14 +198,42 @@ def getHistoStat(histo_data,time_start, time_end):
 	#print(bin_val)
 	#print(histo_data)
 	acc_data = 0
-	
+	mean = 0
+	data_collect = []
+	weights = 0
 	for i in range(1,bin_total):
 		loop_time = i * bin_val
 		
+
 		if loop_time >=  time_start and loop_time <= time_end:
 			acc_data = acc_data + histo_data[i,1]
-			#print(histo_data[i,1])
-	return acc_data
+			real_time = loop_time + bin_val / 2
+			
+			# calculate mean
+			mean += real_time * histo_data[i,1]
+			weights += histo_data[i,1]
+
+			# collect data
+			data_collect.append((real_time, histo_data[i,1]))
+
+	# no data in the specified region
+	if weights <= 0:
+		return 0 , 0, 0 , 0
+	
+	mean = mean / weights
+	
+	std = 0
+	max_val = 0
+	for dat in data_collect:
+		std += (dat[0] - mean) * (dat[0] - mean) * dat[1]
+		if dat[1] > max_val:
+			max_val = dat[1]
+	
+	std = math.sqrt(std / (weights - 1)) 
+	
+	#print(histo_data[i,1])
+
+	return acc_data, mean, std, max_val
 
 # saves the daily bird count
 def saveData(txt_dailytxt_path,date_stamp, bird_out, bird_in):

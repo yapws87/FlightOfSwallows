@@ -35,7 +35,10 @@ birdRes_out = b_log.extractData(file_outBird,time_interval)
 
 speedName = str(histoname.parent) + "/" + str(histoname.stem) + "_speed" + str(histoname.suffix) 
 trailName = str(histoname.parent) + "/" + str(histoname.stem) + "_trail" + str(histoname.suffix)
-b_log.drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_path,date_str,1, 'Frequency Of Birds', 'Bird Count')
+
+
+
+#b_log.drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_path,date_str,1, 'Frequency Of Birds', 'Bird Count')
 #drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,speedName,date_str,2, 'Speed Of Birds', 'Speed [km/h]')
 #drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,trailName,date_str,3, 'Trail Of Birds', 'Trail Count')
 
@@ -49,15 +52,19 @@ else :
 
 print ('Acc : ', int(bird_acc), '%|\n')
 
-main_bird_out = b_log.getHistoStat(birdRes_out.histo,6,7.5)
-main_bird_in = b_log.getHistoStat(birdRes_in.histo,18.25,20.0)
+peak_bo, mu_bo, std_bo, max_bo= b_log.getHistoStat(birdRes_out.histo,6,7.5)
+peak_bi,mu_bi, std_bi, max_bi = b_log.getHistoStat(birdRes_in.histo,18.25,20.0)
 
+b_log.drawHisto(birdRes_in.histo,birdRes_out.histo,time_interval / 5,histo_img_path	,date_str,1, 'Frequency Of Birds', 'Bird Count',mu_bo, mu_bi, std_bo, std_bi, max_bo, max_bi)
 
-print ('Peak_In : ', int(main_bird_in), ' | ', 'Peak_Out: ', int(main_bird_out),'|\n')
+print ('Peak_In : ', int(peak_bi), ' | ', 'Peak_Out: ', int(peak_bo),'|\n')
 
-#extract_status_data(file_status,5)
+area_bo = b_log.calculate_norm_area(mu_bo, std_bo, max_bo, time_interval)
+area_bi = b_log.calculate_norm_area(mu_bi, std_bi, max_bi, time_interval)
 
-b_log.saveData(txt_dailytxt_path,date_stamp, main_bird_out,main_bird_in)
+print ('Area_In : ', int(area_bi), ' | ', 'Area_Out: ', int(area_bo),'|\n')
+
+b_log.saveData(txt_dailytxt_path,date_stamp, peak_bo, peak_bi)
 
 b_log.plotBirdTrendLine(txt_dailytxt_path,line_img_path)
 
