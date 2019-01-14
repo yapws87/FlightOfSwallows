@@ -33,7 +33,7 @@ speedName = str(histoname.parent) + "/" + str(histoname.stem) + "_speed" + str(h
 trailName = str(histoname.parent) + "/" + str(histoname.stem) + "_trail" + str(histoname.suffix)
 
 # Calculate Peak
-peak_bo, mu_bo, std_bo, max_bo= b_log.getHistoStat(birdRes_out.histo,6,7.2)
+peak_bo, mu_bo, std_bo, max_bo= b_log.getHistoStat(birdRes_out.histo,6,7)
 peak_bi,mu_bi, std_bi, max_bi = b_log.getHistoStat(birdRes_in.histo,18.5,20.0)
 
 # Calculate Area
