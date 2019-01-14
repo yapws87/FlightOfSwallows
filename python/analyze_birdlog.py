@@ -51,10 +51,10 @@ if birdRes_in.total > birdRes_out.total:
 else :
 	bird_acc = birdRes_in.total / float(birdRes_out.total) * 100
 
-print ('Total_In : ', birdRes_in.total, ' | ','Total_Out: ', birdRes_out.total, '|\n')
-print ('Acc : ', int(bird_acc), '%|\n')
-print ('Peak_In : ', int(peak_bi), ' | ', 'Peak_Out: ', int(peak_bo),'|\n')
-print ('Area_In : ', int(area_bi), ' | ', 'Area_Out: ', int(area_bo),'|\n')
+print ('Total_In: {} | Total_Out: {} |'.format( birdRes_in.total, birdRes_out.total ))
+print ('Acc: {} |'.format( int(bird_acc) ))
+print ('Peak_In: {} | Peak_Out: {} |'.format( int(peak_bi), int(peak_bo) ))
+print ('Area_In: {} | Area_Out: {} |'.format( int(area_bi), int(area_bo) ))
 
 
 b_log.saveData(txt_dailytxt_path,date_stamp, peak_bo, peak_bi)
