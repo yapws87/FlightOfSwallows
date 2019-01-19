@@ -13,6 +13,11 @@
 #include "PiCommon.h"
 #include "PiTwitter.h"
 
+#define MINUTES_TO_TWEET		15
+#define BIRD_COUNTS_TO_TWEET	40000
+
+
+
 #ifndef PERSONAL_COMPUTER
 #include "unistd.h"
 #else
