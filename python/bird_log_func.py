@@ -201,6 +201,10 @@ def getHistoStat(histo_data,time_start, time_end):
 	mean = 0
 	data_collect = []
 	weights = 0
+
+	max_index = 0
+	max_value = 0
+	max_time = 0
 	for i in range(1,bin_total):
 		loop_time = i * bin_val
 		
@@ -214,22 +218,72 @@ def getHistoStat(histo_data,time_start, time_end):
 			weights += histo_data[i,1]
 
 			# collect data
-			data_collect.append((real_time, histo_data[i,1]))
+			data = histo_data[i,1]
+			data_collect.append((real_time, data))
 
+			# identify the peak 
+			if data > max_value:
+				max_value = data
+				max_index = i
+				max_time = real_time
 	# no data in the specified region
 	if weights <= 0:
 		return 0 , 0, 0 , 0
 	
 	mean = mean / weights
+
+
+	# Search for gaussian range from the peak
+	weights = max_value
+	bot_signal = False
+	i = max_index
+	data_collect_2 = []
+	data_collect_2.append((max_time,max_value))
+	pre_data = max_value
+	while not bot_signal:
+		i = i - 1
+		real_time = i * bin_val + bin_val / 2
+		data = histo_data[i,1]
+		diff = abs(pre_data - data)
+
+		# Break if the signal is higher
+		if diff > pre_data * 0.6 or not data :
+			bot_signal = True
+		else:
+			data_collect_2.append((real_time,data))
+			weights = weights + data
+			pre_data = data
+
+	bot_signal = False
+	pre_data = max_value
+	i = max_index
+	while not bot_signal:
+		i = i + 1
+		real_time = i * bin_val + bin_val / 2
+		data = histo_data[i,1]
+		diff = abs(pre_data - data)
+
+		# Break if the signal is higher
+		if diff > pre_data * 0.5 or not data:
+			bot_signal = True		
+		else:
+			data_collect_2.append((real_time,data))
+			weights = weights + data
+			pre_data = data
 	
+	#print(data_collect_2)
 	std = 0
 	max_val = 0
-	for dat in data_collect:
-		std += (dat[0] - mean) * (dat[0] - mean) * dat[1]
+	#for dat in data_collect:
+	for dat in data_collect_2:
+		#std += (dat[0] - mean) * (dat[0] - mean) * dat[1]
+		std += (dat[0] - max_time) * (dat[0] - max_time) * dat[1]
 		if dat[1] > max_val:
 			max_val = dat[1]
 	
-	std = math.sqrt(std / (weights - 1)) 
+	total_data = len(data_collect_2)
+	denom = (total_data - 1) / float(total_data) * (weights - 1)
+	std = math.sqrt(std / denom) 
 	
 	#print(histo_data[i,1])
 
