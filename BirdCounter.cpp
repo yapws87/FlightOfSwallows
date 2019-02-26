@@ -591,7 +591,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 			
 			return;
 		}
-		else if (m_avgIntensity < 90 && nBrightness_offset < nMaxBrightness) {
+		else if (m_avgIntensity < 100 && nBrightness_offset < nMaxBrightness) {
 			nBrightness_offset = nBrightness_offset + nIncrement;
 			nBrightness_offset = nBrightness_offset > nMaxBrightness ? nMaxBrightness : nBrightness_offset;
 			picom.getString_fromCmd("v4l2-ctl -c brightness=" + std::to_string(nBrightness_offset));
