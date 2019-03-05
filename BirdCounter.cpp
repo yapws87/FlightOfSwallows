@@ -5,7 +5,7 @@
 CBirdCounter::CBirdCounter()
 {
 	//m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 35, false);
-	m_pMOG = cv::createBackgroundSubtractorKNN(90 * 10, 5, false);
+	m_pMOG = cv::createBackgroundSubtractorKNN(90 * 10, 35, false);
 	//m_pMOG->SetVarThreshold(12);
 	m_avgIntensity = 0;
 }
