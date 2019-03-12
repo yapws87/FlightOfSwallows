@@ -4,8 +4,8 @@
 
 CBirdCounter::CBirdCounter()
 {
-	//m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 2 , 35, false);
-	m_pMOG = cv::createBackgroundSubtractorKNN(90 * 10, 35, false);
+	//m_pMOG = cv::createBackgroundSubtractorMOG2(90 * 5 , 5, false);
+	m_pMOG = cv::createBackgroundSubtractorKNN(60 * 10, 45, false);
 	//m_pMOG->SetVarThreshold(12);
 	m_avgIntensity = 0;
 }
@@ -194,7 +194,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	float fBoxSizeRatio = 10;
 	int nMinBirdSize = 4;
 	float fNonZeroRatioThresh = 0.25;
-	float fIntersectRatio = 2;
+	float fIntersectRatio = 2.5;
 	
 	int nSrcWidth = matRealSrc.cols;
 	int nSrcHeight = matRealSrc.rows;
@@ -216,8 +216,8 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	std::vector<BirdData> bird_candidates;
 
 	// Return if too many spurious blobs
-	if (bird_blocks.size() > 30)
-		return false;
+	//if (bird_blocks.size() > 30)
+	//	return false;
 
 	for (int n = 0; n < bird_blocks.size(); n++)
 	{
@@ -275,7 +275,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	}
 
 	// Return if too many spurious birds
-	if (bird_candidates.size() > 10)
+	if (bird_candidates.size() > 20)//10)
 		return false;
 	//std::cout << "bird_candidates : " << bird_candidates.size() << std::endl;
 
@@ -343,7 +343,7 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 	}
 
 	// Count Birds
-	int nIn_Line = (int)(0.35 * nSrcWidth);
+	int nIn_Line = (int)(0.2 * nSrcWidth);
 	int nOut_Line = (int)(0.6 * nSrcWidth);
 	int nCnt_line = (nIn_Line + nOut_Line) / 2;
 
@@ -533,8 +533,26 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		float fScale = 0.5;
 		cv::Mat smallLocalGray;
 		cv::Mat finalGray;
-		cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), fScale, fScale,cv::INTER_NEAREST);
-		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(7, 7), 9);
+		cv::resize(matLocalGray, smallLocalGray, cv::Size(0, 0), fScale, fScale, cv::INTER_CUBIC);// cv::INTER_NEAREST);
+				
+		//cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(7, 7), 9);
+		cv::GaussianBlur(smallLocalGray, smallLocalGray, cv::Size(3, 3), -1);
+
+		//cv::Mat sobelX, sobelY;
+		//cv::Sobel(smallLocalGray, sobelX, CV_32F, 1, 0);
+		//cv::Sobel(smallLocalGray, sobelY, CV_32F, 0, 1);
+
+		//cv::multiply(sobelX, sobelX, sobelX);
+		//cv::multiply(sobelY, sobelY, sobelY);
+		//cv::Mat sobelXY;
+		//cv::add(sobelX, sobelY, sobelXY);
+		//cv::sqrt(sobelXY, sobelXY);
+
+		//
+		//sobelXY.convertTo(smallLocalGray, CV_8U);
+		//cv::blur(smallLocalGray, smallLocalGray, cv::Size(5, 5));
+		//cv::cvtColor(smallLocalGray, matLocalColor, cv::COLOR_GRAY2BGR);
+		//cv::resize(matLocalColor, matLocalColor, cv::Size(0, 0), 2, 2);
 
 		// Remove Noise Area
 		cv::Rect noiseRect = cv::Rect(smallLocalGray.cols - (smallLocalGray.cols * 0.28)
@@ -614,9 +632,9 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		m_nToggleLearn++;
 
 		// Set all to zero if average intensity is low
-		if (m_avgIntensity < 80) {
-			matLocalFore = cv::Mat::zeros(finalGray.size(), CV_8UC1);
-		}
+		//if (m_avgIntensity < 80) {
+		//	matLocalFore = cv::Mat::zeros(finalGray.size(), CV_8UC1);
+		//}
 
 		// Get the background image
 		cv::Mat matBG;
@@ -641,7 +659,7 @@ void CBirdCounter::process_thread(cv::Mat matFrame)
 		cv::Mat matDisplayWithBirds;
 		// Skip when too large changes occur
 		//std::cout << "dForeRatio : " << dForeRatio << std::endl;
-		if (dForeRatio > 0.3) {
+		if (dForeRatio > 0.4) {
 			m_nSaturationCount++;
   			m_nCountContinuosValid = 0;
 			m_birds.clear();
