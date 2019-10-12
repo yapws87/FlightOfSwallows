@@ -1,7 +1,7 @@
 #pragma once
 #include "stdio.h"
 #include "stdlib.h"
-#include "DPLabel.h"
+//#include "DPLabel.h"
 #include "PiOpenCV.h"
 #include "opencv2/opencv.hpp"
 #include <opencv2/video/background_segm.hpp>
@@ -145,12 +145,12 @@ struct BirdData
 		for (int i = (int)vec_trail.size() - 2; i >= (int)vec_trail.size() - 5 && i > 0; i--)
 		{
 			cv::Point diff = vec_trail[i] - vec_trail[i + 1];
-			float fMag = std::sqrt(diff.x*diff.x + diff.y*diff.y);
+			float fMag = (float)std::sqrt(diff.x*diff.x + diff.y*diff.y);
 			fAccSpeed += fMag * fPix2Meter / fFrameTime;
 			nValidCount++;
 		}
 		if (nValidCount > 0)
-			fAverageSpeed = fAccSpeed / (float)nValidCount * 3.6; // change m/s to km/h by multiplying 3.6
+			fAverageSpeed = fAccSpeed / (float)nValidCount * 3.6f; // change m/s to km/h by multiplying 3.6
 
 	}
 
@@ -328,7 +328,7 @@ protected:
 	double m_avgIntensity;
 
 	std::vector<BirdData> m_birds;
-	DPLabel dpLabel;
+	//DPLabel dpLabel;
 	int m_nToggleLearn = 0;
 
 	PiOpenCV m_cv;

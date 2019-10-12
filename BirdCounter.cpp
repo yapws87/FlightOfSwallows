@@ -17,7 +17,7 @@ CBirdCounter::~CBirdCounter()
 
 void CBirdCounter::start_measure()
 {
-	m_dTickCount = cv::getTickCount();
+	m_dTickCount = (double)cv::getTickCount();
 }
 
 void CBirdCounter::end_measure(int nInsertFPS)
@@ -28,7 +28,7 @@ void CBirdCounter::end_measure(int nInsertFPS)
 		dTime = (cv::getTickCount() - m_dTickCount) / cv::getTickFrequency() ;
 		double dFPS;
 		dFPS = 1 / dTime;
-		m_nFps_real = (m_nFps_real + dFPS) / 2;
+		m_nFps_real = (int)((m_nFps_real + dFPS) / 2.f);
 		if (m_nFps_real > 1000)
 			m_nFps_real = 0;
 
@@ -176,7 +176,7 @@ int CBirdCounter::findBestBirdIndex(BirdData bird_src, std::vector<BirdData> bir
 		
 		cv::Rect b1 = EnlargeSafeROI(bird_src.boundingBox, fIntersectRatio, bird_src.nBirdDirection);
 		cv::Rect b2 = EnlargeSafeROI(bird_candidates[i].boundingBox, fIntersectRatio, bird_src.nBirdDirection);
-		float fArea = (b1 & b2).area();
+		float fArea = (float)(b1 & b2).area();
 
 		if (fArea > fMax)
 		{
@@ -255,10 +255,10 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 				cv::Rect temp = cv::boundingRect(subBlocks[i]);
 				temp = temp + birdBox.tl();
 
-				temp.x *= fScale;
-				temp.y *= fScale;
-				temp.width *= fScale;
-				temp.height *= fScale;
+				temp.x *= (int)fScale;
+				temp.y *= (int)fScale;
+				temp.width *= (int)fScale;
+				temp.height *= (int)fScale;
 
 				bird_candidates.push_back(BirdData(temp));
 			
@@ -266,10 +266,10 @@ bool CBirdCounter::countBird(cv::Mat matForeBird, cv::Mat matRealSrc, cv::Mat &m
 		}
 		else
 		{
-			birdBox.x *= fScale;
-			birdBox.y *= fScale;
-			birdBox.width *= fScale;
-			birdBox.height *= fScale;
+			birdBox.x *= (int)fScale;
+			birdBox.y *= (int)fScale;
+			birdBox.width *= (int)fScale;
+			birdBox.height *= (int)fScale;
 			bird_candidates.push_back(BirdData(birdBox));
 		}
 	}
