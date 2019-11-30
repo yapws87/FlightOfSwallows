@@ -34,7 +34,7 @@ yes | sudo apt-get autoremove
 # Download and install OpenCV
 echo "Installing OpenCV.."
 cd ~
-ver_num=3.3.1
+ver_num=3.4.7
 file_dir=opencv-$ver_num
 
 if [ -d "$file_dir" ]
@@ -111,7 +111,13 @@ mkdir build
 cd build
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
-	-D ENABLE_NEON=ON \
+    -D INSTALL_C_EXAMPLES=OFF \
+    -D INSTALL_PYTHON_EXAMPLES=OFF \
+    -D OPENCV_GENERATE_PKGCONFIG=ON \
+    -D ENABLE_NEON=ON \
+    -D OPENCV_EXTRA_EXE_LINKER_FLAGS=-latomic \
+    -D ENABLE_VFPV3=ON \
+    -D BUILD_TESTS=OFF \
 	-D WITH_LIBV4L=ON \
 	-D ENABLE_PRECOMPILED_HEADERS=OFF \
 	.. 
